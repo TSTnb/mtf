@@ -1,0 +1,20 @@
+{
+   "content_scripts": [ {
+      "js": [ "mtf.js" ],
+      "matches": [ "*://*.tetrisfriends.com/games/*/game.php*" ],
+      "run_at": "document_end"
+   } ],
+   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+   "description": "Reduces lag as much as possible by removing everything from the page except for the game itself.",
+   "icons": {
+      "128": "logo128.png",
+      "16": "logo16.png",
+      "48": "logo48.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhbXDMd47i8KIdQhn/7HoWmbjmj9CPA6PA75313Jf/dZ6e2mpKNvp3GCUu/pFMsDTdpKYhatauf8U0EN2cynxYz7Ha73BC0SM7jfQCI4oUsejwAY8E2JzfY1JQtSB3ah73Pniqt2LMNRbVhWfPzhVyJedqTMekDH96q3RRqm4Cz1xOmbaFFtdUcq/rQ4UHDkPZAEZtMkovmQCVPnnb5hx5kz+g1X6styUK0HBflTR4gA5hV1oJ3QVYZ/StNEROM2NZXI7EMS3NmUtBltlkj6MsAgSq4d2HwMI/wX6nfZgMJpo+B4HvPapHXLUGmkM46QkjXMdrM719lAXTvw1VJVAmwIDAQAB",
+   "manifest_version": 2,
+   "name": "Minimal Tetris Friends",
+   "permissions": [ "tabs", "*://*.tetrisfriends.com/*" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "3.0.4"
+}
