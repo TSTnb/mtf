@@ -31,8 +31,8 @@ function resizeContentFlash()
 
     contentFlash.style.height = updatedHeight + "px";
     contentFlash.style.width = updatedWidth + "px";
-    contentFlash.style.margin-top = -updatedHeight / 2 + "px";
-    contentFlash.style.margin-left = -updatedWidth / 2 + "px";
+    contentFlash.style.marginTop = -updatedHeight / 2 + "px";
+    contentFlash.style.marginLeft = -updatedWidth / 2 + "px";
 }
 
 function startScriptFunction(){
