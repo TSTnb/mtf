@@ -68,7 +68,14 @@ addEventListener("DOMContentLoaded",
         resizeContentFlash();
 
         var headStr = '<style> body { background: url(//tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; font-family: "Trebuchet MS",Helvetica,Tahoma,Geneva,Verdana,Arial,sans-serif; font-size: 12px; color: #666; margin: 0; text-align: center; display: block; overflow: hidden} #contentFlash { visibility: visible !important; position: absolute; top: 50%; left: 50%; } * { margin: 0; padding: 0; outline: none; -moz-box-sizing: border-box; box-sizing: border-box; }</style>';
-        var bodyStr = $(contentFlash).clone().removeAttr("height").removeAttr("width").append("<param name=quality value=low></object>").find("param[name=wmode]").attr("value", "direct").parent()[0].outerHTML;
+
+        var bodyStr = $(contentFlash).clone();
+        bodyStr = $(bodyStr).removeAttr("height");
+        bodyStr = $(bodyStr).removeAttr("width")
+        bodyStr = $(bodyStr).append("<param name=quality value=low></object>")
+        $(bodyStr).find("param[name=wmode]").attr("value", "direct");
+
+        bodyStr = $(bodyStr).parent()[0].outerHTML;
         document.documentElement.innerHTML = 
             '<head>' + headStr + '</head>' +
             '<body>' + bodyStr + '</body>';
