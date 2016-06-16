@@ -47,13 +47,11 @@ addEventListener("DOMContentLoaded",
         document.documentElement.innerHTML = 
             '<head>' + headStr + '</head>' +
             '<body>' + bodyStr + '</body>';
-        var startScriptFunction = Function('gamePrerollComplete();if(contentFlash.outerHTML.indexOf("object") == -1){renderFlash()};');
+        var startScriptFunction = Function('gamePrerollComplete();if(contentFlash.outerHTML.indexOf("object") == -1){renderFlash()};if( location.href.indexOf("/Live/game.php") != -1 ){var sArenaTimes = 5; function startArena(){if(contentFlash.TotalFrames){try{contentFlash.as3_prerollDone()}catch(err){}}else{setTimeout(startArena, 1000); return}; sArenaTimes--; setTimeout(startArena, 1000)}; startArena()}');
         /*implicit typecast to get function scope contents as string*/
         var startScriptString = startScriptFunction + '';
         /*strip wrapping function declaration*/
         startScriptString = startScriptString.slice( startScriptString.indexOf('{') + 2, startScriptString.length - 2);
-        if( location.href.indexOf("/Live/game.php") != -1 )
-            startScriptString += ';var sArenaTimes = 5; function startArena(){if(contentFlash.TotalFrames){try{contentFlash.as3_prerollDone()}catch(err){}}else{setTimeout(startArena, 1000); return}; sArenaTimes--; setTimeout(startArena, 1000)}; startArena()';
 
         document.body.appendChild( document.createElement("script") ).innerHTML =  startScriptString;
     }
