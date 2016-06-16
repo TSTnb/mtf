@@ -29,10 +29,10 @@ function resizeContentFlash()
         updatedWidth = innerWidth;
     }
 
-    $(contentFlash).css("height", updatedHeight + "px");
-    $(contentFlash).css("width", updatedWidth + "px");
-    $(contentFlash).css("margin-top", -updatedHeight / 2 + "px");
-    $(contentFlash).css("margin-left", -updatedWidth / 2 + "px");
+    contentFlash.style.height = updatedHeight + "px";
+    contentFlash.style.width = updatedWidth + "px";
+    contentFlash.style.margin-top = -updatedHeight / 2 + "px";
+    contentFlash.style.margin-left = -updatedWidth / 2 + "px";
 }
 
 function startScriptFunction(){
