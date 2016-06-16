@@ -76,7 +76,6 @@ addEventListener("DOMContentLoaded",
         var startScriptString = startScriptFunction + '';
         /*strip wrapping function declaration*/
         startScriptString = startScriptString.slice( startScriptString.indexOf('{') + 2, startScriptString.length - 2);
-
         document.body.appendChild( document.createElement("script") ).innerHTML =  startScriptString;
     }
 )
