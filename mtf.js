@@ -73,7 +73,6 @@ function initializeMinimalTetrisFriends()
 
 
         var bodyObject = contentFlash.cloneNode();
-        bodyObject.
         bodyObject.appendChild( document.createElement("param") ).outerHTML = "<param name=quality value=low>";
         bodyObject.appendChild( document.createElement("param") ).outerHTML = "<param name=wmode value=direct>";
         bodyStr = bodyObject.outerHTML
