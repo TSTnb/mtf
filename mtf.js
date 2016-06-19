@@ -55,14 +55,15 @@ function startScriptFunction(){
            }
            sArenaTimes--;
            setTimeout(startArena, 1000);
-       };
+       }
        startArena();
    }
 }
 
-addEventListener("DOMContentLoaded",
-    function()
-    {
+addEventListener("DOMContentLoaded", initializeMinimalTetrisFriends + '');
+
+function initializeMinimalTetrisFriends()
+{
         contentFlashSize.originalWidth = contentFlash.width;
         contentFlashSize.originalHeight = contentFlash.height;
         resizeContentFlash();
@@ -85,6 +86,5 @@ addEventListener("DOMContentLoaded",
         startScriptString = startScriptString.slice( startScriptString.indexOf('{') + 2, startScriptString.length - 2);
         document.body.appendChild( document.createElement("script") ).innerHTML =  startScriptString;
     }
-)
 
 addEventListener("resize", resizeContentFlash);
