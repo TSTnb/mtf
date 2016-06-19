@@ -60,7 +60,7 @@ function startScriptFunction(){
    }
 }
 
-addEventListener("DOMContentLoaded", initializeMinimalTetrisFriends + '');
+addEventListener("DOMContentLoaded", initializeMinimalTetrisFriends);
 
 function initializeMinimalTetrisFriends()
 {
