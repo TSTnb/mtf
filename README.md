@@ -2,7 +2,7 @@
 ###### Version 3.0.2, last updated 06-23-2015
 
 ### Description
-This is a script that removes *everything* from the page except for the game itself (and the nice-looking background), sets the Flash quality to "low" instead of "high", and sets the "wmode" parameter to "direct".  [i]This reduces lag significantly.[/i]
+This is a script that removes *everything* from the page except for the game itself (and the nice-looking background), sets the Flash quality to "low" instead of "high", and sets the "wmode" parameter to "direct".  *This reduces lag significantly.*
 
 Games currently supported:
 * [Arena](http://www.tetrisfriends.com/games/Live/game.php)
