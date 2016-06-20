@@ -12,7 +12,7 @@ Games currently supported:
 ### How to install
 
 ##### _________________________________________________________________
-##### **[Before you begin, install Adblock!  This step reduces lag quite a bit by itself.](https://adblockplus.org/)**
+##### **[Before you begin, install Adblock! This step reduces lag quite a bit by itself.](https://adblockplus.org/)**
 ___
 
 #### Step 1: Get a Userscript Manager
@@ -23,11 +23,11 @@ ___
 * If you have Opera, get [Violentmonkey](https://addons.opera.com/en/extensions/details/violent-monkey/).
 
 #### Step 2: Get the script
-Go to [this page](https://raw.githubusercontent.com/morningpee/minimal-tetris-friends/4.0.1/Minimal%20Tetris%20Friends.user.js).  A dialog will pop up, click accept, and the script is installed.
+Go to [this page](https://raw.githubusercontent.com/morningpee/minimal-tetris-friends/4.0.1/Minimal%20Tetris%20Friends.user.js). A dialog will pop up, click accept, and the script is installed.
 
 ### How to use
 
-Visit the [Tetris Friends Arena](http://www.tetrisfriends.com/games/Live/game.php), and the script will do the rest.  The DAS URL hack *does* work with this.
+Visit the [Tetris Friends Arena](http://www.tetrisfriends.com/games/Live/game.php), and the script will do the rest. The DAS URL hack *does* work with this.
 
 ### What it should look like
 Without the script installed, it will look something like this:
