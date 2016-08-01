@@ -12,27 +12,48 @@
 // ==/UserScript==
 
 var contentFlashSize = new Object();
+var condensedContentFlashHeight = 100;
 
 function resizeContentFlash()
 {
-    windowSizeRatio = innerHeight / innerWidth;
-    contentFlashSizeRatio = contentFlashSize.originalHeight / contentFlashSize.originalWidth;
+    
+    var windowSizeRatio = innerHeight / innerWidth;
+    
+    
+    var contentFlashSizeRatio = contentFlashSize.originalHeight / contentFlashSize.originalWidth;
+    
+    var condensedWidth = contentFlashSize.minimalWidth
+    var condensedHeight = contentFlashSize.minimalHeight;
+    
+    /*var condensedWidth = condensedContentFlashHeight / contentFlashSizeRatio;
+    var condensedHeight = condensedContentFlashHeight; */
+        
+    var scaleFactorX;
+    var scaleFactorY;
+    
     
     if(  contentFlashSizeRatio > windowSizeRatio )
     {
-        updatedHeight = innerHeight;
         updatedWidth = Math.round( innerHeight / contentFlashSizeRatio );
+        updatedHeight = innerHeight;
     }
     else
     {
-        updatedHeight = Math.round( innerWidth * contentFlashSizeRatio );
         updatedWidth = innerWidth;
+        updatedHeight = Math.round( innerWidth * contentFlashSizeRatio );
     }
 
-    $(contentFlash).css("height", updatedHeight + "px");
-    $(contentFlash).css("width", updatedWidth + "px");
-    $(contentFlash).css("margin-top", -updatedHeight / 2 + "px");
+    scaleFactorX = updatedWidth / condensedWidth;
+    scaleFactorY = updatedHeight / condensedHeight;
+    
+    $(contentFlash).css("width", condensedWidth + "px");
+    $(contentFlash).css("height", condensedHeight + "px");
+    
+    $(contentFlash).css("transform", "scale( " + scaleFactorX + " ) translate(0px, 0px)" );
+
+    /* $(contentFlash).css("margin-top", -updatedHeight / 2 + "px");
     $(contentFlash).css("margin-left", -updatedWidth / 2 + "px");
+    */
 }
 
 addEventListener("DOMContentLoaded",
@@ -40,10 +61,16 @@ addEventListener("DOMContentLoaded",
     {
         contentFlashSize.originalWidth = contentFlash.width;
         contentFlashSize.originalHeight = contentFlash.height;
+    
+        contentFlashSize.scaleFactor = 10
+        contentFlashSize.minimalWidth = contentFlash.width / contentFlashSize.scaleFactor;
+        contentFlashSize.minimalHeight = contentFlash.height / contentFlashSize.scaleFactor;
+    
         resizeContentFlash();
 
-        var headStr = '<style> body { background: url(//tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; font-family: "Trebuchet MS",Helvetica,Tahoma,Geneva,Verdana,Arial,sans-serif; font-size: 12px; color: #666; margin: 0; text-align: center; display: block; overflow: hidden} #contentFlash { visibility: visible !important; position: absolute; top: 50%; left: 50%; } * { margin: 0; padding: 0; outline: none; -moz-box-sizing: border-box; box-sizing: border-box; }</style>';
-        var bodyStr = $(contentFlash).clone().removeAttr("height").removeAttr("width").append("<param name=quality value=low></object>").find("param[name=wmode]").attr("value", "direct").parent()[0].outerHTML;
+        var headStr = '<style> body { image-rendering: optimizespeed; background: url(//tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; font-family: "Trebuchet MS",Helvetica,Tahoma,Geneva,Verdana,Arial,sans-serif; font-size: 12px; color: #666; margin: 0; text-align: left; display: block; overflow: hidden} #contentFlash { visibility: visible !important; transform-origin: top left; } * { margin: 0; padding: 0; outline: none; -moz-box-sizing: border-box; box-sizing: border-box; }</style>';
+        /* var bodyStr = $(contentFlash).clone().removeAttr("height").removeAttr("width").append("<param name=quality value=low></object>").find("param[name=wmode]").attr("value", "direct").parent()[0].outerHTML;*/
+        var bodyStr = $(contentFlash).clone().removeAttr("height").removeAttr("width").append("<param name=quality value=low></object>").append("<param name=scale value=exactfit>").find("param[name=wmode]").attr("value", "opaque").parent()[0].outerHTML;
         document.documentElement.innerHTML = 
             '<head>' + headStr + '</head>' +
             '<body>' + bodyStr + '</body>';
@@ -55,4 +82,4 @@ addEventListener("DOMContentLoaded",
     }
 )
 
-addEventListener("resize", resizeContentFlash);
+ addEventListener("resize", resizeContentFlash); 
