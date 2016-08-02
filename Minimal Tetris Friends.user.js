@@ -26,7 +26,7 @@ function talkAboutThatContentFlashSize()
 
 function setContentFlashSize()
 {
-    var contentFlashSizeRatio = contentFlashSize.originalHeight / contentFlashSize.originalWidth;
+    var contentFlashAspectRatio = contentFlashSize.originalHeight / contentFlashSize.originalWidth;
 
     var condensedWidth = contentFlashSize.minimalWidth
     var condensedHeight = contentFlashSize.minimalHeight;
@@ -40,18 +40,18 @@ function setContentFlashSize()
 
 function transformContentFlash()
 {
-    var windowSizeRatio = innerHeight / innerWidth;
+    var windowAspectRatio = innerHeight / innerWidth;
 
-    var contentFlashSizeRatio = contentFlashSize.originalHeight / contentFlashSize.originalWidth;
+    var contentFlashAspectRatio = contentFlashSize.originalHeight / contentFlashSize.originalWidth;
 
     var scaleFactorX;
     var scaleFactorY;
     var translateX;
     var translateY;
 
-    if(  contentFlashSizeRatio > windowSizeRatio )
+    if(  contentFlashAspectRatio > windowAspectRatio )
     {
-        updatedWidth = Math.round( innerHeight / contentFlashSizeRatio );
+        updatedWidth = Math.round( innerHeight / contentFlashAspectRatio );
         updatedHeight = innerHeight;
 
         translateX = updatedWidth - innerWidth / 2  + 'px';
@@ -60,7 +60,7 @@ function transformContentFlash()
     else
     {
         updatedWidth = innerWidth;
-        updatedHeight = Math.round( innerWidth * contentFlashSizeRatio );
+        updatedHeight = Math.round( innerWidth * contentFlashAspectRatio );
 
         translateX = 0;
         translateY = '50%';
