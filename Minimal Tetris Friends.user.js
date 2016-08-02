@@ -1,14 +1,14 @@
 // ==UserScript==
 // @name Minimal Tetris Friends
 // @namespace minimaltetrisfriends
-// @description Reduces lag as much as possible by removing everything from the page except for the games themselves.
+// @description Reduces lag as much as possible
 // @include http://*tetrisfriends.com/games/Ultra/game.php*
 // @include http://*tetrisfriends.com/games/Sprint/game.php*
 // @include http://*tetrisfriends.com/games/Live/game.php*
 // @grant none 
 // @run-at document-start
-// @version 2016-03-06,4.0.1
-// @author knux
+// @version 4.2.1
+// @author morningpee
 // ==/UserScript==
 
 var contentFlashSize = new Object();
