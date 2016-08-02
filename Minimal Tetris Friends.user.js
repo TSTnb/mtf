@@ -99,5 +99,3 @@ addEventListener("DOMContentLoaded",
         addEventListener("resize", transformContentFlash);
     }
 )
-
-
