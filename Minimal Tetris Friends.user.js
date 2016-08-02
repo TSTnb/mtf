@@ -46,30 +46,22 @@ function transformContentFlash()
 
     var scaleFactorX;
     var scaleFactorY;
-    var translateX;
-    var translateY;
 
     if(  contentFlashAspectRatio > windowAspectRatio )
     {
         updatedWidth = Math.round( innerHeight / contentFlashAspectRatio );
         updatedHeight = innerHeight;
-
-        translateX = updatedWidth - innerWidth / 2  + 'px';
-        translateY = 0;
     }
     else
     {
         updatedWidth = innerWidth;
         updatedHeight = Math.round( innerWidth * contentFlashAspectRatio );
-
-        translateX = 0;
-        translateY = '50%';
     }
 
     scaleFactorX = updatedWidth / contentFlashSize.minimalWidth
     scaleFactorY = updatedHeight / contentFlashSize.minimalHeight;
 
-    $(contentFlash).css("transform", "scale( " + scaleFactorX + " ) translate3d( " + translateX + ", " + translateY + ", 0px)" );
+    $(contentFlash).css("transform", "scale( " + scaleFactorX + " ) translate3d( -50%, -50%, 0px)" );
 }
 
 addEventListener("DOMContentLoaded",
@@ -79,7 +71,7 @@ addEventListener("DOMContentLoaded",
 
         var headStr = '';
         headStr += '<meta name="viewport" content="height=100, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">';
-        headStr += '<style> :root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } body { background: url(//tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; font-family: "Trebuchet MS",Helvetica,Tahoma,Geneva,Verdana,Arial,sans-serif; font-size: 12px; color: #666; margin: 0; text-align: left; display: block; overflow: hidden} #contentFlash { visibility: visible !important; transform-style: preserve-3d; transform-origin: top left; } * { margin: 0; padding: 0; outline: none; -moz-box-sizing: border-box; box-sizing: border-box; }</style>';
+        headStr += '<style> :root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } body { background: url(//tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; font-family: "Trebuchet MS",Helvetica,Tahoma,Geneva,Verdana,Arial,sans-serif; font-size: 12px; color: #666; margin: 0; text-align: left; display: block; overflow: hidden} #contentFlash { visibility: visible !important; position: absolute; top: 50%; left: 50%; transform-style: preserve-3d; transform-origin: top left; } * { margin: 0; padding: 0; outline: none; -moz-box-sizing: border-box; box-sizing: border-box; }</style>';
         headStr = '<head>' + headStr + '</head>';
 
         var bodyStr = '';
