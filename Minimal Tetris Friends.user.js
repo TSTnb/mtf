@@ -51,12 +51,14 @@ function resizeContentFlash()
 
 function buildHeader()
 {
-
+    var headerStr = '';
+    return headerStr;
 }
 
 function buildBody()
 {
-
+    var bodyStr = '';
+    return bodyStr;
 }
 
 addEventListener("DOMContentLoaded",
@@ -68,18 +70,15 @@ addEventListener("DOMContentLoaded",
         contentFlashSize.scaleFactor = 2;
         contentFlashSize.minimalWidth = contentFlash.width / contentFlashSize.scaleFactor;
         contentFlashSize.minimalHeight = contentFlash.height / contentFlashSize.scaleFactor;
-    
-        resizeContentFlash();
+
+        var headStr = '';
+        headStr += '<meta name="viewport" content="height=100, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">';
+        headStr += '<style> :root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } body { background: url(//tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; font-family: "Trebuchet MS",Helvetica,Tahoma,Geneva,Verdana,Arial,sans-serif; font-size: 12px; color: #666; margin: 0; text-align: left; display: block; overflow: hidden} body > div { width: 1vw; height: 1vh; }#contentFlash { visibility: visible !important; transform-origin: top left; } * { margin: 0; padding: 0; outline: none; -moz-box-sizing: border-box; box-sizing: border-box; }</style>';
+        headStr = '<head>' + headStr + '</head>';
 
         var bodyStr = '';
-        var headStr = '';
-    
-        headStr += '<meta name="viewport" content="height=100, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">';
-        headStr += '<style> :root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } body { background: url(//tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; font-family: "Trebuchet MS",Helvetica,Tahoma,Geneva,Verdana,Arial,sans-serif; font-size: 12px; color: #666; margin: 0; text-align: left; display: block; overflow: hidden} #contentFlash { visibility: visible !important; transform-origin: top left; } * { margin: 0; padding: 0; outline: none; -moz-box-sizing: border-box; box-sizing: border-box; }</style>';
-    
-        headStr = '<head>' + headStr + '</head>';
-    
         bodyStr = $(contentFlash).clone().removeAttr("height").removeAttr("width").append("<param name=quality value=low></object>").append("<param name=scale value=exactfit>").find("param[name=wmode]").attr("value", "opaque").parent()[0].outerHTML;
+        bodyStr = '<div>' + bodyStr + '</div>';
         bodyStr = '<body>' + bodyStr + '</body>';
     
         document.documentElement.innerHTML = headStr + bodyStr;
@@ -89,6 +88,7 @@ addEventListener("DOMContentLoaded",
             startScript += ';var sArenaTimes = 5; function startArena(){if(contentFlash.TotalFrames){try{contentFlash.as3_prerollDone()}catch(err){}}else{setTimeout(startArena, 1000); return}; sArenaTimes--; setTimeout(startArena, 1000)}; startArena()';
 
         document.body.appendChild( document.createElement("script") ).innerHTML = startScript;
+        resizeContentFlash();
     }
 )
 
