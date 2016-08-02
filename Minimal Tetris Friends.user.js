@@ -7,7 +7,7 @@
 // @include http://*tetrisfriends.com/games/Live/game.php*
 // @grant none 
 // @run-at document-start
-// @version 4.2.1
+// @version 4.2.2
 // @author morningpee
 // ==/UserScript==
 
