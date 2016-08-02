@@ -1,5 +1,5 @@
  ![](http://i.imgur.com/1njY7qe.png)
-###### Version 4.2.3, last updated 2016-08-02
+###### Version 4.2.4, last updated 2016-08-02
 
 ### Description
 This is a script that removes everything from the page except for the game itself and the nice-looking background, sets the Flash quality to "low" instead of "high", and sets the "wmode" parameter to "direct". *This reduces lag significantly.*
@@ -44,5 +44,5 @@ So anyway, try it out and post results.
 **[Download for Chrome](https://chrome.google.com/webstore/detail/minimal-tetris-friends/jmcfgfebjmfodjnmgicmkpkbpbfelhki)** | last updated 2015-06-23 |
 |||
 |||
-**[Download for Firefox or Opera](https://raw.githubusercontent.com/morningpee/minimal-tetris-friends/4.2.3/Minimal%20Tetris%20Friends.user.js)** | last updated 2016-08-02 |
+**[Download for Firefox or Opera](https://raw.githubusercontent.com/morningpee/minimal-tetris-friends/4.2.4/Minimal%20Tetris%20Friends.user.js)** | last updated 2016-08-02 |
 |||size=1]last updated 2016-08-02[/size]
