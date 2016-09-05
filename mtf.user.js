@@ -16,21 +16,24 @@ document.removeChild( document.documentElement );
     documentElement = document.createElement("html")
   ).innerHTML = "<head></head><body></body>";
 
+flashVars = new Object();
+flashVars.apiUrl = "http://api.tetrisfriends.com/api";
+flashVars.startParam = "clickToPlay";
+
 var request = new XMLHttpRequest();
 var SYNCHRONOUS_REQUEST=false;
 request.open('GET', 'http://www.tetrisfriends.com/users/ajax/profile_my_tetris_style.php', SYNCHRONOUS_REQUEST);
 request.send(null);
 
 if (request.status === 200) {
-  flashVars = eval( request.responseText.match(/flashVars = {[\s\S]*timestamp.*}/)[0] );
-  flashVars.apiUrl = "http://api.tetrisfriends.com/api";
-  flashVars.startParam = "clickToPlay";
-  delete flashVars.viewerId;
-  flashVarsParamString = Object.keys( flashVars ).map(k => k + '=' + flashVars[k] ).join('&');
-  flashVarsParam = document.createElement("param");
-  flashVarsParam.setAttribute("name", "flashvars")
-  flashVarsParam.setAttribute("value", flashVarsParamString)
+    flashVars = Object.assign( flashVars, eval( request.responseText.match(/flashVars = {[\s\S]*timestamp.*}/)[0] ) );
+    delete flashVars.viewerId;
 }
+
+flashVarsParamString = Object.keys( flashVars ).map(k => k + '=' + flashVars[k] ).join('&');
+flashVarsParam = document.createElement("param");
+flashVarsParam.setAttribute("name", "flashvars")
+flashVarsParam.setAttribute("value", flashVarsParamString)
 
 var contentFlashSize = new Object();
 
