@@ -54,6 +54,7 @@ function transformContentFlash()
     scaleFactorY = updatedHeight / contentFlashSize.minimalHeight;
 
     $(contentFlash).css("transform", "scale( " + scaleFactorX + " ) translate3d( -50%, -50%, 0px)" );
+    contentFlash.style.transform = "scale( " + scaleFactorX + " ) translate3d( -50%, -50%, 0px)";
 }
 
 addEventListener("DOMContentLoaded",
