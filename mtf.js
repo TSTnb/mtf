@@ -26,16 +26,8 @@ function talkAboutThatContentFlashSize()
 
 function setContentFlashSize()
 {
-    var contentFlashAspectRatio = contentFlashSize.originalHeight / contentFlashSize.originalWidth;
-
-    var condensedWidth = contentFlashSize.minimalWidth
-    var condensedHeight = contentFlashSize.minimalHeight;
-
-    var scaleFactorX = contentFlashSize.originalWidth / condensedWidth;
-    var scaleFactorY = contentFlashSize.originalHeight / condensedHeight;
-
-    $(contentFlash).css("width", condensedWidth + "px");
-    $(contentFlash).css("height", condensedHeight + "px");
+    contentFlash.style.width = contentFlashSize.minimalWidth + "px";
+    contentFlash.style.height = contentFlashSize.minimalHeight + "px";
 }
 
 function transformContentFlash()
