@@ -11,6 +11,27 @@
 // @author morningpee
 // ==/UserScript==
 
+document.removeChild( document.documentElement );
+  document.appendChild(
+    documentElement = document.createElement("html")
+  ).innerHTML = "<head></head><body></body>";
+
+var request = new XMLHttpRequest();
+var SYNCHRONOUS_REQUEST=false;
+request.open('GET', 'http://www.tetrisfriends.com/users/ajax/profile_my_tetris_style.php', SYNCHRONOUS_REQUEST);
+request.send(null);
+
+if (request.status === 200) {
+  flashVars = eval( request.responseText.match(/flashVars = {[\s\S]*timestamp.*}/)[0] );
+  flashVars.apiUrl = "http://api.tetrisfriends.com/api";
+  flashVars.startParam = "clickToPlay";
+  delete flashVars.viewerId;
+  flashVarsParamString = Object.keys( flashVars ).map(k => k + '=' + flashVars[k] ).join('&');
+  flashVarsParam = document.createElement("param");
+  flashVarsParam.setAttribute("name", "flashvars")
+  flashVarsParam.setAttribute("value", flashVarsParamString)
+}
+
 var contentFlashSize = new Object();
 
 function talkAboutThatContentFlashSize()
@@ -53,26 +74,24 @@ function transformContentFlash()
     scaleFactorX = updatedWidth / contentFlashSize.minimalWidth
     scaleFactorY = updatedHeight / contentFlashSize.minimalHeight;
 
-    $(contentFlash).css("transform", "scale( " + scaleFactorX + " ) translate3d( -50%, -50%, 0px)" );
     contentFlash.style.transform = "scale( " + scaleFactorX + " ) translate3d( -50%, -50%, 0px)";
 }
 
 addEventListener("DOMContentLoaded",
     function()
     {
+        gamePrerollComplete = Function('contentFlash.as3_prerollDone && contentFlash.as3_prerollDone()');
+        contentFlashString = '<object id="contentFlash" data="//tetrisow-a.akamaihd.net/data5_0_0_3/games/Ultra/OWGameUltra.swf?version=3" allowscriptaccess="always" type="application/x-shockwave-flash" height="560" width="760"><param value="opaque" name="wmode"></object>';
+        contentFlash = new DOMParser().parseFromString(contentFlashString, 'text/html').body.children[0];
         talkAboutThatContentFlashSize()
-
+        contentFlash.removeAttribute("height");
+        contentFlash.removeAttribute("width");
+        contentFlash.appendChild(flashVarsParam);
         var headStr = '';
-        headStr += '<meta name="viewport" content="height=100, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">';
-        headStr += '<style> :root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } body { background: url(//tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; font-family: "Trebuchet MS",Helvetica,Tahoma,Geneva,Verdana,Arial,sans-serif; font-size: 12px; color: #666; margin: 0; text-align: left; display: block; overflow: hidden} #contentFlash { visibility: visible !important; position: absolute; top: 50%; left: 50%; transform-style: preserve-3d; transform-origin: top left; } * { margin: 0; padding: 0; outline: none; -moz-box-sizing: border-box; box-sizing: border-box; }</style>';
-        headStr = '<head>' + headStr + '</head>';
+        document.head.innerHTML += '<meta name="viewport" content="height=100, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">' +
+                                   '<style> :root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } body { background: url(//tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; font-family: "Trebuchet MS",Helvetica,Tahoma,Geneva,Verdana,Arial,sans-serif; font-size: 12px; color: #666; margin: 0; text-align: left; display: block; overflow: hidden} #contentFlash { visibility: visible !important; position: absolute; top: 50%; left: 50%; transform-style: preserve-3d; transform-origin: top left; } * { margin: 0; padding: 0; outline: none; -moz-box-sizing: border-box; box-sizing: border-box; }</style>';
 
-        var bodyStr = '';
-        bodyStr = $(contentFlash).clone().removeAttr("height").removeAttr("width").append("<param name=quality value=low></object>").append("<param name=scale value=exactfit>").find("param[name=wmode]").attr("value", "opaque").parent()[0].outerHTML;
-        bodyStr = '<body>' + bodyStr + '</body>';
-
-        document.documentElement.innerHTML = headStr + bodyStr;
-
+        document.body.appendChild(contentFlash);
         setContentFlashSize();
         transformContentFlash();
 
@@ -83,4 +102,4 @@ addEventListener("DOMContentLoaded",
         document.body.appendChild( document.createElement("script") ).innerHTML = startScript;
         addEventListener("resize", transformContentFlash);
     }
-)
+);
