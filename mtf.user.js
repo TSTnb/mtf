@@ -11,10 +11,7 @@
 // @author morningpee
 // ==/UserScript==
 
-document.removeChild( document.documentElement );
-  document.appendChild(
-    documentElement = document.createElement("html")
-  ).innerHTML = "<head></head><body></body>";
+window.stop();
 
 flashVars = new Object();
 flashVars.apiUrl = "http://api.tetrisfriends.com/api";
@@ -80,28 +77,22 @@ function transformContentFlash()
     contentFlash.style.transform = "scale( " + scaleFactorX + " ) translate3d( -50%, -50%, 0px)";
 }
 
-addEventListener("DOMContentLoaded",
-    function()
-    {
-        contentFlashString = '<object id="contentFlash" data="//tetrisow-a.akamaihd.net/data5_0_0_3/games/Ultra/OWGameUltra.swf?version=3" allowscriptaccess="always" type="application/x-shockwave-flash" height="560" width="760"><param value="opaque" name="wmode"></object>';
-        contentFlash = new DOMParser().parseFromString(contentFlashString, 'text/html').body.children[0];
-        talkAboutThatContentFlashSize()
-        contentFlash.removeAttribute("height");
-        contentFlash.removeAttribute("width");
-        contentFlash.appendChild(flashVarsParam);
-        var headStr = '';
-        document.head.innerHTML += '<meta name="viewport" content="height=100, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">' +
-                                   '<style> :root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } body { background: url(//tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; font-family: "Trebuchet MS",Helvetica,Tahoma,Geneva,Verdana,Arial,sans-serif; font-size: 12px; color: #666; margin: 0; text-align: left; display: block; overflow: hidden} #contentFlash { visibility: visible !important; position: absolute; top: 50%; left: 50%; transform-style: preserve-3d; transform-origin: top left; } * { margin: 0; padding: 0; outline: none; -moz-box-sizing: border-box; box-sizing: border-box; }</style>';
+contentFlashString = '<object id="contentFlash" data="//tetrisow-a.akamaihd.net/data5_0_0_3/games/Ultra/OWGameUltra.swf?version=3" allowscriptaccess="always" type="application/x-shockwave-flash" height="560" width="760"><param value="opaque" name="wmode"></object>';
+contentFlash = new DOMParser().parseFromString(contentFlashString, 'text/html').body.children[0];
+talkAboutThatContentFlashSize();
+contentFlash.removeAttribute("height");
+contentFlash.removeAttribute("width");
+contentFlash.appendChild(flashVarsParam);
 
-        document.body.appendChild(contentFlash);
-        setContentFlashSize();
-        transformContentFlash();
 
-        var startScript = 'if(contentFlash.outerHTML.indexOf("object") == -1){renderFlash()};';
-        if( location.href.indexOf("/Live/game.php") != -1 )
-            startScript += ';var sArenaTimes = 5; function startArena(){if(contentFlash.TotalFrames){try{contentFlash.as3_prerollDone()}catch(err){}}else{setTimeout(startArena, 1000); return}; sArenaTimes--; setTimeout(startArena, 1000)}; startArena()';
+setContentFlashSize();
+transformContentFlash();
+addEventListener("resize", transformContentFlash);
 
-        document.body.appendChild( document.createElement("script") ).innerHTML = startScript;
-        addEventListener("resize", transformContentFlash);
-    }
-);
+mtfDocumentElement = document.createElement("html");
+mtfDocumentElement.appendChild( document.createElement("head") ).innerHTML = '<meta name="viewport" content="height=100, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">' +
+                                                                             '<style> :root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } body { background: url(//tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; font-family: "Trebuchet MS",Helvetica,Tahoma,Geneva,Verdana,Arial,sans-serif; font-size: 12px; color: #666; margin: 0; text-align: left; display: block; overflow: hidden} #contentFlash { visibility: visible !important; position: absolute; top: 50%; left: 50%; transform-style: preserve-3d; transform-origin: top left; } * { margin: 0; padding: 0; outline: none; -moz-box-sizing: border-box; box-sizing: border-box; }</style>';
+mtfDocumentElement.appendChild( document.createElement("body") ).appendChild( contentFlash );
+
+document.removeChild( document.documentElement );
+document.appendChild( mtfDocumentElement );
