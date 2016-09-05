@@ -80,7 +80,6 @@ function transformContentFlash()
 addEventListener("DOMContentLoaded",
     function()
     {
-        gamePrerollComplete = Function('contentFlash.as3_prerollDone && contentFlash.as3_prerollDone()');
         contentFlashString = '<object id="contentFlash" data="//tetrisow-a.akamaihd.net/data5_0_0_3/games/Ultra/OWGameUltra.swf?version=3" allowscriptaccess="always" type="application/x-shockwave-flash" height="560" width="760"><param value="opaque" name="wmode"></object>';
         contentFlash = new DOMParser().parseFromString(contentFlashString, 'text/html').body.children[0];
         talkAboutThatContentFlashSize()
@@ -95,7 +94,7 @@ addEventListener("DOMContentLoaded",
         setContentFlashSize();
         transformContentFlash();
 
-        var startScript = 'gamePrerollComplete();if(contentFlash.outerHTML.indexOf("object") == -1){renderFlash()};';
+        var startScript = 'if(contentFlash.outerHTML.indexOf("object") == -1){renderFlash()};';
         if( location.href.indexOf("/Live/game.php") != -1 )
             startScript += ';var sArenaTimes = 5; function startArena(){if(contentFlash.TotalFrames){try{contentFlash.as3_prerollDone()}catch(err){}}else{setTimeout(startArena, 1000); return}; sArenaTimes--; setTimeout(startArena, 1000)}; startArena()';
 
