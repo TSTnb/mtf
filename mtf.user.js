@@ -29,9 +29,6 @@ if (request.status === 200) {
 }
 
 flashVarsParamString = Object.keys( flashVars ).map(k => k + '=' + flashVars[k] ).join('&');
-flashVarsParam = document.createElement("param");
-flashVarsParam.setAttribute("name", "flashvars")
-flashVarsParam.setAttribute("value", flashVarsParamString)
 
 var contentFlashSize = new Object();
 
@@ -78,12 +75,21 @@ function transformContentFlash()
     contentFlash.style.transform = "scale( " + scaleFactorX + " ) translate3d( -50%, -50%, 0px)";
 }
 
-contentFlashString = '<object id="contentFlash" data="//tetrisow-a.akamaihd.net/data5_0_0_3/games/Ultra/OWGameUltra.swf?version=3" allowscriptaccess="always" type="application/x-shockwave-flash" height="560" width="760"><param value="opaque" name="wmode"></object>';
-contentFlash = new DOMParser().parseFromString(contentFlashString, 'text/html').body.children[0];
+contentFlash = document.createElement("embed");
+contentFlash.setAttribute("id", "contentFlash");
+contentFlash.setAttribute("allowscriptaccess", "always");
+contentFlash.setAttribute("name", "plugin");
+contentFlash.setAttribute("height", "560");
+contentFlash.setAttribute("width", "760");
+contentFlash.setAttribute("src", "http://www.tetrisfriends.com/data/games/Ultra/OWGameUltra.swf");
+contentFlash.setAttribute("type", "application/x-shockwave-flash");
+contentFlash.setAttribute("wmode", "opaque");
+contentFlash.setAttribute("flashvars", flashVarsParamString);
+
 talkAboutThatContentFlashSize();
+
 contentFlash.removeAttribute("height");
 contentFlash.removeAttribute("width");
-contentFlash.appendChild(flashVarsParam);
 
 setContentFlashSize();
 transformContentFlash();
