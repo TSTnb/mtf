@@ -38,12 +38,13 @@ var contentFlashSize = new Object();
 
 function talkAboutThatContentFlashSize(contentFlash)
 {
+    contentFlashSize.scaleFactor = 2;
+
     contentFlashSize.originalWidth = 760;
     contentFlashSize.originalHeight = 560;
 
-    contentFlashSize.scaleFactor = 2;
-    contentFlashSize.minimalWidth = 760 / contentFlashSize.scaleFactor;
-    contentFlashSize.minimalHeight = 560 / contentFlashSize.scaleFactor;
+    contentFlashSize.minimalWidth = contentFlashSize.originalWidth / contentFlashSize.scaleFactor;
+    contentFlashSize.minimalHeight = contentFlashSize.originalHeight / contentFlashSize.scaleFactor;
 }
 
 function setContentFlashSize(contentFlash)
