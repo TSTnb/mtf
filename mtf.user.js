@@ -115,7 +115,7 @@ function runOnContentFlashLoaded()
     try{
         percentLoaded = contentFlash.PercentLoaded();
 
-        /* this line will fail if it isn't loaded */
+        /* this line will fail if it is not loaded */
         contentFlash.TGetProperty('/', 0);
     }
     catch(e){
@@ -131,7 +131,6 @@ function runOnContentFlashLoaded()
 
 function mtfInit()
 {
-    thingWrong = 0;
     contentFlash.LoadMovie(0, "http://tetrisow-a.akamaihd.net/data5_0_0_3/games/Ultra/OWGameUltra.swf");
     runOnContentFlashLoaded();
 }
