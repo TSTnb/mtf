@@ -42,8 +42,10 @@ function buildFlashVarsParamString()
     return flashVarsParamString;
 }
 
-function talkAboutThatContentFlashSize()
+function getContentFlashSize()
 {
+    contentFlashSize = new Object();
+
     contentFlashSize.T_WIDTH_SCALE_INDEX = 2;
     contentFlashSize.T_HEIGHT_SCALE_INDEX = 3;
 
@@ -55,7 +57,10 @@ function talkAboutThatContentFlashSize()
 
     contentFlash.style.width = contentFlashSize.originalWidth + "px";
     contentFlash.style.height = contentFlashSize.originalHeight + "px";
+}
 
+function scaleContentFlash()
+{
     contentFlashSize.scaleFactor = 2;
     contentFlashSize.translateConstant = -100 / contentFlashSize.scaleFactor / 2;
 
@@ -124,9 +129,14 @@ function runOnContentFlashLoaded()
 
     if( percentLoaded != "100" )
        return setTimeout( runOnContentFlashLoaded, 300 );
-    contentFlashSize = new Object();
-    talkAboutThatContentFlashSize();
-    transformContentFlash();
+    getContentFlashSize();
+
+    var isFirefox = navigator.userAgent.indexOf(/webkit/i) == -1;
+    if( isFirefox )
+    {
+        scaleContentFlash();
+        transformContentFlash();
+    }
 }
 
 function mtfInit()
@@ -137,7 +147,7 @@ function mtfInit()
 
 document.body.appendChild( document.createElement('style') ).innerHTML = '* { margin: 0; }';
 
-document.body.appendChild( document.createElement('script') ).innerHTML = mtfInit.toString() + talkAboutThatContentFlashSize.toString() + transformContentFlash.toString() + runOnContentFlashLoaded.toString();
+document.body.appendChild( document.createElement('script') ).innerHTML = mtfInit.toString() + getContentFlashSize.toString() + scaleContentFlash.toString() + transformContentFlash.toString() + runOnContentFlashLoaded.toString();
 document.body.appendChild( document.createElement('style') ).innerHTML = ':root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } embed { position: absolute; top: 50vh; left: 50vw; transform-style: preserve-3d; transform-origin: top left; }';
 
 document.body.appendChild( buildContentFlash( buildFlashVarsParamString() ) );
