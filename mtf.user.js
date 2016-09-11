@@ -137,6 +137,7 @@ function mtfInit()
 {
     contentFlash.LoadMovie(0, "http://tetrisow-a.akamaihd.net/data5_0_0_3/games/Ultra/OWGameUltra.swf");
     runOnContentFlashLoaded();
+    addEventListener("resize", transformContentFlash );
 }
 
 document.body.appendChild( document.createElement('style') ).innerHTML = '* { margin: 0; }';
@@ -145,7 +146,6 @@ document.body.appendChild( document.createElement('script') ).innerHTML = mtfIni
 document.body.appendChild( document.createElement('style') ).innerHTML = ':root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } embed { position: absolute; top: 50vh; left: 50vw; transform-style: preserve-3d; transform-origin: top left; }';
 
 buildFlashVarsParamString();
-addEventListener("resize", transformContentFlash );
 
 function haveFlashVars(responseText, flashVars)
 {
