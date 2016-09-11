@@ -103,6 +103,7 @@ function buildContentFlash(flashVarsParamString)
     contentFlash.setAttribute("type", "application/x-shockwave-flash");
     contentFlash.setAttribute("wmode", "opaque");
     contentFlash.setAttribute("flashvars", flashVarsParamString);
+    contentFlash.setAttribute("quality", "low");
     contentFlash.setAttribute("salign", "tl"); /* Live in particular needs this */
 
     contentFlash.style.visibility = "hidden";
