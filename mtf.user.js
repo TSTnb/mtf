@@ -163,5 +163,5 @@ function haveFlashVars(responseText, flashVars)
     flashVarsParamString = Object.keys( flashVars ).map(k => k + '=' + flashVars[k] ).join('&');
 
     document.body.appendChild( buildContentFlash( flashVarsParamString ) );
-    document.body.appendChild( document.createElement('script') ).innerHTML = "mtfInit()";
+    mtfInit();
 }
