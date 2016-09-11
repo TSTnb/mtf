@@ -28,18 +28,12 @@ function buildFlashVarsParamString()
     flashVars.apiUrl = "http://api.tetrisfriends.com/api";
     flashVars.startParam = "clickToPlay";
 
-    var request = new XMLHttpRequest();
-    var SYNCHRONOUS_REQUEST=false;
-    request.open('GET', 'http://www.tetrisfriends.com/users/ajax/profile_my_tetris_style.php', SYNCHRONOUS_REQUEST);
-    request.send(null);
+    var flashVarsRequest = new XMLHttpRequest();
+    flashVarsRequest.addEventListener("load", function(){ try{ haveFlashVars(this.responseText, flashVars); } catch(err){alert(err);} } );
 
-    if (request.status === 200) {
-        flashVars = Object.assign( flashVars, eval( request.responseText.match(/flashVars = {[\s\S]*timestamp.*}/)[0] ) );
-        delete flashVars.viewerId;
-    }
-
-    flashVarsParamString = Object.keys( flashVars ).map(k => k + '=' + flashVars[k] ).join('&');
-    return flashVarsParamString;
+    var ASYNCHRONOUS_REQUEST = true;
+    flashVarsRequest.open('GET', '/users/ajax/profile_my_tetris_style.php', ASYNCHRONOUS_REQUEST);
+    flashVarsRequest.send();
 }
 
 function getContentFlashSize()
@@ -109,7 +103,7 @@ function buildContentFlash(flashVarsParamString)
     contentFlash.setAttribute("wmode", "opaque");
     contentFlash.setAttribute("flashvars", flashVarsParamString);
 
-        contentFlash.style.visibility = "hidden";
+    contentFlash.style.visibility = "hidden";
 
     return contentFlash;
 }
@@ -150,7 +144,16 @@ document.body.appendChild( document.createElement('style') ).innerHTML = '* { ma
 document.body.appendChild( document.createElement('script') ).innerHTML = mtfInit.toString() + getContentFlashSize.toString() + scaleContentFlash.toString() + transformContentFlash.toString() + runOnContentFlashLoaded.toString();
 document.body.appendChild( document.createElement('style') ).innerHTML = ':root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } embed { position: absolute; top: 50vh; left: 50vw; transform-style: preserve-3d; transform-origin: top left; }';
 
-document.body.appendChild( buildContentFlash( buildFlashVarsParamString() ) );
-document.body.appendChild( document.createElement('script') ).innerHTML = "mtfInit()";
-
+buildFlashVarsParamString();
 addEventListener("resize", transformContentFlash );
+
+function haveFlashVars(responseText, flashVars)
+{
+    flashVars = Object.assign( flashVars, eval( responseText.match(/flashVars = {[\s\S]*timestamp.*}/)[0] ) );
+    delete flashVars.viewerId;
+
+    flashVarsParamString = Object.keys( flashVars ).map(k => k + '=' + flashVars[k] ).join('&');
+
+    document.body.appendChild( buildContentFlash( flashVarsParamString ) );
+    document.body.appendChild( document.createElement('script') ).innerHTML = "mtfInit()";
+}
