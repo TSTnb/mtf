@@ -14,6 +14,16 @@
 
 window.stop();
 
+/*start fresh with html5 */
+document.doctype&&
+    document.replaceChild( document.implementation.createDocumentType('html', "", ""), document.doctype );
+
+document.replaceChild(
+        document.implementation.createHTMLDocument("Minimal Tetris Friends").documentElement,
+        document.documentElement
+);
+mtfFrame = document.body.appendChild( document.createElement("iframe") );
+
 function buildFlashVarsParamString()
 {
     var flashVars = new Object();
@@ -86,9 +96,9 @@ function transformContentFlash()
     contentFlash.style.transform = "scale( " + scaleFactorX + " ) translate3d( " + contentFlashSize.translateConstant + "% , " + contentFlashSize.translateConstant + "% , 0px)";
 }
 
-function buildContentFlash(sourceDocument, flashVarsParamString)
+function buildContentFlash(flashVarsParamString)
 {
-    var contentFlash = sourceDocument.createElement("embed");
+    var contentFlash = document.createElement("embed");
     contentFlash.setAttribute("id", "contentFlash");
     contentFlash.setAttribute("allowscriptaccess", "always");
     contentFlash.setAttribute("name", "plugin");
@@ -132,29 +142,15 @@ function mtfInit()
 }
 
 
-
+try{
 /* html5 */
-document.doctype&&
-    document.replaceChild( document.implementation.createDocumentType('html', "", ""), document.doctype );
+document.body.appendChild( document.createElement('style') ).innerHTML = '* { margin: 0; } iframe { border: 0; width: 100vw; height: 100vh; }';
 
-mtfWrapper = document.createElement("html");
-mtfWrapper.appendChild( document.createElement("head") );
-mtfBody = mtfWrapper.appendChild( document.createElement("body") )
-    .appendChild(
-       mtfFrame = document.createElement("iframe")
-    );
-mtfBody.appendChild( document.createElement('style') ).innerHTML = '* { margin: 0; } iframe { border: 0; width: 100vw; height: 100vh; }';
+document.body.appendChild( document.createElement('script') ).innerHTML = mtfInit.toString() + talkAboutThatContentFlashSize.toString() + transformContentFlash.toString() + runOnContentFlashLoaded.toString();
+document.body.appendChild( document.createElement('style') ).innerHTML = ':root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } embed { position: absolute; top: 50vh; left: 50vw; transform-style: preserve-3d; transform-origin: top left; }';
 
-mtfDocument = document.implementation.createHTMLDocument("Minimal Tetris Friends");
+document.body.appendChild( buildContentFlash( buildFlashVarsParamString() ) );
+document.body.appendChild( document.createElement('script') ).innerHTML = "mtfInit()";
 
-mtfDocument.head.innerHTML = '<meta name="viewport" content="height=100, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />';
-
-mtfDocument.head.appendChild( document.createElement('script') ).innerHTML = mtfInit.toString() + talkAboutThatContentFlashSize.toString() + transformContentFlash.toString() + runOnContentFlashLoaded.toString();
-mtfDocument.body.appendChild( document.createElement('style') ).innerHTML = ':root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } embed { position: absolute; top: 50vh; left: 50vw; transform-style: preserve-3d; transform-origin: top left; }';
-
-mtfDocument.body.appendChild( buildContentFlash( mtfDocument, buildFlashVarsParamString() ) );
-mtfDocument.body.setAttribute("onload", "mtfInit()");
-
-mtfFrame.src = "data:text/html," + mtfDocument.documentElement.outerHTML;
-addEventListener("resize", function(){ frames[0].transformContentFlash.call( frames[0], frames[0].contentFlash ) } );
-document.replaceChild( mtfWrapper, document.documentElement );
+addEventListener("resize", transformContentFlash );
+}catch(err){alert(err);}
