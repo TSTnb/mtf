@@ -50,20 +50,20 @@ function talkAboutThatContentFlashSize()
     contentFlashSize.T_WIDTH_INDEX = 8;
     contentFlashSize.T_HEIGHT_INDEX = 9;
 
-    contentFlashSize.scaleFactor = 2;
-    contentFlashSize.translateConstant = -100 / contentFlashSize.scaleFactor / 2;
-
     contentFlashSize.originalWidth = contentFlash.TGetProperty('/', contentFlashSize.T_WIDTH_INDEX);
     contentFlashSize.originalHeight = contentFlash.TGetProperty('/', contentFlashSize.T_HEIGHT_INDEX);
+
+    contentFlash.style.width = contentFlashSize.originalWidth + "px";
+    contentFlash.style.height = contentFlashSize.originalHeight + "px";
+
+    contentFlashSize.scaleFactor = 2;
+    contentFlashSize.translateConstant = -100 / contentFlashSize.scaleFactor / 2;
 
     contentFlashSize.minimalWidth = contentFlashSize.originalWidth / contentFlashSize.scaleFactor;
     contentFlashSize.minimalHeight = contentFlashSize.originalHeight / contentFlashSize.scaleFactor;
 
     contentFlash.TSetProperty("/", contentFlashSize.T_HEIGHT_SCALE_INDEX, 100 / contentFlashSize.scaleFactor);
     contentFlash.TSetProperty("/", contentFlashSize.T_WIDTH_SCALE_INDEX, 100 / contentFlashSize.scaleFactor);
-
-    contentFlash.style.width = contentFlashSize.originalWidth + "px";
-    contentFlash.style.height = contentFlashSize.originalHeight + "px";
 }
 
 function transformContentFlash()
