@@ -5,7 +5,6 @@
 // @include http://*tetrisfriends.com/games/Ultra/game.php*
 // @include http://*tetrisfriends.com/games/Sprint/game.php*
 // @include http://*tetrisfriends.com/games/Live/game.php*
-// @include http://*tetrisfriends.com/data/games/Ultra/OWGameUltra.swf
 // @grant none
 // @run-at document-start
 // @version 4.2.4
