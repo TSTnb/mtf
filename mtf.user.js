@@ -14,7 +14,7 @@
 
 window.stop();
 
-/*start fresh with html5 */
+/*start fresh with html5 document */
 document.doctype&&
     document.replaceChild( document.implementation.createDocumentType('html', "", ""), document.doctype );
 
