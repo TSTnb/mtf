@@ -11,6 +11,7 @@
 // @author morningpee
 // ==/UserScript==
 
+
 window.stop();
 
 /*start fresh with html5 document */
@@ -102,6 +103,7 @@ function buildContentFlash(flashVarsParamString)
     contentFlash.setAttribute("type", "application/x-shockwave-flash");
     contentFlash.setAttribute("wmode", "opaque");
     contentFlash.setAttribute("flashvars", flashVarsParamString);
+    contentFlash.setAttribute("salign", "tl"); /* Live in particular needs this */
 
     contentFlash.style.visibility = "hidden";
 
@@ -135,14 +137,20 @@ function runOnContentFlashLoaded()
 
 function mtfInit()
 {
-    contentFlash.LoadMovie(0, "http://tetrisow-a.akamaihd.net/data5_0_0_3/games/Ultra/OWGameUltra.swf");
+    contentFlash.LoadMovie(0, "http://www.tetrisfriends.com/data/games/" + gameName + "/" + gameFileName[ gameName ]);
     runOnContentFlashLoaded();
     addEventListener("resize", transformContentFlash );
 }
 
+gameFileName = [];
+gameFileName['Ultra'] = 'OWGameUltra.swf';
+gameFileName['Sprint'] = 'OWGameSprint.swf';
+gameFileName['Live'] = 'OWGameTetrisLive.swf';
+gameName = location.href.match(/games\/(.*)\/game.php/)[1];
+
 document.body.appendChild( document.createElement('style') ).innerHTML = '* { margin: 0; }';
 
-document.body.appendChild( document.createElement('script') ).innerHTML = mtfInit.toString() + getContentFlashSize.toString() + scaleContentFlash.toString() + transformContentFlash.toString() + runOnContentFlashLoaded.toString();
+/*document.body.appendChild( document.createElement('script') ).innerHTML = mtfInit.toString() + getContentFlashSize.toString() + scaleContentFlash.toString() + transformContentFlash.toString() + runOnContentFlashLoaded.toString();*/
 document.body.appendChild( document.createElement('style') ).innerHTML = ':root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } embed { position: absolute; top: 50vh; left: 50vw; transform-style: preserve-3d; transform-origin: top left; }';
 
 buildFlashVarsParamString();
