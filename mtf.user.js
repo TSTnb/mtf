@@ -22,7 +22,6 @@ document.replaceChild(
         document.implementation.createHTMLDocument("Minimal Tetris Friends").documentElement,
         document.documentElement
 );
-mtfFrame = document.body.appendChild( document.createElement("iframe") );
 
 function buildFlashVarsParamString()
 {
@@ -144,7 +143,7 @@ function mtfInit()
 
 try{
 /* html5 */
-document.body.appendChild( document.createElement('style') ).innerHTML = '* { margin: 0; } iframe { border: 0; width: 100vw; height: 100vh; }';
+document.body.appendChild( document.createElement('style') ).innerHTML = '* { margin: 0; }';
 
 document.body.appendChild( document.createElement('script') ).innerHTML = mtfInit.toString() + talkAboutThatContentFlashSize.toString() + transformContentFlash.toString() + runOnContentFlashLoaded.toString();
 document.body.appendChild( document.createElement('style') ).innerHTML = ':root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } embed { position: absolute; top: 50vh; left: 50vw; transform-style: preserve-3d; transform-origin: top left; }';
