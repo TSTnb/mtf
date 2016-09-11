@@ -127,7 +127,7 @@ function runOnContentFlashLoaded()
        return setTimeout( runOnContentFlashLoaded, 300 );
     getContentFlashSize();
 
-    var isFirefox = navigator.userAgent.indexOf(/webkit/i) == -1;
+    var isFirefox = navigator.userAgent.search(/webkit/i) == -1;
     if( isFirefox )
     {
         scaleContentFlash();
