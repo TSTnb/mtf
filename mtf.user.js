@@ -136,9 +136,6 @@ function mtfInit()
     runOnContentFlashLoaded();
 }
 
-
-try{
-/* html5 */
 document.body.appendChild( document.createElement('style') ).innerHTML = '* { margin: 0; }';
 
 document.body.appendChild( document.createElement('script') ).innerHTML = mtfInit.toString() + talkAboutThatContentFlashSize.toString() + transformContentFlash.toString() + runOnContentFlashLoaded.toString();
@@ -148,4 +145,3 @@ document.body.appendChild( buildContentFlash( buildFlashVarsParamString() ) );
 document.body.appendChild( document.createElement('script') ).innerHTML = "mtfInit()";
 
 addEventListener("resize", transformContentFlash );
-}catch(err){alert(err);}
