@@ -125,12 +125,9 @@ function runOnContentFlashLoaded()
 
     if( percentLoaded != "100" )
        return setTimeout( runOnContentFlashLoaded, 300 );
-    try
-        {
     contentFlashSize = new Object();
     talkAboutThatContentFlashSize();
     transformContentFlash();
-            }catch(err){alert(err);}
 }
 
 function mtfInit()
