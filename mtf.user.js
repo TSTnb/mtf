@@ -103,6 +103,7 @@ function buildContentFlash(flashVarsParamString)
     contentFlash.setAttribute("type", "application/x-shockwave-flash");
     contentFlash.setAttribute("wmode", "opaque");
     contentFlash.setAttribute("flashvars", flashVarsParamString);
+    contentFlash.setAttribute("quality", "low");
     contentFlash.setAttribute("salign", "tl"); /* Live in particular needs this */
 
     contentFlash.style.visibility = "hidden";
@@ -127,7 +128,7 @@ function runOnContentFlashLoaded()
        return setTimeout( runOnContentFlashLoaded, 300 );
     getContentFlashSize();
 
-    var isFirefox = navigator.userAgent.indexOf(/webkit/i) == -1;
+    var isFirefox = navigator.userAgent.search(/webkit/i) == -1;
     if( isFirefox )
     {
         scaleContentFlash();
