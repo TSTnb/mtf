@@ -93,7 +93,7 @@ function transformContentFlash()
     scaleFactorY = updatedHeight / contentFlashSize.minimalHeight;
 
     /*we need to use translate3d instead of translate for 3d acceleration*/
-    contentFlash.style.transform = "scale3d( " + scaleFactorX + "," +  scaleFactorX + "," + scaleFactorX + " ) translate3d(-50% , -50% , 0px)";
+    contentFlash.style.transform = "scale3d( " + scaleFactorX + "," + scaleFactorX + "," + scaleFactorX + " ) translate3d(-50% , -50% , 0px)";
 }
 
 function buildContentFlash(flashVarsParamString)
