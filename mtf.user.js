@@ -57,7 +57,6 @@ function getContentFlashSize()
 function scaleContentFlash()
 {
     contentFlashSize.scaleFactor = 2;
-    contentFlashSize.translateConstant = contentFlashSize.scaleFactor / 2;
 
     contentFlashSize.minimalWidth = contentFlashSize.originalWidth / contentFlashSize.scaleFactor;
     contentFlashSize.minimalHeight = contentFlashSize.originalHeight / contentFlashSize.scaleFactor;
