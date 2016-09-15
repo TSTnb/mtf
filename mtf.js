@@ -1,89 +1,168 @@
 // ==UserScript==
 // @name Minimal Tetris Friends
 // @namespace minimaltetrisfriends
-// @description Reduces lag as much as possible by removing everything from the page except for the games themselves.
+// @description Reduces lag as much as possible
 // @include http://*tetrisfriends.com/games/Ultra/game.php*
 // @include http://*tetrisfriends.com/games/Sprint/game.php*
 // @include http://*tetrisfriends.com/games/Live/game.php*
-// @grant none 
+// @grant none
 // @run-at document-start
-// @version 2016-03-06,4.0.1
-// @author knux
+// @version 4.2.5 Firefox-only
+// @author morningpee
 // ==/UserScript==
 
-var contentFlashSize = new Object();
 
-function resizeContentFlash()
+window.stop();
+
+/*start fresh with html5 document */
+document.doctype&&
+    document.replaceChild( document.implementation.createDocumentType('html', "", ""), document.doctype );
+
+document.replaceChild(
+        document.implementation.createHTMLDocument("Minimal Tetris Friends").documentElement,
+        document.documentElement
+);
+
+function buildFlashVarsParamString()
 {
-    windowSizeRatio = innerHeight / innerWidth;
-    contentFlashSizeRatio = contentFlashSize.originalHeight / contentFlashSize.originalWidth;
-    
-    if(  contentFlashSizeRatio > windowSizeRatio )
+    var flashVars = new Object();
+    flashVars.apiUrl = "http://api.tetrisfriends.com/api";
+    flashVars.startParam = "clickToPlay";
+
+    var flashVarsRequest = new XMLHttpRequest();
+    flashVarsRequest.addEventListener("load", function(){ try{ haveFlashVars(this.responseText, flashVars); } catch(err){alert(err);} } );
+
+    var ASYNCHRONOUS_REQUEST = true;
+    flashVarsRequest.open('GET', '/users/ajax/profile_my_tetris_style.php', ASYNCHRONOUS_REQUEST);
+    flashVarsRequest.send();
+}
+
+function getContentFlashSize()
+{
+    contentFlashSize = new Object();
+
+    contentFlashSize.T_WIDTH_SCALE_INDEX = 2;
+    contentFlashSize.T_HEIGHT_SCALE_INDEX = 3;
+
+    contentFlashSize.T_WIDTH_INDEX = 8;
+    contentFlashSize.T_HEIGHT_INDEX = 9;
+
+    contentFlashSize.originalWidth = contentFlash.TGetProperty('/', contentFlashSize.T_WIDTH_INDEX);
+    contentFlashSize.originalHeight = contentFlash.TGetProperty('/', contentFlashSize.T_HEIGHT_INDEX);
+
+    contentFlash.style.width = contentFlashSize.originalWidth + "px";
+    contentFlash.style.height = contentFlashSize.originalHeight + "px";
+}
+
+function scaleContentFlash()
+{
+    contentFlashSize.scaleFactor = 2;
+
+    contentFlashSize.minimalWidth = contentFlashSize.originalWidth / contentFlashSize.scaleFactor;
+    contentFlashSize.minimalHeight = contentFlashSize.originalHeight / contentFlashSize.scaleFactor;
+
+    contentFlash.style.width = contentFlashSize.minimalWidth + "px";
+    contentFlash.style.height = contentFlashSize.minimalHeight + "px";
+
+    contentFlash.TSetProperty("/", contentFlashSize.T_HEIGHT_SCALE_INDEX, 100 / contentFlashSize.scaleFactor);
+    contentFlash.TSetProperty("/", contentFlashSize.T_WIDTH_SCALE_INDEX, 100 / contentFlashSize.scaleFactor);
+}
+
+function transformContentFlash()
+{
+    contentFlash.style.visibility = "initial";
+    var windowAspectRatio = innerHeight / innerWidth;
+
+    var contentFlashAspectRatio = contentFlashSize.originalHeight / contentFlashSize.originalWidth;
+
+    var scaleFactorX;
+    var scaleFactorY;
+
+    if(  contentFlashAspectRatio > windowAspectRatio )
     {
+        updatedWidth = Math.round( innerHeight / contentFlashAspectRatio );
         updatedHeight = innerHeight;
-        updatedWidth = Math.round( innerHeight / contentFlashSizeRatio );
     }
     else
     {
-        updatedHeight = Math.round( innerWidth * contentFlashSizeRatio );
         updatedWidth = innerWidth;
+        updatedHeight = Math.round( innerWidth * contentFlashAspectRatio );
     }
 
-    contentFlash.style.height = updatedHeight + "px";
-    contentFlash.style.width = updatedWidth + "px";
-    contentFlash.style.marginTop = -updatedHeight / 2 + "px";
-    contentFlash.style.marginLeft = -updatedWidth / 2 + "px";
+    scaleFactorX = updatedWidth / contentFlashSize.minimalWidth;
+    scaleFactorY = updatedHeight / contentFlashSize.minimalHeight;
+
+    /*we need to use translate3d instead of translate for 3d acceleration*/
+    contentFlash.style.transform = "scale3d( " + scaleFactorX + "," + scaleFactorX + "," + scaleFactorX + " ) translate3d(-50% , -50% , 0px)";
 }
 
-function startScriptFunction(){
-   gamePrerollComplete();
-   if(contentFlash.outerHTML.indexOf("object") == -1){
-       renderFlash();
-   }
-   if( location.href.indexOf("/Live/game.php") != -1 ){
-       var sArenaTimes = 5;
-       function startArena() {
-           if(contentFlash.TotalFrames)
-           {
-               try{
-                   contentFlash.as3_prerollDone();
-               }catch(err){}
-           }else
-           {
-               setTimeout(startArena, 1000);
-               return;
-           }
-           sArenaTimes--;
-           setTimeout(startArena, 1000);
-       }
-       startArena();
-   }
-}
-
-addEventListener("DOMContentLoaded", initializeMinimalTetrisFriends);
-
-function initializeMinimalTetrisFriends()
+function buildContentFlash(flashVarsParamString)
 {
-        contentFlashSize.originalWidth = contentFlash.width;
-        contentFlashSize.originalHeight = contentFlash.height;
-        resizeContentFlash();
+    var contentFlash = document.createElement("embed");
+    contentFlash.setAttribute("id", "contentFlash");
+    contentFlash.setAttribute("allowscriptaccess", "always");
+    contentFlash.setAttribute("name", "plugin");
+    contentFlash.setAttribute("type", "application/x-shockwave-flash");
+    contentFlash.setAttribute("wmode", "opaque");
+    contentFlash.setAttribute("flashvars", flashVarsParamString);
+    contentFlash.setAttribute("quality", "low");
+    contentFlash.setAttribute("salign", "tl"); /* Live in particular needs this */
+    contentFlash.setAttribute("scale", "noscale");
 
-        var headStr = '<style> body { background: url(//tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; font-family: "Trebuchet MS",Helvetica,Tahoma,Geneva,Verdana,Arial,sans-serif; font-size: 12px; color: #666; margin: 0; text-align: center; display: block; overflow: hidden} #contentFlash { visibility: visible !important; position: absolute; top: 50%; left: 50%; } * { margin: 0; padding: 0; outline: none; -moz-box-sizing: border-box; box-sizing: border-box; }</style>';
+    contentFlash.style.visibility = "hidden";
 
+    return contentFlash;
+}
 
+function runOnContentFlashLoaded()
+{
+    var percentLoaded = "0";
+    try{
+        percentLoaded = contentFlash.PercentLoaded();
 
-        var bodyObject = contentFlash.cloneNode();
-        bodyObject.appendChild( document.createElement("param") ).outerHTML = "<param name=quality value=low>";
-        bodyObject.appendChild( document.createElement("param") ).outerHTML = "<param name=wmode value=direct>";
-        bodyStr = bodyObject.outerHTML
-        document.documentElement.innerHTML = 
-            '<head>' + headStr + '</head>' +
-            '<body>' + bodyStr + '</body>';
-        /*implicit typecast to get function scope contents as string*/
-        var startScriptString = startScriptFunction + '';
-        /*strip wrapping function declaration*/
-        startScriptString = startScriptString.slice( startScriptString.indexOf('{') + 2, startScriptString.length - 2);
-        document.body.appendChild( document.createElement("script") ).innerHTML =  startScriptString;
+        /* this line will fail if it is not loaded */
+        contentFlash.TGetProperty('/', 0);
+    }
+    catch(e){
+        percentLoaded = "0";
     }
 
-addEventListener("resize", resizeContentFlash);
+    if( percentLoaded != "100" )
+       return setTimeout( runOnContentFlashLoaded, 300 );
+    getContentFlashSize();
+
+    var isFirefox = navigator.userAgent.search(/webkit/i) == -1;
+    if( isFirefox )
+    {
+        scaleContentFlash();
+        transformContentFlash();
+    }
+}
+
+function mtfInit()
+{
+    contentFlash.LoadMovie(0, "http://www.tetrisfriends.com/data/games/" + gameName + "/" + gameFileName[ gameName ]);
+    runOnContentFlashLoaded();
+    addEventListener("resize", transformContentFlash );
+}
+
+gameFileName = [];
+gameFileName['Ultra'] = 'OWGameUltra.swf';
+gameFileName['Sprint'] = 'OWGameSprint.swf';
+gameFileName['Live'] = 'OWGameTetrisLive.swf';
+gameName = location.href.match(/games\/(.*)\/game.php/)[1];
+
+document.body.appendChild( document.createElement('style') ).innerHTML = '* { margin: 0; } :root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } embed { position: absolute; top: 50%; left: 50%; transform-style: preserve-3d; transform-origin: top left; }';
+
+buildFlashVarsParamString();
+
+function haveFlashVars(responseText, flashVars)
+{
+    flashVars = Object.assign( flashVars, eval( responseText.match(/flashVars = {[\s\S]*timestamp.*}/)[0] ) );
+    delete flashVars.viewerId;
+
+    flashVarsParamString = Object.keys( flashVars ).map(k => k + '=' + flashVars[k] ).join('&');
+
+    document.body.appendChild( buildContentFlash( flashVarsParamString ) );
+    mtfInit();
+}
