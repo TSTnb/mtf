@@ -1,5 +1,5 @@
  ![](http://i.imgur.com/1njY7qe.png)
-###### Version 4.2.4, last updated 2016-08-02
+###### Version 4.2.5 (Firefox only), last updated 2016-09-14
 
 ### Description
 This is a script that removes everything from the page except for the game itself and the nice-looking background, sets the Flash quality to "low" instead of "high", and sets the "wmode" parameter to "direct". *This reduces lag significantly.*
