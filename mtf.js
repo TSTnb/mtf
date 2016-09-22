@@ -29,6 +29,9 @@ function buildFlashVarsParamString()
     flashVars.apiUrl = "http://api.tetrisfriends.com/api";
     flashVars.startParam = "clickToPlay";
 
+	if( gameName === "Live" )
+		flashVars.isPrerollEnabled = "true";
+
     var flashVarsRequest = new XMLHttpRequest();
     flashVarsRequest.addEventListener("load", function(){ try{ haveFlashVars(this.responseText, flashVars); } catch(err){alert(err);} } );
 
@@ -73,6 +76,9 @@ function scaleContentFlash()
 
 function showContentFlash()
 {
+	if( gameName === "Live" )
+		contentFlash.as3_prerollDone();
+
     contentFlash.style.visibility = "initial";
 }
 
