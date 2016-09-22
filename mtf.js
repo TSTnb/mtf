@@ -47,16 +47,19 @@ function getContentFlashSize()
     contentFlashSize.T_WIDTH_INDEX = 8;
     contentFlashSize.T_HEIGHT_INDEX = 9;
 
-    contentFlashSize.originalWidth = contentFlash.TGetProperty('/', contentFlashSize.T_WIDTH_INDEX);
+	/* canvas size is off \: */
+	if( gameName === "Live" )
+		contentFlashSize.originalWidth = 946;
+	else
+		contentFlashSize.originalWidth = contentFlash.TGetProperty('/', contentFlashSize.T_WIDTH_INDEX);
+
     contentFlashSize.originalHeight = contentFlash.TGetProperty('/', contentFlashSize.T_HEIGHT_INDEX);
 
-    contentFlash.style.width = contentFlashSize.originalWidth + "px";
-    contentFlash.style.height = contentFlashSize.originalHeight + "px";
 }
 
 function scaleContentFlash()
 {
-    contentFlashSize.scaleFactor = 2;
+    contentFlashSize.scaleFactor = 1;
 
     contentFlashSize.minimalWidth = contentFlashSize.originalWidth / contentFlashSize.scaleFactor;
     contentFlashSize.minimalHeight = contentFlashSize.originalHeight / contentFlashSize.scaleFactor;
@@ -68,9 +71,13 @@ function scaleContentFlash()
     contentFlash.TSetProperty("/", contentFlashSize.T_WIDTH_SCALE_INDEX, 100 / contentFlashSize.scaleFactor);
 }
 
-function transformContentFlash()
+function showContentFlash()
 {
     contentFlash.style.visibility = "initial";
+}
+
+function computeContentFlashScale()
+{
     var windowAspectRatio = innerHeight / innerWidth;
 
     var contentFlashAspectRatio = contentFlashSize.originalHeight / contentFlashSize.originalWidth;
@@ -89,6 +96,21 @@ function transformContentFlash()
         updatedHeight = Math.round( innerWidth * contentFlashAspectRatio );
     }
 
+    return { width: updatedWidth, height: updatedHeight };
+}
+
+function resizeContentFlash()
+{
+    var contentFlashDimensions = computeContentFlashScale();
+    contentFlash.style.width = contentFlashDimensions.width + "px";
+    contentFlash.style.height = contentFlashDimensions.height + "px";
+
+}
+
+function transformContentFlash()
+{
+    var contentFlashDimensions = computeContentFlashScale();
+
     scaleFactorX = updatedWidth / contentFlashSize.minimalWidth;
     scaleFactorY = updatedHeight / contentFlashSize.minimalHeight;
 
@@ -103,11 +125,11 @@ function buildContentFlash(flashVarsParamString)
     contentFlash.setAttribute("allowscriptaccess", "always");
     contentFlash.setAttribute("name", "plugin");
     contentFlash.setAttribute("type", "application/x-shockwave-flash");
-    contentFlash.setAttribute("wmode", "opaque");
+    contentFlash.setAttribute("wmode", "direct");
     contentFlash.setAttribute("flashvars", flashVarsParamString);
     contentFlash.setAttribute("quality", "low");
     contentFlash.setAttribute("salign", "tl"); /* Live in particular needs this */
-    contentFlash.setAttribute("scale", "noscale");
+    contentFlash.setAttribute("scale", "noborder");
 
     contentFlash.style.visibility = "hidden";
 
@@ -136,14 +158,21 @@ function runOnContentFlashLoaded()
     {
         scaleContentFlash();
         transformContentFlash();
+		addEventListener("resize", transformContentFlash );
     }
+	else
+	{
+		resizeContentFlash();
+		addEventListener("resize", resizeContentFlash );
+	}
+
+    showContentFlash();
 }
 
 function mtfInit()
 {
     contentFlash.LoadMovie(0, "http://www.tetrisfriends.com/data/games/" + gameName + "/" + gameFileName[ gameName ]);
     runOnContentFlashLoaded();
-    addEventListener("resize", transformContentFlash );
 }
 
 gameFileName = [];
@@ -152,7 +181,7 @@ gameFileName['Sprint'] = 'OWGameSprint.swf';
 gameFileName['Live'] = 'OWGameTetrisLive.swf';
 gameName = location.href.match(/games\/(.*)\/game.php/)[1];
 
-document.body.appendChild( document.createElement('style') ).innerHTML = '* { margin: 0; } :root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } embed { position: absolute; top: 50%; left: 50%; transform-style: preserve-3d; transform-origin: top left; }';
+document.body.appendChild( document.createElement('style') ).innerHTML = '* { margin: 0; } :root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } embed { position: absolute; transform-style: preserve-3d; transform-origin: top left; top: 50%; left: 50%; transform: translate3d( -50%, -50%, 0 ); width: 100%; height: 100%; }';
 
 buildFlashVarsParamString();
 
