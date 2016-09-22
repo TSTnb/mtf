@@ -177,14 +177,32 @@ function runOnContentFlashLoaded()
 
 function mtfInit()
 {
-    contentFlash.LoadMovie(0, "http://www.tetrisfriends.com/data/games/" + gameName + "/" + gameFileName[ gameName ]);
+    contentFlash.LoadMovie(0, "http://www.tetrisfriends.com/data/games/" + gameName + "/" + getGameFileName( gameName ) );
     runOnContentFlashLoaded();
 }
 
-gameFileName = [];
-gameFileName['Ultra'] = 'OWGameUltra.swf';
-gameFileName['Sprint'] = 'OWGameSprint.swf';
-gameFileName['Live'] = 'OWGameTetrisLive.swf';
+function getGameFileName( gameName )
+{
+	var gameFileName;
+
+	var gameFileNames =
+		{ 	 Battle2P:		"OWGameBattle2pMaps.swf"
+			,ColorFull:		"OWGameColorBlind.swf"
+			,Live:			"OWGameTetrisLive.swf"
+			,Mono:			"OWGameColorBlind.swf"
+			,NBlox:			"nbloxWebsite.swf"
+			,Sprint5P:		"OWGameSprint5p.swf"
+			,TetrisConnect:	"OWGameConnect.swf"
+		};
+
+	if( typeof gameFileNames[ gameName ] === "string" )
+		gameFileName = gameFileNames[ gameName ];
+	else
+		gameFileName = "OWGame" + gameName + ".swf";
+
+	return gameFileName;
+}
+
 gameName = location.href.match(/games\/(.*)\/game.php/)[1];
 
 document.body.appendChild( document.createElement('style') ).innerHTML = '* { margin: 0; } :root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } embed { position: absolute; transform-style: preserve-3d; transform-origin: top left; top: 50%; left: 50%; transform: translate3d( -50%, -50%, 0 ); width: 100%; height: 100%; }';
