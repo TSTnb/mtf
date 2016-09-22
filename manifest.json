@@ -4,7 +4,6 @@
       "matches": [ "*://*.tetrisfriends.com/games/*/game.php*" ],
       "run_at": "document_end"
    } ],
-   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
    "description": "Reduces lag as much as possible by removing everything from the page except for the game itself.",
    "icons": {
       "128": "logo128.png",
