@@ -192,7 +192,7 @@ function getGameFileName( gameName )
 			,Mono:			"OWGameColorBlind.swf"
 			,NBlox:			"nbloxWebsite.swf"
 			,Sprint5P:		"OWGameSprint5p.swf"
-			,TetrisConnect:	"OWGameConnect.swf"
+			,TetrisConnect:	        "OWGameConnect.swf"
 		};
 
 	if( typeof gameFileNames[ gameName ] === "string" )
