@@ -33,7 +33,7 @@ function buildFlashVarsParamString()
     flashVarsRequest.addEventListener("load", function(){ try{ haveFlashVars(this.responseText, flashVars); } catch(err){alert(err);} } );
 
     var ASYNCHRONOUS_REQUEST = true;
-    flashVarsRequest.open('GET', '/users/ajax/profile_my_tetris_style.php', ASYNCHRONOUS_REQUEST);
+    flashVarsRequest.open('GET', '/users/ajax/profile_my_tetris_style.php?id=1', ASYNCHRONOUS_REQUEST);
     flashVarsRequest.send();
 }
 
@@ -187,17 +187,10 @@ buildFlashVarsParamString();
 
 function haveFlashVars(responseText, flashVars)
 {
-	ajaxFlashVars = responseText.match(/flashVars = {[\s\S]*timestamp.*}/);
+    flashVars = Object.assign( flashVars, eval( responseText.match(/flashVars = {[\s\S]*timestamp.*}/)[0] ) );
+    delete flashVars.viewerId;
 
-	if( ajaxFlashVars !== null )
-		flashVars = Object.assign( flashVars, eval( ajaxFlashVars[0] ) );
-	else
-	{
-		/* they didn't log in or something, but maybe that's on purpose, you never know */
-	}
-
-	delete flashVars.viewerId;
-	flashVarsParamString = Object.keys( flashVars ).map(k => k + '=' + flashVars[k] ).join('&');
+    flashVarsParamString = Object.keys( flashVars ).map(k => k + '=' + flashVars[k] ).join('&');
 
     document.body.appendChild( buildContentFlash( flashVarsParamString ) );
     mtfInit();
