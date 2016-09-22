@@ -187,10 +187,17 @@ buildFlashVarsParamString();
 
 function haveFlashVars(responseText, flashVars)
 {
-    flashVars = Object.assign( flashVars, eval( responseText.match(/flashVars = {[\s\S]*timestamp.*}/)[0] ) );
-    delete flashVars.viewerId;
+	ajaxFlashVars = responseText.match(/flashVars = {[\s\S]*timestamp.*}/);
 
-    flashVarsParamString = Object.keys( flashVars ).map(k => k + '=' + flashVars[k] ).join('&');
+	if( ajaxFlashVars !== null )
+		flashVars = Object.assign( flashVars, eval( ajaxFlashVars[0] ) );
+	else
+	{
+		/* they didn't log in or something, but maybe that's on purpose, you never know */
+	}
+
+	delete flashVars.viewerId;
+	flashVarsParamString = Object.keys( flashVars ).map(k => k + '=' + flashVars[k] ).join('&');
 
     document.body.appendChild( buildContentFlash( flashVarsParamString ) );
     mtfInit();
