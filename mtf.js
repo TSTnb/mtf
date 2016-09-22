@@ -77,7 +77,7 @@ function scaleContentFlash()
 function showContentFlash()
 {
 	if( gameName === "Live" )
-		contentFlash.as3_prerollDone();
+            try{ contentFlash.as3_prerollDone(); }catch(err){ /* user is not guest */ }
 
     contentFlash.style.visibility = "initial";
 }
