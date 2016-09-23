@@ -199,6 +199,7 @@ function getGameFileName( gameName )
 			,Live           :	"OWGameTetrisLive.swf"
 			,Mono           :	"OWGameColorBlind.swf"
 			,NBlox          :	"nbloxWebsite.swf"
+			,Rally8P        :	"OWRally8P.swf"
 			,Sprint5P       :	"OWGameSprint5p.swf"
 			,TetrisConnect  :       "OWGameConnect.swf"
 		};
