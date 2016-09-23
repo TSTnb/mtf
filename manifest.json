@@ -1,12 +1,10 @@
 {
-   "content_scripts": [ {
-      "js": [ "mtf.js" ],
-      "matches": [ "*://*.tetrisfriends.com/games/Ultra/game.php*"
-                 , "*://*.tetrisfriends.com/games/Sprint/game.php*"
-                 , "*://*.tetrisfriends.com/games/Live/game.php*"
-      ],
-      "run_at": "document_start"
-   } ],
+   "content_scripts": [
+      { "js"               :  [ "mtf.js"                                        ]
+      , "matches"          :  [ "*://*.tetrisfriends.com/games/*/game.php*"     ]
+      , "run_at"           :  "document_start"
+      }
+   ],
    "description": "Reduces lag as much as possible by removing everything from the page except for the game itself.",
    "icons": {
       "128": "logo128.png",
