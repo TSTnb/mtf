@@ -50,13 +50,17 @@ function getContentFlashSize()
     contentFlashSize.T_WIDTH_INDEX = 8;
     contentFlashSize.T_HEIGHT_INDEX = 9;
 
-	/* canvas size is off \: */
-	if( gameName === "Live" )
-		contentFlashSize.originalWidth = 946;
-	else
-		contentFlashSize.originalWidth = contentFlash.TGetProperty('/', contentFlashSize.T_WIDTH_INDEX);
 
-    contentFlashSize.originalHeight = contentFlash.TGetProperty('/', contentFlashSize.T_HEIGHT_INDEX);
+    contentFlashSize.originalWidth = contentFlash.TGetProperty('/', contentFlashSize.T_WIDTH_INDEX);
+
+contentFlashSize.originalHeight = contentFlash.TGetProperty('/', contentFlashSize.T_HEIGHT_INDEX);
+
+    /* canvas size is off \: */
+    if( gameName === "Live" )
+        contentFlashSize.originalWidth = 946;
+
+    if( gameName === "NBlox" )
+        contentFlashSize.originalHeight = 900;
 
 }
 
@@ -76,8 +80,12 @@ function scaleContentFlash()
 
 function showContentFlash()
 {
-	if( gameName === "Live" )
-            try{ contentFlash.as3_prerollDone(); }catch(err){ /* user is not guest */ }
+    if( gameName === "Live" )
+        try{ contentFlash.as3_prerollDone(); }catch(err){ /* user is not guest */ }
+    if( gameName === "NBlox" )
+    {
+        document.body.appendChild( document.createElement("iframe") ).src = "http://tetrisfriends.com/data/games/" + gameName + "/OWGame" + gameName + ".swf";
+    }
 
     contentFlash.style.visibility = "initial";
 }
@@ -177,7 +185,7 @@ function runOnContentFlashLoaded()
 
 function mtfInit()
 {
-    contentFlash.LoadMovie(0, "http://www.tetrisfriends.com/data/games/" + gameName + "/" + getGameFileName( gameName ) );
+    contentFlash.LoadMovie( 0, "http://www.tetrisfriends.com/data/games/" + gameName + "/" + gameFileName );
     runOnContentFlashLoaded();
 }
 
@@ -204,8 +212,9 @@ function getGameFileName( gameName )
 }
 
 gameName = location.href.match(/games\/(.*)\/game.php/)[1];
+gameFileName = getGameFileName( gameName );
 
-document.body.appendChild( document.createElement('style') ).innerHTML = '* { margin: 0; } :root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } embed { position: absolute; transform-style: preserve-3d; transform-origin: top left; top: 50%; left: 50%; transform: translate3d( -50%, -50%, 0 ); width: 100%; height: 100%; }';
+document.body.appendChild( document.createElement('style') ).innerHTML = '* { margin: 0; } :root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } iframe { display:none; } embed { position: absolute; transform-style: preserve-3d; transform-origin: top left; top: 50%; left: 50%; transform: translate3d( -50%, -50%, 0 ); width: 100%; height: 100%; }';
 
 buildFlashVarsParamString();
 
