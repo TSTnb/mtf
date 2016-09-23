@@ -194,13 +194,13 @@ function getGameFileName( gameName )
 	var gameFileName;
 
 	var gameFileNames =
-		{ 	 Battle2P:		"OWGameBattle2pMaps.swf"
-			,ColorFull:		"OWGameColorBlind.swf"
-			,Live:			"OWGameTetrisLive.swf"
-			,Mono:			"OWGameColorBlind.swf"
-			,NBlox:			"nbloxWebsite.swf"
-			,Sprint5P:		"OWGameSprint5p.swf"
-			,TetrisConnect:	        "OWGameConnect.swf"
+		{ 	 Battle2P       :	"OWGameBattle2pMaps.swf"
+			,ColorFull      :	"OWGameColorBlind.swf"
+			,Live           :	"OWGameTetrisLive.swf"
+			,Mono           :	"OWGameColorBlind.swf"
+			,NBlox          :	"nbloxWebsite.swf"
+			,Sprint5P       :	"OWGameSprint5p.swf"
+			,TetrisConnect  :       "OWGameConnect.swf"
 		};
 
 	if( typeof gameFileNames[ gameName ] === "string" )
