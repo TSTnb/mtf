@@ -11,7 +11,6 @@
 // @author morningpee
 // ==/UserScript==
 
-
 window.stop();
 
 /*start fresh with html5 document */
