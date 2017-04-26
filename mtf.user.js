@@ -112,7 +112,7 @@ function buildContentFlash(flashVarsParamString)
     contentFlash.setAttribute("allowscriptaccess", "always");
     contentFlash.setAttribute("name", "plugin");
     contentFlash.setAttribute("type", "application/x-shockwave-flash");
-    contentFlash.setAttribute("wmode", "opaque");
+    contentFlash.setAttribute("wmode", "gpu");
     contentFlash.setAttribute("flashvars", flashVarsParamString);
     contentFlash.setAttribute("quality", "low");
     contentFlash.setAttribute("salign", "tl"); /* Live in particular needs this */
@@ -161,7 +161,7 @@ gameFileName['Sprint'] = 'OWGameSprint.swf';
 gameFileName['Live'] = 'OWGameTetrisLive.swf';
 gameName = location.href.match(/games\/(.*)\/game.php/)[1];
 
-document.body.appendChild( document.createElement('style') ).innerHTML = '* { margin: 0; } :root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } embed { position: absolute; top: 50%; left: 50%; transform-style: preserve-3d; transform-origin: top left; }';
+document.body.appendChild( document.createElement('style') ).innerHTML = '* { margin: 0; } :root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } embed { position: absolute; top: 50%; left: 50%; }';
 
 buildFlashVarsParamString();
 
