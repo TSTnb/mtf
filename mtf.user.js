@@ -40,6 +40,9 @@ function getContentFlashSize()
 {
     contentFlashSize = new Object();
 
+    contentFlashSize.T_PAN_X_INDEX = 0;
+    contentFlashSize.T_PAN_Y_INDEX = 1;
+
     contentFlashSize.T_WIDTH_SCALE_INDEX = 2;
     contentFlashSize.T_HEIGHT_SCALE_INDEX = 3;
 
@@ -90,9 +93,16 @@ function transformContentFlash()
 
     scaleFactorX = updatedWidth / contentFlashSize.minimalWidth;
     scaleFactorY = updatedHeight / contentFlashSize.minimalHeight;
+    contentFlash.TSetProperty("/", contentFlashSize.T_HEIGHT_SCALE_INDEX, 100 * scaleFactorX);
+    contentFlash.TSetProperty("/", contentFlashSize.T_WIDTH_SCALE_INDEX, 100 * scaleFactorY);
 
-    /*we need to use translate3d instead of translate for 3d acceleration*/
-    contentFlash.style.transform = "scale3d( " + scaleFactorX + "," + scaleFactorX + "," + scaleFactorX + " ) translate3d(-50% , -50% , 0px)";
+    contentFlash.style.marginTop = -updatedHeight / 2 + "px";
+    contentFlash.style.marginLeft = -updatedWidth / 2 + "px";
+
+    contentFlash.style.width = updatedWidth + "px";
+    contentFlash.style.height = updatedHeight + "px";
+    contentFlash.TSetProperty("/", contentFlashSize.T_PAN_X_INDEX, (contentFlashSize.minimalWidth - updatedWidth) / 2);
+    contentFlash.TSetProperty("/", contentFlashSize.T_PAN_Y_INDEX, (contentFlashSize.minimalHeight - updatedHeight) / 2);
 }
 
 function buildContentFlash(flashVarsParamString)
