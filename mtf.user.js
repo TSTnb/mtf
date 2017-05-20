@@ -25,14 +25,12 @@ document.replaceChild(
 function buildFlashVarsParamString()
 {
     var flashVars = new Object();
-    flashVars.apiUrl = "http://api.tetrisfriends.com/api";
-    flashVars.startParam = "clickToPlay";
 
     var flashVarsRequest = new XMLHttpRequest();
     flashVarsRequest.addEventListener("load", function(){ try{ haveFlashVars(this.responseText, flashVars); } catch(err){alert(err);} } );
 
     var ASYNCHRONOUS_REQUEST = true;
-    flashVarsRequest.open('GET', '/users/ajax/profile_my_tetris_style.php', ASYNCHRONOUS_REQUEST);
+    flashVarsRequest.open('GET', location.pathname, ASYNCHRONOUS_REQUEST);
     flashVarsRequest.send();
 }
 
@@ -161,14 +159,46 @@ gameFileName['Sprint'] = 'OWGameSprint.swf';
 gameFileName['Live'] = 'OWGameTetrisLive.swf';
 gameName = location.href.match(/games\/(.*)\/game.php/)[1];
 
+gameSize = [];
+gameSize['Ultra'] = [760, 560];
+gameSize['Sprint'] = [760, 560];
+gameSize['Live'] = [946, 560];
+
 document.body.appendChild( document.createElement('style') ).innerHTML = '* { margin: 0; } :root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } embed { position: absolute; top: 50%; left: 50%; }';
 
 buildFlashVarsParamString();
 
 function haveFlashVars(responseText, flashVars)
 {
-    flashVars = Object.assign( flashVars, eval( responseText.match(/flashVars = {[\s\S]*timestamp.*}/)[0] ) );
-    delete flashVars.viewerId;
+    var $ = {};
+    $.cookie = function (variable){
+       var query = window.location.search.substring(1);
+       var vars = query.split("&");
+       for (var i=0;i<vars.length;i++) {
+               var pair = vars[i].split("=");
+               if(pair[0] == variable){return pair[1];}
+       }
+       return '';
+    };
+
+    var theExternalId = null;
+    var theLoginId = null;
+    var prerollEnabled = false;
+    var analyticsEnabled = false;
+    var theStartParam = "clickToPlay";
+
+    flashVars = Object.assign( flashVars, eval( responseText.match(/flashVars = {[\s\S]*(friendUserIds|guestId).*}/)[0] ) );
+    delete flashVars.theGamePath;
+    delete flashVars.isDemo;
+    delete flashVars.ip;
+    delete flashVars.externalId;
+    delete flashVars.loginId;
+    delete flashVars.channelId;
+    delete flashVars.numGamesToPlayAd;
+    delete flashVars.isPrerollEnabled;
+    delete flashVars.isAnalyticsEnabled;
+    delete flashVars.isPrerollEnabled;
+    delete flashVars.prerollId;
 
     flashVarsParamString = Object.keys( flashVars ).map(k => k + '=' + flashVars[k] ).join('&');
 
