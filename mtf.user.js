@@ -151,6 +151,7 @@ function mtfInit()
     contentFlash.LoadMovie(0, "http://www.tetrisfriends.com/data/games/" + gameName + "/" + gameFileName[ gameName ]);
     runOnContentFlashLoaded();
     addEventListener("resize", transformContentFlash );
+    keepAlive();
 }
 
 gameFileName = [];
@@ -204,4 +205,13 @@ function haveFlashVars(responseText, flashVars)
 
     document.body.appendChild( buildContentFlash( flashVarsParamString ) );
     mtfInit();
+}
+
+function keepAlive()
+{
+    var keepAliveRequest = new XMLHttpRequest();
+    var ASYNCHRONOUS_REQUEST = true;
+    keepAliveRequest.open('GET', "/users/ajax/refresh_session.php", ASYNCHRONOUS_REQUEST);
+    keepAliveRequest.send();
+    setTimeout(keepAlive, 30 * 1000);
 }
