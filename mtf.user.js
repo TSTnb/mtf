@@ -47,8 +47,8 @@ function getContentFlashSize()
     contentFlashSize.T_WIDTH_INDEX = 8;
     contentFlashSize.T_HEIGHT_INDEX = 9;
 
-    contentFlashSize.originalWidth = contentFlash.TGetProperty('/', contentFlashSize.T_WIDTH_INDEX);
-    contentFlashSize.originalHeight = contentFlash.TGetProperty('/', contentFlashSize.T_HEIGHT_INDEX);
+    contentFlashSize.originalWidth = gameSize[gameName][0];
+    contentFlashSize.originalHeight = gameSize[gameName][1];
 
     contentFlash.style.width = contentFlashSize.originalWidth + "px";
     contentFlash.style.height = contentFlashSize.originalHeight + "px";
