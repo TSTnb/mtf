@@ -30,7 +30,7 @@ function buildFlashVarsParamString()
     flashVarsRequest.addEventListener("load", function(){ try{ haveFlashVars(this.responseText, flashVars); } catch(err){alert(err);} } );
 
     var ASYNCHRONOUS_REQUEST = true;
-    flashVarsRequest.open('GET', location.pathname, ASYNCHRONOUS_REQUEST);
+    flashVarsRequest.open('GET', location.href, ASYNCHRONOUS_REQUEST);
     flashVarsRequest.send();
 }
 
