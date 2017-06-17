@@ -145,7 +145,14 @@ function runOnContentFlashLoaded()
 
 function mtfInit()
 {
-    contentFlash.LoadMovie(0, "http://www.tetrisfriends.com/data/games/" + gameName + "/" + gameFileName[ gameName ]);
+    try{
+        contentFlash.LoadMovie(0, "http://www.tetrisfriends.com/data/games/" + gameName + "/" + gameFileName[ gameName ]);
+    }
+    catch(err)
+    {
+        setTimeout(mtfInit, 1000);
+        return;
+    }
     runOnContentFlashLoaded();
     addEventListener("resize", transformContentFlash );
     keepAlive();
