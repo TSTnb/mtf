@@ -8,7 +8,7 @@
 // @include http://*tetrisfriends.com/games/Live/game.php*
 // @grant none
 // @run-at document-start
-// @version 4.2.5 Firefox-only
+// @version 4.2.6
 // @author morningpee
 // ==/UserScript==
 
@@ -139,12 +139,8 @@ function runOnContentFlashLoaded()
        return setTimeout( runOnContentFlashLoaded, 300 );
     getContentFlashSize();
 
-    var isFirefox = navigator.userAgent.search(/webkit/i) == -1;
-    if( isFirefox )
-    {
-        scaleContentFlash();
-        transformContentFlash();
-    }
+    scaleContentFlash();
+    transformContentFlash();
 }
 
 function mtfInit()
