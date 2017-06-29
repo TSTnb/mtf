@@ -1,6 +1,6 @@
 {
    "content_scripts": [
-      { "js"               :  [ "mtf.js"                                        ]
+      { "js"               :  [ "mtf.user.js"                                        ]
       , "matches"          :  [ "*://*.tetrisfriends.com/games/*/game.php*"     ]
       , "run_at"           :  "document_start"
       }
