@@ -36,80 +36,6 @@ function buildFlashVarsParamString()
     flashVarsRequest.send();
 }
 
-function getContentFlashSize()
-{
-    contentFlashSize = new Object();
-
-    contentFlashSize.T_PAN_X_INDEX = 0;
-    contentFlashSize.T_PAN_Y_INDEX = 1;
-
-    contentFlashSize.T_WIDTH_SCALE_INDEX = 2;
-    contentFlashSize.T_HEIGHT_SCALE_INDEX = 3;
-
-    contentFlashSize.T_WIDTH_INDEX = 8;
-    contentFlashSize.T_HEIGHT_INDEX = 9;
-
-    contentFlashSize.originalWidth = gameSize[gameName][0];
-    contentFlashSize.originalHeight = gameSize[gameName][1];
-
-    contentFlash.style.width = contentFlashSize.originalWidth + "px";
-    contentFlash.style.height = contentFlashSize.originalHeight + "px";
-}
-
-function scaleContentFlash()
-{
-    contentFlashSize.scaleFactor = 1;
-
-    contentFlashSize.minimalWidth = contentFlashSize.originalWidth / contentFlashSize.scaleFactor;
-    contentFlashSize.minimalHeight = contentFlashSize.originalHeight / contentFlashSize.scaleFactor;
-
-    contentFlash.style.width = contentFlashSize.minimalWidth + "px";
-    contentFlash.style.height = contentFlashSize.minimalHeight + "px";
-
-    contentFlash.TSetProperty("/", contentFlashSize.T_HEIGHT_SCALE_INDEX, 100 / contentFlashSize.scaleFactor);
-    contentFlash.TSetProperty("/", contentFlashSize.T_WIDTH_SCALE_INDEX, 100 / contentFlashSize.scaleFactor);
-}
-
-function transformContentFlash()
-{
-    contentFlash.style.visibility = "initial";
-    var windowAspectRatio = innerHeight / innerWidth;
-
-    var contentFlashAspectRatio = contentFlashSize.originalHeight / contentFlashSize.originalWidth;
-
-    var scaleFactorX;
-    var scaleFactorY;
-
-    if(  contentFlashAspectRatio > windowAspectRatio )
-    {
-        updatedWidth = Math.round( innerHeight / contentFlashAspectRatio );
-        updatedHeight = innerHeight;
-    }
-    else
-    {
-        updatedWidth = innerWidth;
-        updatedHeight = Math.round( innerWidth * contentFlashAspectRatio );
-    }
-
-    /* do not scale if it would be larger than the original size */
-    correctedWidth = updatedWidth > gameSize[gameName][0]? gameSize[gameName][0]: updatedWidth;
-    correctedHeight = updatedHeight > gameSize[gameName][1]? gameSize[gameName][1]: updatedHeight;
-
-    scaleFactorX = correctedWidth / contentFlashSize.minimalWidth;
-    scaleFactorY = correctedHeight / contentFlashSize.minimalHeight;
-
-    contentFlash.TSetProperty("/", contentFlashSize.T_HEIGHT_SCALE_INDEX, 100 * scaleFactorX);
-    contentFlash.TSetProperty("/", contentFlashSize.T_WIDTH_SCALE_INDEX, 100 * scaleFactorY);
-
-    contentFlash.style.marginLeft = -(correctedWidth / 2) + "px";
-    contentFlash.style.marginTop = -((updatedHeight + correctedHeight) / 2) / 2 + "px";
-
-    contentFlash.style.width = correctedWidth + "px";
-    contentFlash.style.height = correctedHeight + "px";
-    contentFlash.TSetProperty("/", contentFlashSize.T_PAN_X_INDEX, (contentFlashSize.minimalWidth - correctedWidth) / 2);
-    contentFlash.TSetProperty("/", contentFlashSize.T_PAN_Y_INDEX, (contentFlashSize.minimalHeight - correctedHeight) / 2);
-}
-
 function buildContentFlash(flashVarsParamString)
 {
     var contentFlash = document.createElement("embed");
@@ -127,6 +53,37 @@ function buildContentFlash(flashVarsParamString)
 
     return contentFlash;
 }
+
+function mtfInit()
+{
+
+    gameFileName = [];
+    gameFileName['Ultra'] = 'OWGameUltra.swf';
+    gameFileName['Sprint'] = 'OWGameSprint.swf';
+    gameFileName['Survival'] = 'OWGameSurvival.swf';
+    gameFileName['Marathon'] = 'OWGameMarathon.swf';
+    gameFileName['Live'] = 'OWGameTetrisLive.swf';
+    gameName = location.href.match(/games\/(.*)\/game.php/)[1];
+
+    gameSize = [];
+    gameSize['Ultra'] = [760, 560];
+    gameSize['Sprint'] = [760, 560];
+    gameSize['Survival'] = [760, 560];
+    gameSize['Marathon'] = [760, 560];
+    gameSize['Live'] = [946, 560];
+
+    try{
+        contentFlash.LoadMovie(0, "http://www.tetrisfriends.com/data/games/" + gameName + "/" + gameFileName[ gameName ]);
+    }
+    catch(err)
+    {
+        alert(err);
+        setTimeout(mtfInit, 1000);
+        return;
+    }
+    runOnContentFlashLoaded();
+    addEventListener("resize", transformContentFlash );
+    keepAlive();
 
 function runOnContentFlashLoaded()
 {
@@ -149,35 +106,90 @@ function runOnContentFlashLoaded()
     transformContentFlash();
 }
 
-function mtfInit()
-{
-    try{
-        contentFlash.LoadMovie(0, "http://www.tetrisfriends.com/data/games/" + gameName + "/" + gameFileName[ gameName ]);
-    }
-    catch(err)
+
+    function transformContentFlash()
     {
-        setTimeout(mtfInit, 1000);
-        return;
+        contentFlash.style.visibility = "initial";
+        var windowAspectRatio = innerHeight / innerWidth;
+
+        var contentFlashAspectRatio = contentFlashSize.originalHeight / contentFlashSize.originalWidth;
+
+        var scaleFactorX;
+        var scaleFactorY;
+
+        if(  contentFlashAspectRatio > windowAspectRatio )
+        {
+            updatedWidth = Math.round( innerHeight / contentFlashAspectRatio );
+            updatedHeight = innerHeight;
+        }
+        else
+        {
+            updatedWidth = innerWidth;
+            updatedHeight = Math.round( innerWidth * contentFlashAspectRatio );
+        }
+
+        /* do not scale if it would be larger than the original size */
+        correctedWidth = updatedWidth > gameSize[gameName][0]? gameSize[gameName][0]: updatedWidth;
+        correctedHeight = updatedHeight > gameSize[gameName][1]? gameSize[gameName][1]: updatedHeight;
+
+        scaleFactorX = correctedWidth / contentFlashSize.minimalWidth;
+        scaleFactorY = correctedHeight / contentFlashSize.minimalHeight;
+
+        contentFlash.TSetProperty("/", contentFlashSize.T_HEIGHT_SCALE_INDEX, 100 * scaleFactorX);
+        contentFlash.TSetProperty("/", contentFlashSize.T_WIDTH_SCALE_INDEX, 100 * scaleFactorY);
+
+        contentFlash.style.marginLeft = -(correctedWidth / 2) + "px";
+        contentFlash.style.marginTop = -((updatedHeight + correctedHeight) / 2) / 2 + "px";
+
+        contentFlash.style.width = correctedWidth + "px";
+        contentFlash.style.height = correctedHeight + "px";
+        contentFlash.TSetProperty("/", contentFlashSize.T_PAN_X_INDEX, (contentFlashSize.minimalWidth - correctedWidth) / 2);
+        contentFlash.TSetProperty("/", contentFlashSize.T_PAN_Y_INDEX, (contentFlashSize.minimalHeight - correctedHeight) / 2);
     }
-    runOnContentFlashLoaded();
-    addEventListener("resize", transformContentFlash );
-    keepAlive();
+
+    function keepAlive()
+    {
+        var keepAliveRequest = new XMLHttpRequest();
+        var ASYNCHRONOUS_REQUEST = true;
+        keepAliveRequest.open('GET', "/users/ajax/refresh_session.php", ASYNCHRONOUS_REQUEST);
+        keepAliveRequest.send();
+        setTimeout(keepAlive, 30 * 1000);
+    }
+
+    function getContentFlashSize()
+    {
+        contentFlashSize = new Object();
+
+        contentFlashSize.T_PAN_X_INDEX = 0;
+        contentFlashSize.T_PAN_Y_INDEX = 1;
+
+        contentFlashSize.T_WIDTH_SCALE_INDEX = 2;
+        contentFlashSize.T_HEIGHT_SCALE_INDEX = 3;
+
+        contentFlashSize.T_WIDTH_INDEX = 8;
+        contentFlashSize.T_HEIGHT_INDEX = 9;
+
+        contentFlashSize.originalWidth = gameSize[gameName][0];
+        contentFlashSize.originalHeight = gameSize[gameName][1];
+
+        contentFlash.style.width = contentFlashSize.originalWidth + "px";
+        contentFlash.style.height = contentFlashSize.originalHeight + "px";
+    }
+
+    function scaleContentFlash()
+    {
+        contentFlashSize.scaleFactor = 1;
+
+        contentFlashSize.minimalWidth = contentFlashSize.originalWidth / contentFlashSize.scaleFactor;
+        contentFlashSize.minimalHeight = contentFlashSize.originalHeight / contentFlashSize.scaleFactor;
+
+        contentFlash.style.width = contentFlashSize.minimalWidth + "px";
+        contentFlash.style.height = contentFlashSize.minimalHeight + "px";
+
+        contentFlash.TSetProperty("/", contentFlashSize.T_HEIGHT_SCALE_INDEX, 100 / contentFlashSize.scaleFactor);
+        contentFlash.TSetProperty("/", contentFlashSize.T_WIDTH_SCALE_INDEX, 100 / contentFlashSize.scaleFactor);
+    }
 }
-
-gameFileName = [];
-gameFileName['Ultra'] = 'OWGameUltra.swf';
-gameFileName['Sprint'] = 'OWGameSprint.swf';
-gameFileName['Survival'] = 'OWGameSurvival.swf';
-gameFileName['Marathon'] = 'OWGameMarathon.swf';
-gameFileName['Live'] = 'OWGameTetrisLive.swf';
-gameName = location.href.match(/games\/(.*)\/game.php/)[1];
-
-gameSize = [];
-gameSize['Ultra'] = [760, 560];
-gameSize['Sprint'] = [760, 560];
-gameSize['Survival'] = [760, 560];
-gameSize['Marathon'] = [760, 560];
-gameSize['Live'] = [946, 560];
 
 document.body.appendChild( document.createElement('style') ).innerHTML = '* { margin: 0; } :root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } embed { position: absolute; top: 50%; left: 50%; }';
 
@@ -218,14 +230,6 @@ function haveFlashVars(responseText, flashVars)
     flashVarsParamString = Object.keys( flashVars ).map(k => k + '=' + flashVars[k] ).join('&');
 
     document.body.appendChild( buildContentFlash( flashVarsParamString ) );
-    mtfInit();
-}
+    document.body.appendChild( document.createElement("script") ).innerHTML = "(" + mtfInit + ")()";
 
-function keepAlive()
-{
-    var keepAliveRequest = new XMLHttpRequest();
-    var ASYNCHRONOUS_REQUEST = true;
-    keepAliveRequest.open('GET', "/users/ajax/refresh_session.php", ASYNCHRONOUS_REQUEST);
-    keepAliveRequest.send();
-    setTimeout(keepAlive, 30 * 1000);
 }
