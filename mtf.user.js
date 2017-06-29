@@ -91,18 +91,23 @@ function transformContentFlash()
         updatedHeight = Math.round( innerWidth * contentFlashAspectRatio );
     }
 
-    scaleFactorX = updatedWidth / contentFlashSize.minimalWidth;
-    scaleFactorY = updatedHeight / contentFlashSize.minimalHeight;
+    /* do not scale if it would be larger than the original size */
+    correctedWidth = updatedWidth > gameSize[gameName][0]? gameSize[gameName][0]: updatedWidth;
+    correctedHeight = updatedHeight > gameSize[gameName][1]? gameSize[gameName][1]: updatedHeight;
+
+    scaleFactorX = correctedWidth / contentFlashSize.minimalWidth;
+    scaleFactorY = correctedHeight / contentFlashSize.minimalHeight;
+
     contentFlash.TSetProperty("/", contentFlashSize.T_HEIGHT_SCALE_INDEX, 100 * scaleFactorX);
     contentFlash.TSetProperty("/", contentFlashSize.T_WIDTH_SCALE_INDEX, 100 * scaleFactorY);
 
-    contentFlash.style.marginTop = -updatedHeight / 2 + "px";
-    contentFlash.style.marginLeft = -updatedWidth / 2 + "px";
+    contentFlash.style.marginLeft = -(correctedWidth / 2) + "px";
+    contentFlash.style.marginTop = -((updatedHeight + correctedHeight) / 2) / 2 + "px";
 
-    contentFlash.style.width = updatedWidth + "px";
-    contentFlash.style.height = updatedHeight + "px";
-    contentFlash.TSetProperty("/", contentFlashSize.T_PAN_X_INDEX, (contentFlashSize.minimalWidth - updatedWidth) / 2);
-    contentFlash.TSetProperty("/", contentFlashSize.T_PAN_Y_INDEX, (contentFlashSize.minimalHeight - updatedHeight) / 2);
+    contentFlash.style.width = correctedWidth + "px";
+    contentFlash.style.height = correctedHeight + "px";
+    contentFlash.TSetProperty("/", contentFlashSize.T_PAN_X_INDEX, (contentFlashSize.minimalWidth - correctedWidth) / 2);
+    contentFlash.TSetProperty("/", contentFlashSize.T_PAN_Y_INDEX, (contentFlashSize.minimalHeight - correctedHeight) / 2);
 }
 
 function buildContentFlash(flashVarsParamString)
