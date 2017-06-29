@@ -5,6 +5,7 @@
 // @include http://*tetrisfriends.com/games/Ultra/game.php*
 // @include http://*tetrisfriends.com/games/Sprint/game.php*
 // @include http://*tetrisfriends.com/games/Survival/game.php*
+// @include http://*tetrisfriends.com/games/Marathon/game.php*
 // @include http://*tetrisfriends.com/games/Live/game.php*
 // @grant none
 // @run-at document-start
@@ -162,6 +163,7 @@ gameFileName = [];
 gameFileName['Ultra'] = 'OWGameUltra.swf';
 gameFileName['Sprint'] = 'OWGameSprint.swf';
 gameFileName['Survival'] = 'OWGameSurvival.swf';
+gameFileName['Marathon'] = 'OWGameMarathon.swf';
 gameFileName['Live'] = 'OWGameTetrisLive.swf';
 gameName = location.href.match(/games\/(.*)\/game.php/)[1];
 
@@ -169,6 +171,7 @@ gameSize = [];
 gameSize['Ultra'] = [760, 560];
 gameSize['Sprint'] = [760, 560];
 gameSize['Survival'] = [760, 560];
+gameSize['Marathon'] = [760, 560];
 gameSize['Live'] = [946, 560];
 
 document.body.appendChild( document.createElement('style') ).innerHTML = '* { margin: 0; } :root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } embed { position: absolute; top: 50%; left: 50%; }';
