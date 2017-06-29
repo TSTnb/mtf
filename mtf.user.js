@@ -20,7 +20,7 @@ document.doctype&&
     document.replaceChild( document.implementation.createDocumentType('html', "", ""), document.doctype );
 
 document.replaceChild(
-        document.implementation.createHTMLDocument("Minimal Tetris Friends").documentElement,
+        document.implementation.createHTMLDocument(document.title).documentElement,
         document.documentElement
 );
 
