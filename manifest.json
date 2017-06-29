@@ -16,6 +16,5 @@
    "name": "Minimal Tetris Friends",
    "short_name": "mtf",
    "permissions": [ "*://*.tetrisfriends.com/*" ],
-   "update_url": "https://clients2.google.com/service/update2/crx",
    "version": "4.4.1"
 }
