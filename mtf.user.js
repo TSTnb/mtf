@@ -85,26 +85,26 @@ function mtfInit()
     addEventListener("resize", transformContentFlash );
     keepAlive();
 
-function runOnContentFlashLoaded()
-{
-    var percentLoaded = "0";
-    try{
-        percentLoaded = contentFlash.PercentLoaded();
+    function runOnContentFlashLoaded()
+    {
+        var percentLoaded = "0";
+        try{
+            percentLoaded = contentFlash.PercentLoaded();
 
-        /* this line will fail if it is not loaded */
-        contentFlash.TGetProperty('/', 0);
+            /* this line will fail if it is not loaded */
+            contentFlash.TGetProperty('/', 0);
+        }
+        catch(e){
+            percentLoaded = "0";
+        }
+
+        if( percentLoaded != "100" )
+           return setTimeout( runOnContentFlashLoaded, 300 );
+        getContentFlashSize();
+
+        scaleContentFlash();
+        transformContentFlash();
     }
-    catch(e){
-        percentLoaded = "0";
-    }
-
-    if( percentLoaded != "100" )
-       return setTimeout( runOnContentFlashLoaded, 300 );
-    getContentFlashSize();
-
-    scaleContentFlash();
-    transformContentFlash();
-}
 
 
     function transformContentFlash()
@@ -230,6 +230,7 @@ function haveFlashVars(responseText, flashVars)
     flashVarsParamString = Object.keys( flashVars ).map(k => k + '=' + flashVars[k] ).join('&');
 
     document.body.appendChild( buildContentFlash( flashVarsParamString ) );
+    /* necessary on firefox to access contentFlash.PercentLoaded() */
     document.body.appendChild( document.createElement("script") ).innerHTML = "(" + mtfInit + ")()";
 
 }
