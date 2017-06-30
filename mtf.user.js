@@ -206,7 +206,16 @@ function haveFlashVars(responseText, flashVars)
     var analyticsEnabled = false;
     var theStartParam = "clickToPlay";
 
-    flashVars = Object.assign( flashVars, eval( responseText.match(/flashVars = {[\s\S]*(friendUserIds|guestId).*}/)[0] ) );
+
+    var rawFlashVars = responseText.match(/flashVars = {[\s\S]*(friendUserIds|guestId).*}/)[0];
+
+    /* Mozilla didn't like eval so now we have this regex to make valid JSON */
+    rawFlashVars = rawFlashVars.replace(/\s*([^\s^:]*)\s*?:\s*(encodeURIComponent\()?(\$.cookie\()?['"]?([^\s^'^"^,^)]*)['"]?\)?(,)?/g, '"$1":"$4"$5');
+    rawFlashVars = rawFlashVars.replace(/\s*flashVars\s*=\s*/, '');
+    rawFlashVars = rawFlashVars.replace(/"([0-9]*)"(,([0-9],?)*)'/, '"$1$2"');
+
+    flashVars = JSON.parse(rawFlashVars);
+
     delete flashVars.theGamePath;
     delete flashVars.isDemo;
     delete flashVars.ip;
