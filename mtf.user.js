@@ -72,15 +72,7 @@ function mtfInit()
     gameSize['Marathon'] = [760, 560];
     gameSize['Live'] = [946, 560];
 
-    try{
-        contentFlash.LoadMovie(0, "http://www.tetrisfriends.com/data/games/" + gameName + "/" + gameFileName[ gameName ]);
-    }
-    catch(err)
-    {
-        alert(err);
-        setTimeout(mtfInit, 1000);
-        return;
-    }
+    contentFlash.setAttribute("src", "http://www.tetrisfriends.com/data/games/" + gameName + "/" + gameFileName[ gameName ]);
     runOnContentFlashLoaded();
     addEventListener("resize", transformContentFlash );
     keepAlive();
