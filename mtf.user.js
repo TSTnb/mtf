@@ -228,6 +228,14 @@ function haveFlashVars(responseText, flashVars)
     delete flashVars.isPrerollEnabled;
     delete flashVars.prerollId;
 
+    flashVars.startParam = theStartParam;
+
+    flashVars.sessionId = encodeURIComponent(flashVars.sessionId);
+    flashVars.apiUrl = encodeURIComponent(flashVars.apiUrl);
+
+    flashVars.autoJoinRoomId = $.cookie(flashVars.autoJoinRoomId);
+    flashVars.autoJoinRoomName = $.cookie(flashVars.autoJoinRoomName);
+
     flashVarsParamString = Object.keys( flashVars ).map(k => k + '=' + flashVars[k] ).join('&');
 
     document.body.appendChild( buildContentFlash( flashVarsParamString ) );
