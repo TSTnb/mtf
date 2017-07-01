@@ -18,11 +18,11 @@ Games currently supported:
 ___
 
 #### Step 1: Get a Userscript Manager
-* If you have Chrome, you can download the [Minimal Tetris Friends browser extension](https://chrome.google.com/webstore/detail/minimal-tetris-friends/jmcfgfebjmfodjnmgicmkpkbpbfelhki).
+* If you have Firefox, download the [Minimal Tetris Friends browser add-on](https://addons.mozilla.org/firefox/addon/mtf/).
 
-* If you have Firefox, get [Tampermonkey](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/).
+* If you have Chrome, download the [Minimal Tetris Friends browser extension](https://chrome.google.com/webstore/detail/minimal-tetris-friends/jmcfgfebjmfodjnmgicmkpkbpbfelhki).
 
-* If you have Opera, get [Tampermonkey](https://addons.opera.com/en/extensions/details/tampermonkey-beta/).
+* If you have Opera, download the [Minimal Tetris Friends browser add-on](https://addons.opera.com/extensions/details/minimal-tetris-friends/).
 
 * If you have Edge, get [Tampermonkey](https://www.microsoft.com/store/apps/9NBLGGH5162S).
 
@@ -47,8 +47,10 @@ So anyway, try it out and post results.
 ---
 |||
 --- | ---:
-**[Download for Chrome](https://chrome.google.com/webstore/detail/minimal-tetris-friends/jmcfgfebjmfodjnmgicmkpkbpbfelhki)** | last updated 2015-06-23 |
+**[Download for Firefox](https://addons.mozilla.org/firefox/addon/mtf/)** | last updated 2017-06-28 |
+**[Download for Chrome](https://chrome.google.com/webstore/detail/minimal-tetris-friends/jmcfgfebjmfodjnmgicmkpkbpbfelhki)** | last updated 2017-06-28 |
+**[Download for Opera](https://addons.opera.com/en/extensions/details/minimal-tetris-friends/)** | last updated 2017-06-28 |
 |||
 |||
-**[Download for Firefox or Opera](https://raw.githubusercontent.com/morningpee/mtf/4.2.7/mtf.user.js)** | last updated 2017-06-28 |
+**[Download for Edge or Safari](https://raw.githubusercontent.com/morningpee/mtf/4.2.7/mtf.user.js)** | last updated 2017-06-28 |
 |||size=1]last updated 2017-06-28[/size]
