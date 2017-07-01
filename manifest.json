@@ -13,7 +13,7 @@
     },
     "applications": {
         "gecko": {
-            "id": "mtf@harddrop.com",
+            "id": "{936c9dbf-25a7-433f-8223-08693060c5da}",
             "strict_min_version": "45.0"
         }
     },
