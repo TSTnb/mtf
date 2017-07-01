@@ -1,14 +1,18 @@
-4.4.6, 2017-06-30: Using JSON.parse(), instead of eval()
 
-4.4.1, 2017-06-28: Game resizes with the window, window uses minimal content document, other ad-blocking software will not increase performance. Game size is capped at the original size (it scales smaller but not larger).
+4.4.6, 2017-06-30
+Using JSON.parse(), instead of eval() for security
 
-4.3.2, 2016-09-23: Reverting back to 3.0.4 due to bugs.
+4.4.1, 2017-06-28
+Game resizes with the window, window uses minimal content document, other ad-blocking software will not increase performance. Game size is capped at the original size (it scales smaller but not larger).
 
-4.3.1, 2016-09-22:
+4.3.2, 2016-09-23
+Reverting back to 3.0.4 due to bugs.
+
+4.3.1, 2016-09-22
 Game resizes with the window, window uses minimal content document, other ad-blocking software will not increase performance.
 
 3.0.4, 2015-06-23
 Updated to use the "direct" wmode for faster rendering.
 
-1.0.2, 2014-10-06
+1.0.2, 2014-10-06:
 This extension used to be the "Minimal Tetris Friends" Userscript, but that website has been down for months. Bask in the glory of your favorite userscript as an easy-to-install extension instead.
