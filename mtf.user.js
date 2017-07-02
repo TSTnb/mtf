@@ -199,7 +199,6 @@ function haveFlashVars(responseText, flashVars)
        return '';
     };
 
-
     flashVars.startParam = "clickToPlay";
 
     flashVars.sessionId = responseText.match(/sessionId.*?:.*?encodeURIComponent\('(.*?)'\)/)[1];
