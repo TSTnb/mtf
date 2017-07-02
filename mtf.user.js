@@ -205,8 +205,12 @@ function haveFlashVars(responseText, flashVars)
     var analyticsEnabled = false;
     var theStartParam = "clickToPlay";
 
+    flashVars.startParam = "clickToPlay";
 
-    var rawFlashVars = responseText.match(/\s*flashVars\s*=\s*({[\s\S]*(friendUserIds|guestId).*})/)[1];
+    flashVars.sessionId = responseText.match(/sessionId.*?:.*?encodeURIComponent\('(.*?)'\)/)[1];
+    flashVars.sessionToken = responseText.match(/sessionToken.*?:.*?encodeURIComponent\('(.*?)'\)/)[1];
+    flashVars.timestamp = responseText.match(/timestamp.*?:.*?(\d+)/)[1];
+    flashVars.apiUrl = encodeURIComponent('http://api.tetrisfriends.com/api');
 
     /* Mozilla didn't like eval so now we have this regex to make valid JSON */
     rawFlashVars = rawFlashVars.replace(/\s*([^\s^:]*)\s*?:\s*(encodeURIComponent\()?(\$.cookie\()?['"]?([^\s^'^"^,^)]*)['"]?\)?(,)?/g, '"$1":"$4"$5');
