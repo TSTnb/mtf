@@ -9,7 +9,7 @@
 // @include http://*tetrisfriends.com/games/Live/game.php*
 // @grant none
 // @run-at document-start
-// @version 4.4.7
+// @version 4.4.9
 // @author morningpee
 // ==/UserScript==
 
@@ -32,7 +32,7 @@ function buildFlashVarsParamString()
     flashVarsRequest.addEventListener("load", function(){ try{ haveFlashVars(this.responseText, flashVars); } catch(err){alert(err);} } );
 
     var ASYNCHRONOUS_REQUEST = true;
-    flashVarsRequest.open('GET', location.href, ASYNCHRONOUS_REQUEST);
+    flashVarsRequest.open('GET', location.protocol + '//' + location.host + '/users/ajax/profile_my_tetris_style.php', ASYNCHRONOUS_REQUEST);
     flashVarsRequest.send();
 }
 
@@ -189,51 +189,25 @@ buildFlashVarsParamString();
 
 function haveFlashVars(responseText, flashVars)
 {
-    var $ = {};
-    $.cookie = function (variable){
+    function getParameter(parameter){
        var query = window.location.search.substring(1);
        var vars = query.split("&");
        for (var i=0;i<vars.length;i++) {
                var pair = vars[i].split("=");
-               if(pair[0] == variable){return pair[1];}
+               if(pair[0] == parameter){return pair[1];}
        }
        return '';
     };
 
-    var theExternalId = null;
-    var theLoginId = null;
-    var prerollEnabled = false;
-    var analyticsEnabled = false;
-    var theStartParam = "clickToPlay";
+    flashVars.startParam = "clickToPlay";
 
+    flashVars.sessionId = responseText.match(/sessionId.*?:.*?encodeURIComponent\('(.*?)'\)/)[1];
+    flashVars.sessionToken = responseText.match(/sessionToken.*?:.*?encodeURIComponent\('(.*?)'\)/)[1];
+    flashVars.timestamp = responseText.match(/timestamp.*?:.*?(\d+)/)[1];
+    flashVars.apiUrl = encodeURIComponent('http://api.tetrisfriends.com/api');
 
-    var rawFlashVars = responseText.match(/\s*flashVars\s*=\s*({[\s\S]*(friendUserIds|guestId).*})/)[1];
-
-    /* Mozilla didn't like eval so now we have this regex to make valid JSON */
-    rawFlashVars = rawFlashVars.replace(/\s*([^\s^:]*)\s*?:\s*(encodeURIComponent\()?(\$.cookie\()?['"]?([^\s^'^"^,^)]*)['"]?\)?(,)?/g, '"$1":"$4"$5');
-    rawFlashVars = rawFlashVars.replace(/"([0-9]*)"(,([0-9],?)*)'/, '"$1$2"');
-
-    flashVars = JSON.parse(rawFlashVars);
-
-    delete flashVars.theGamePath;
-    delete flashVars.isDemo;
-    delete flashVars.ip;
-    delete flashVars.externalId;
-    delete flashVars.loginId;
-    delete flashVars.channelId;
-    delete flashVars.numGamesToPlayAd;
-    delete flashVars.isPrerollEnabled;
-    delete flashVars.isAnalyticsEnabled;
-    delete flashVars.isPrerollEnabled;
-    delete flashVars.prerollId;
-
-    flashVars.startParam = theStartParam;
-
-    flashVars.sessionId = encodeURIComponent(flashVars.sessionId);
-    flashVars.apiUrl = encodeURIComponent(flashVars.apiUrl);
-
-    flashVars.autoJoinRoomId = $.cookie(flashVars.autoJoinRoomId);
-    flashVars.autoJoinRoomName = $.cookie(flashVars.autoJoinRoomName);
+    flashVars.autoJoinRoomId = getParameter('autoJoinRoomId');
+    flashVars.autoJoinRoomName = getParameter('autoJoinRoomName');
 
     flashVarsParamString = Object.keys( flashVars ).map(k => k + '=' + flashVars[k] ).join('&');
 
