@@ -199,11 +199,6 @@ function haveFlashVars(responseText, flashVars)
        return '';
     };
 
-    var theExternalId = null;
-    var theLoginId = null;
-    var prerollEnabled = false;
-    var analyticsEnabled = false;
-    var theStartParam = "clickToPlay";
 
     flashVars.startParam = "clickToPlay";
 
@@ -212,31 +207,6 @@ function haveFlashVars(responseText, flashVars)
     flashVars.timestamp = responseText.match(/timestamp.*?:.*?(\d+)/)[1];
     flashVars.apiUrl = encodeURIComponent('http://api.tetrisfriends.com/api');
 
-    /* Mozilla didn't like eval so now we have this regex to make valid JSON */
-    rawFlashVars = rawFlashVars.replace(/\s*([^\s^:]*)\s*?:\s*(encodeURIComponent\()?(\$.cookie\()?['"]?([^\s^'^"^,^)]*)['"]?\)?(,)?/g, '"$1":"$4"$5');
-    rawFlashVars = rawFlashVars.replace(/"([0-9]*)"(,([0-9],?)*)'/, '"$1$2"');
-
-    flashVars = JSON.parse(rawFlashVars);
-
-    delete flashVars.theGamePath;
-    delete flashVars.isDemo;
-    delete flashVars.ip;
-    delete flashVars.externalId;
-    delete flashVars.loginId;
-    delete flashVars.channelId;
-    delete flashVars.numGamesToPlayAd;
-    delete flashVars.isPrerollEnabled;
-    delete flashVars.isAnalyticsEnabled;
-    delete flashVars.isPrerollEnabled;
-    delete flashVars.prerollId;
-
-    flashVars.startParam = theStartParam;
-
-    flashVars.sessionId = encodeURIComponent(flashVars.sessionId);
-    flashVars.apiUrl = encodeURIComponent(flashVars.apiUrl);
-
-    flashVars.autoJoinRoomId = $.cookie(flashVars.autoJoinRoomId);
-    flashVars.autoJoinRoomName = $.cookie(flashVars.autoJoinRoomName);
     flashVars.autoJoinRoomId = getParameter('autoJoinRoomId');
     flashVars.autoJoinRoomName = getParameter('autoJoinRoomName');
 
