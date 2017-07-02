@@ -206,8 +206,13 @@ function haveFlashVars(responseText, flashVars)
     flashVars.timestamp = responseText.match(/timestamp.*?:.*?(\d+)/)[1];
     flashVars.apiUrl = encodeURIComponent('http://api.tetrisfriends.com/api');
 
-    flashVars.autoJoinRoomId = getParameter('autoJoinRoomId');
-    flashVars.autoJoinRoomName = getParameter('autoJoinRoomName');
+    var urlParameters = ['autoJoinRoomId', 'autoJoinRoomName'];
+    for(i in urlParameters)
+    {
+        flashVars[ urlParameters[i] ] = getParameter( urlParameters[i] );
+        if( flashVars[ urlParameters[i] ] === '' )
+            delete flashVars[ urlParameters[i] ];
+    }
 
     flashVarsParamString = Object.keys( flashVars ).map(k => k + '=' + flashVars[k] ).join('&');
 
