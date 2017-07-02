@@ -17,7 +17,7 @@ window.stop();
 
 /*start fresh with html5 document */
 document.doctype&&
-    document.replaceChild( document.implementation.createDocumentType('html', "", ""), document.doctype );
+    document.replaceChild( document.implementation.createDocumentType('html', '', ''), document.doctype );
 
 document.replaceChild(
         document.implementation.createHTMLDocument(document.title).documentElement,
@@ -29,7 +29,7 @@ function buildFlashVarsParamString()
     var flashVars = new Object();
 
     var flashVarsRequest = new XMLHttpRequest();
-    flashVarsRequest.addEventListener("load", function(){ try{ haveFlashVars(this.responseText, flashVars); } catch(err){alert(err);} } );
+    flashVarsRequest.addEventListener('load', function(){ try{ haveFlashVars(this.responseText, flashVars); } catch(err){alert(err);} } );
 
     var ASYNCHRONOUS_REQUEST = true;
     flashVarsRequest.open('GET', location.protocol + '//' + location.host + '/users/ajax/profile_my_tetris_style.php', ASYNCHRONOUS_REQUEST);
@@ -38,18 +38,18 @@ function buildFlashVarsParamString()
 
 function buildContentFlash(flashVarsParamString)
 {
-    var contentFlash = document.createElement("embed");
-    contentFlash.setAttribute("id", "contentFlash");
-    contentFlash.setAttribute("allowscriptaccess", "always");
-    contentFlash.setAttribute("name", "plugin");
-    contentFlash.setAttribute("type", "application/x-shockwave-flash");
-    contentFlash.setAttribute("wmode", "gpu");
-    contentFlash.setAttribute("flashvars", flashVarsParamString);
-    contentFlash.setAttribute("quality", "low");
-    contentFlash.setAttribute("salign", "tl"); /* Live in particular needs this */
-    contentFlash.setAttribute("scale", "noscale");
+    var contentFlash = document.createElement('embed');
+    contentFlash.setAttribute('id', 'contentFlash');
+    contentFlash.setAttribute('allowscriptaccess', 'always');
+    contentFlash.setAttribute('name', 'plugin');
+    contentFlash.setAttribute('type', 'application/x-shockwave-flash');
+    contentFlash.setAttribute('wmode', 'gpu');
+    contentFlash.setAttribute('flashvars', flashVarsParamString);
+    contentFlash.setAttribute('quality', 'low');
+    contentFlash.setAttribute('salign', 'tl'); /* Live in particular needs this */
+    contentFlash.setAttribute('scale', 'noscale');
 
-    contentFlash.style.visibility = "hidden";
+    contentFlash.style.visibility = 'hidden';
 
     return contentFlash;
 }
@@ -72,14 +72,14 @@ function mtfInit()
     gameSize['Marathon'] = [760, 560];
     gameSize['Live'] = [946, 560];
 
-    contentFlash.setAttribute("src", "http://www.tetrisfriends.com/data/games/" + gameName + "/" + gameFileName[ gameName ]);
+    contentFlash.setAttribute('src', 'http://www.tetrisfriends.com/data/games/' + gameName + '/' + gameFileName[ gameName ]);
     runOnContentFlashLoaded();
-    addEventListener("resize", transformContentFlash );
+    addEventListener('resize', transformContentFlash );
     keepAlive();
 
     function runOnContentFlashLoaded()
     {
-        var percentLoaded = "0";
+        var percentLoaded = '0';
         try{
             percentLoaded = contentFlash.PercentLoaded();
 
@@ -87,10 +87,10 @@ function mtfInit()
             contentFlash.TGetProperty('/', 0);
         }
         catch(e){
-            percentLoaded = "0";
+            percentLoaded = '0';
         }
 
-        if( percentLoaded != "100" )
+        if( percentLoaded != '100' )
            return setTimeout( runOnContentFlashLoaded, 300 );
         getContentFlashSize();
 
@@ -101,7 +101,7 @@ function mtfInit()
 
     function transformContentFlash()
     {
-        contentFlash.style.visibility = "initial";
+        contentFlash.style.visibility = 'initial';
         var windowAspectRatio = innerHeight / innerWidth;
 
         var contentFlashAspectRatio = contentFlashSize.originalHeight / contentFlashSize.originalWidth;
@@ -127,23 +127,23 @@ function mtfInit()
         scaleFactorX = correctedWidth / contentFlashSize.minimalWidth;
         scaleFactorY = correctedHeight / contentFlashSize.minimalHeight;
 
-        contentFlash.TSetProperty("/", contentFlashSize.T_HEIGHT_SCALE_INDEX, 100 * scaleFactorX);
-        contentFlash.TSetProperty("/", contentFlashSize.T_WIDTH_SCALE_INDEX, 100 * scaleFactorY);
+        contentFlash.TSetProperty('/', contentFlashSize.T_HEIGHT_SCALE_INDEX, 100 * scaleFactorX);
+        contentFlash.TSetProperty('/', contentFlashSize.T_WIDTH_SCALE_INDEX, 100 * scaleFactorY);
 
-        contentFlash.style.marginLeft = -(correctedWidth / 2) + "px";
-        contentFlash.style.marginTop = -((updatedHeight + correctedHeight) / 2) / 2 + "px";
+        contentFlash.style.marginLeft = -(correctedWidth / 2) + 'px';
+        contentFlash.style.marginTop = -((updatedHeight + correctedHeight) / 2) / 2 + 'px';
 
-        contentFlash.style.width = correctedWidth + "px";
-        contentFlash.style.height = correctedHeight + "px";
-        contentFlash.TSetProperty("/", contentFlashSize.T_PAN_X_INDEX, (contentFlashSize.minimalWidth - correctedWidth) / 2);
-        contentFlash.TSetProperty("/", contentFlashSize.T_PAN_Y_INDEX, (contentFlashSize.minimalHeight - correctedHeight) / 2);
+        contentFlash.style.width = correctedWidth + 'px';
+        contentFlash.style.height = correctedHeight + 'px';
+        contentFlash.TSetProperty('/', contentFlashSize.T_PAN_X_INDEX, (contentFlashSize.minimalWidth - correctedWidth) / 2);
+        contentFlash.TSetProperty('/', contentFlashSize.T_PAN_Y_INDEX, (contentFlashSize.minimalHeight - correctedHeight) / 2);
     }
 
     function keepAlive()
     {
         var keepAliveRequest = new XMLHttpRequest();
         var ASYNCHRONOUS_REQUEST = true;
-        keepAliveRequest.open('GET', "/users/ajax/refresh_session.php", ASYNCHRONOUS_REQUEST);
+        keepAliveRequest.open('GET', '/users/ajax/refresh_session.php', ASYNCHRONOUS_REQUEST);
         keepAliveRequest.send();
         setTimeout(keepAlive, 30 * 1000);
     }
@@ -164,8 +164,8 @@ function mtfInit()
         contentFlashSize.originalWidth = gameSize[gameName][0];
         contentFlashSize.originalHeight = gameSize[gameName][1];
 
-        contentFlash.style.width = contentFlashSize.originalWidth + "px";
-        contentFlash.style.height = contentFlashSize.originalHeight + "px";
+        contentFlash.style.width = contentFlashSize.originalWidth + 'px';
+        contentFlash.style.height = contentFlashSize.originalHeight + 'px';
     }
 
     function scaleContentFlash()
@@ -175,11 +175,11 @@ function mtfInit()
         contentFlashSize.minimalWidth = contentFlashSize.originalWidth / contentFlashSize.scaleFactor;
         contentFlashSize.minimalHeight = contentFlashSize.originalHeight / contentFlashSize.scaleFactor;
 
-        contentFlash.style.width = contentFlashSize.minimalWidth + "px";
-        contentFlash.style.height = contentFlashSize.minimalHeight + "px";
+        contentFlash.style.width = contentFlashSize.minimalWidth + 'px';
+        contentFlash.style.height = contentFlashSize.minimalHeight + 'px';
 
-        contentFlash.TSetProperty("/", contentFlashSize.T_HEIGHT_SCALE_INDEX, 100 / contentFlashSize.scaleFactor);
-        contentFlash.TSetProperty("/", contentFlashSize.T_WIDTH_SCALE_INDEX, 100 / contentFlashSize.scaleFactor);
+        contentFlash.TSetProperty('/', contentFlashSize.T_HEIGHT_SCALE_INDEX, 100 / contentFlashSize.scaleFactor);
+        contentFlash.TSetProperty('/', contentFlashSize.T_WIDTH_SCALE_INDEX, 100 / contentFlashSize.scaleFactor);
     }
 }
 
@@ -191,15 +191,15 @@ function haveFlashVars(responseText, flashVars)
 {
     function getParameter(parameter){
        var query = window.location.search.substring(1);
-       var vars = query.split("&");
+       var vars = query.split('&');
        for (var i=0;i<vars.length;i++) {
-               var pair = vars[i].split("=");
+               var pair = vars[i].split('=');
                if(pair[0] == parameter){return pair[1];}
        }
        return '';
     };
 
-    flashVars.startParam = "clickToPlay";
+    flashVars.startParam = 'clickToPlay';
 
     flashVars.sessionId = responseText.match(/sessionId.*?:.*?encodeURIComponent\('(.*?)'\)/)[1];
     flashVars.sessionToken = responseText.match(/sessionToken.*?:.*?encodeURIComponent\('(.*?)'\)/)[1];
@@ -218,6 +218,5 @@ function haveFlashVars(responseText, flashVars)
 
     document.body.appendChild( buildContentFlash( flashVarsParamString ) );
     /* necessary on firefox to access contentFlash.PercentLoaded() */
-    document.body.appendChild( document.createElement("script") ).textContent = "(" + mtfInit + ")()";
-
+    document.body.appendChild( document.createElement('script') ).textContent = '(' + mtfInit + ')()';
 }
