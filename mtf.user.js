@@ -189,6 +189,16 @@ buildFlashVarsParamString();
 
 function haveFlashVars(responseText, flashVars)
 {
+    flashVars.startParam = 'clickToPlay';
+
+    var rawFlashVars = responseText.match(/flashVars.*?=.*?({[\s\S]*?})/)[1];
+
+    flashVars.sessionId = rawFlashVars.match(/sessionId.*?:.*?encodeURIComponent\('(.*?)'\)/)[1];
+    flashVars.sessionToken = rawFlashVars.match(/sessionToken.*?:.*?encodeURIComponent\('(.*?)'\)/)[1];
+    flashVars.timestamp = rawFlashVars.match(/timestamp.*?:.*?(\d+)/)[1];
+    flashVars.friendUserIds = rawFlashVars.match(/friendUserIds.*?'((\d+,)*\d*)'/)[1];
+    flashVars.blockedToByUserIds = rawFlashVars.match(/blockedToByUserIds.*?'((\d+,)*\d*)'/)[1];
+
     function getParameter(parameter){
        var query = window.location.search.substring(1);
        var vars = query.split('&');
@@ -198,13 +208,6 @@ function haveFlashVars(responseText, flashVars)
        }
        return '';
     };
-
-    flashVars.startParam = 'clickToPlay';
-
-    flashVars.sessionId = responseText.match(/sessionId.*?:.*?encodeURIComponent\('(.*?)'\)/)[1];
-    flashVars.sessionToken = responseText.match(/sessionToken.*?:.*?encodeURIComponent\('(.*?)'\)/)[1];
-    flashVars.timestamp = responseText.match(/timestamp.*?:.*?(\d+)/)[1];
-    flashVars.apiUrl = encodeURIComponent('http://api.tetrisfriends.com/api');
 
     var urlParameters = ['autoJoinRoomId', 'autoJoinRoomName', 'das', 'ar'];
     for(i in urlParameters)
