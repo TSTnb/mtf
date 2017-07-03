@@ -24,6 +24,10 @@ document.replaceChild(
         document.documentElement
 );
 
+document.body.appendChild( document.createElement('style') ).textContent = '* { margin: 0; } :root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } embed { position: absolute; top: 50%; left: 50%; }';
+
+buildFlashVarsParamString();
+
 function buildFlashVarsParamString()
 {
     var flashVars = new Object();
@@ -52,6 +56,43 @@ function buildContentFlash(flashVarsParamString)
     contentFlash.style.visibility = 'hidden';
 
     return contentFlash;
+}
+
+function haveFlashVars(responseText, flashVars)
+{
+    flashVars.startParam = 'clickToPlay';
+
+    var rawFlashVars = responseText.match(/flashVars.*?=.*?({[\s\S]*?})/)[1];
+
+    flashVars.sessionId = rawFlashVars.match(/sessionId.*?:.*?encodeURIComponent\('(.*?)'\)/)[1];
+    flashVars.sessionToken = rawFlashVars.match(/sessionToken.*?:.*?encodeURIComponent\('(.*?)'\)/)[1];
+    flashVars.timestamp = rawFlashVars.match(/timestamp.*?:.*?(\d+)/)[1];
+    flashVars.friendUserIds = rawFlashVars.match(/friendUserIds.*?'((\d+,)*\d*)'/)[1];
+    flashVars.blockedToByUserIds = rawFlashVars.match(/blockedToByUserIds.*?'((\d+,)*\d*)'/)[1];
+
+    function getParameter(parameter){
+       var query = window.location.search.substring(1);
+       var vars = query.split('&');
+       for (var i=0;i<vars.length;i++) {
+               var pair = vars[i].split('=');
+               if(pair[0] == parameter){return pair[1];}
+       }
+       return '';
+    };
+
+    var urlParameters = ['autoJoinRoomId', 'autoJoinRoomName', 'das', 'ar'];
+    for(i in urlParameters)
+    {
+        flashVars[ urlParameters[i] ] = getParameter( urlParameters[i] );
+        if( flashVars[ urlParameters[i] ] === '' )
+            delete flashVars[ urlParameters[i] ];
+    }
+
+    flashVarsParamString = Object.keys( flashVars ).map(k => k + '=' + flashVars[k] ).join('&');
+
+    document.body.appendChild( buildContentFlash( flashVarsParamString ) );
+    /* necessary on firefox to access contentFlash.PercentLoaded() */
+    document.body.appendChild( document.createElement('script') ).textContent = '(' + mtfInit + ')()';
 }
 
 function mtfInit()
@@ -181,45 +222,4 @@ function mtfInit()
         contentFlash.TSetProperty('/', contentFlashSize.T_HEIGHT_SCALE_INDEX, 100 / contentFlashSize.scaleFactor);
         contentFlash.TSetProperty('/', contentFlashSize.T_WIDTH_SCALE_INDEX, 100 / contentFlashSize.scaleFactor);
     }
-}
-
-document.body.appendChild( document.createElement('style') ).textContent = '* { margin: 0; } :root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } embed { position: absolute; top: 50%; left: 50%; }';
-
-buildFlashVarsParamString();
-
-function haveFlashVars(responseText, flashVars)
-{
-    flashVars.startParam = 'clickToPlay';
-
-    var rawFlashVars = responseText.match(/flashVars.*?=.*?({[\s\S]*?})/)[1];
-
-    flashVars.sessionId = rawFlashVars.match(/sessionId.*?:.*?encodeURIComponent\('(.*?)'\)/)[1];
-    flashVars.sessionToken = rawFlashVars.match(/sessionToken.*?:.*?encodeURIComponent\('(.*?)'\)/)[1];
-    flashVars.timestamp = rawFlashVars.match(/timestamp.*?:.*?(\d+)/)[1];
-    flashVars.friendUserIds = rawFlashVars.match(/friendUserIds.*?'((\d+,)*\d*)'/)[1];
-    flashVars.blockedToByUserIds = rawFlashVars.match(/blockedToByUserIds.*?'((\d+,)*\d*)'/)[1];
-
-    function getParameter(parameter){
-       var query = window.location.search.substring(1);
-       var vars = query.split('&');
-       for (var i=0;i<vars.length;i++) {
-               var pair = vars[i].split('=');
-               if(pair[0] == parameter){return pair[1];}
-       }
-       return '';
-    };
-
-    var urlParameters = ['autoJoinRoomId', 'autoJoinRoomName', 'das', 'ar'];
-    for(i in urlParameters)
-    {
-        flashVars[ urlParameters[i] ] = getParameter( urlParameters[i] );
-        if( flashVars[ urlParameters[i] ] === '' )
-            delete flashVars[ urlParameters[i] ];
-    }
-
-    flashVarsParamString = Object.keys( flashVars ).map(k => k + '=' + flashVars[k] ).join('&');
-
-    document.body.appendChild( buildContentFlash( flashVarsParamString ) );
-    /* necessary on firefox to access contentFlash.PercentLoaded() */
-    document.body.appendChild( document.createElement('script') ).textContent = '(' + mtfInit + ')()';
 }
