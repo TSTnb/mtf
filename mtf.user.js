@@ -129,10 +129,10 @@ function mtfInit()
     {
         var percentLoaded = '0';
         try{
-            percentLoaded = contentFlash.PercentLoaded();
-
             /* this line will fail if it is not loaded */
             contentFlash.TGetProperty('/', 0);
+            percentLoaded = contentFlash.PercentLoaded();
+
         }
         catch(e){
             percentLoaded = '0';
