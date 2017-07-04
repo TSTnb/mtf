@@ -229,4 +229,43 @@ function mtfInit()
         contentFlash.TSetProperty('/', contentFlashSize.T_HEIGHT_SCALE_INDEX, 100 / contentFlashSize.scaleFactor);
         contentFlash.TSetProperty('/', contentFlashSize.T_WIDTH_SCALE_INDEX, 100 / contentFlashSize.scaleFactor);
     }
+
+    js_tetrisShowResults = function(results)
+    {
+        gameData = results.split(',').pop().match(/^(.*)<awards>/)[1];
+        var gameReplayer = document.createElement('embed');
+        gameReplayer.setAttribute('id', 'gameReplayer');
+        gameReplayer.setAttribute('allowscriptaccess', 'always');
+        gameReplayer.setAttribute('name', 'plugin');
+        gameReplayer.setAttribute('type', 'application/x-shockwave-flash');
+        gameReplayer.setAttribute('src', 'http://www.tetrisfriends.com/data/games/replayer/OWTetrisReplayWidget.swf');
+        gameReplayer.setAttribute('scale', 'noscale');
+        contentFlash = document.body.appendChild(gameReplayer);
+        transformContentFlash();
+        scaleContentFlash();
+
+        correctSize = false;
+        gameSize[gameName] = [616, 355];
+        runOnReplayerLoaded(gameData);
+    }
+
+    runOnReplayerLoaded = function(gameData)
+    {
+        var percentLoaded = '0';
+        try{
+            /* this line will fail if it is not loaded */
+            contentFlash.TGetProperty('/', 0);
+            percentLoaded = contentFlash.PercentLoaded();
+        }
+        catch(e){
+            alert(e);
+            percentLoaded = '0';
+        }
+
+        if( percentLoaded != '100' )
+           return setTimeout( function(){ runOnReplayerLoaded(gameData ) }, 50 );
+        getContentFlashSize();
+        contentFlash.as3_loadReplayer(gameProductId[gameName], 'http://www.tetrisfriends.com/data/games/' + gameName + '/' + gameName.toLowerCase() + 'WebsiteReplay.swf');
+        contentFlash.as3_startReplay(gameData);
+    }
 }
