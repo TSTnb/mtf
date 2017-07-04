@@ -75,7 +75,7 @@ function haveFlashVars(responseText, flashVars)
        var vars = query.split('&');
        for (var i=0;i<vars.length;i++) {
                var pair = vars[i].split('=');
-               if(pair[0] == parameter){return pair[1];}
+               if(pair[0] === parameter){return pair[1];}
        }
        return '';
     };
@@ -106,12 +106,19 @@ function mtfInit()
     gameFileName['Live'] = 'OWGameTetrisLive.swf';
     gameName = location.href.match(/games\/(.*)\/game.php/)[1];
 
+    correctSize = true;
     gameSize = [];
     gameSize['Ultra'] = [760, 560];
     gameSize['Sprint'] = [760, 560];
     gameSize['Survival'] = [760, 560];
     gameSize['Marathon'] = [760, 560];
     gameSize['Live'] = [946, 560];
+
+    gameProductId = [];
+    gameProductId['Ultra'] = 23;
+    gameProductId['Sprint'] = 84;
+    gameProductId['Survival'] = 12;
+    gameProductId['Marathon'] = 10;
 
     contentFlash.setAttribute('src', 'http://www.tetrisfriends.com/data/games/' + gameName + '/' + gameFileName[ gameName ]);
     runOnContentFlashLoaded();
@@ -122,10 +129,10 @@ function mtfInit()
     {
         var percentLoaded = '0';
         try{
-            percentLoaded = contentFlash.PercentLoaded();
-
             /* this line will fail if it is not loaded */
             contentFlash.TGetProperty('/', 0);
+            percentLoaded = contentFlash.PercentLoaded();
+
         }
         catch(e){
             percentLoaded = '0';
@@ -162,8 +169,8 @@ function mtfInit()
         }
 
         /* do not scale if it would be larger than the original size */
-        correctedWidth = updatedWidth > gameSize[gameName][0]? gameSize[gameName][0]: updatedWidth;
-        correctedHeight = updatedHeight > gameSize[gameName][1]? gameSize[gameName][1]: updatedHeight;
+        correctedWidth = correctSize === true && updatedWidth > gameSize[gameName][0]? gameSize[gameName][0]: updatedWidth;
+        correctedHeight = correctSize === true && updatedHeight > gameSize[gameName][1]? gameSize[gameName][1]: updatedHeight;
 
         scaleFactorX = correctedWidth / contentFlashSize.minimalWidth;
         scaleFactorY = correctedHeight / contentFlashSize.minimalHeight;
@@ -221,5 +228,52 @@ function mtfInit()
 
         contentFlash.TSetProperty('/', contentFlashSize.T_HEIGHT_SCALE_INDEX, 100 / contentFlashSize.scaleFactor);
         contentFlash.TSetProperty('/', contentFlashSize.T_WIDTH_SCALE_INDEX, 100 / contentFlashSize.scaleFactor);
+    }
+
+    js_tetrisShowResults = function(results)
+    {
+        gameData = results.split(',').pop().match(/^(.*)<awards>/)[1];
+        var gameReplayer = document.createElement('embed');
+        gameReplayer.setAttribute('id', 'gameReplayer');
+        gameReplayer.setAttribute('allowscriptaccess', 'always');
+        gameReplayer.setAttribute('name', 'plugin');
+        gameReplayer.setAttribute('type', 'application/x-shockwave-flash');
+        gameReplayer.setAttribute('src', 'http://www.tetrisfriends.com/data/games/replayer/OWTetrisReplayWidget.swf');
+        gameReplayer.setAttribute('scale', 'noscale');
+        contentFlash = document.body.appendChild(gameReplayer);
+        contentFlash.style.visibility = "hidden";
+
+        correctSize = false;
+        gameSize[gameName] = [616, 355];
+        runOnReplayerLoaded(gameData);
+    }
+
+    runOnReplayerLoaded = function(gameData)
+    {
+        var percentLoaded = '0';
+        try{
+            /* this line will fail if it is not loaded */
+            contentFlash.TGetProperty('/', 0);
+            percentLoaded = contentFlash.PercentLoaded();
+        }
+        catch(e){
+            alert(e);
+            percentLoaded = '0';
+        }
+
+        if( percentLoaded != '100' )
+           return setTimeout( function(){ runOnReplayerLoaded(gameData ) }, 50 );
+        getContentFlashSize();
+        contentFlash.as3_loadReplayer(gameProductId[gameName], 'http://www.tetrisfriends.com/data/games/' + gameName + '/' + gameName.toLowerCase() + 'WebsiteReplay.swf');
+        contentFlash.as3_startReplay(gameData);
+    }
+
+    replayReady = function()
+    {
+        scaleContentFlash();
+        /* if we don't wait to transform it, the replayer loads improperly */
+        transformContentFlash();
+        document.body.removeChild( document.getElementById('contentFlash') );
+        contentFlash.style.visibility = "visible";
     }
 }
