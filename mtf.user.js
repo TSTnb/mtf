@@ -67,8 +67,14 @@ function haveFlashVars(responseText, flashVars)
     flashVars.sessionId = rawFlashVars.match(/sessionId.*?:.*?encodeURIComponent\('(.*?)'\)/)[1];
     flashVars.sessionToken = rawFlashVars.match(/sessionToken.*?:.*?encodeURIComponent\('(.*?)'\)/)[1];
     flashVars.timestamp = rawFlashVars.match(/timestamp.*?:.*?(\d+)/)[1];
-    flashVars.friendUserIds = rawFlashVars.match(/friendUserIds.*?'((\d+,)*\d*)'/)[1];
-    flashVars.blockedToByUserIds = rawFlashVars.match(/blockedToByUserIds.*?'((\d+,)*\d*)'/)[1];
+
+    try{
+        flashVars.friendUserIds = rawFlashVars.match(/friendUserIds.*?'((\d+,)*\d*)'/)[1];
+        flashVars.blockedToByUserIds = rawFlashVars.match(/blockedToByUserIds.*?'((\d+,)*\d*)'/)[1];
+    }catch(err)
+    {
+        /* If this failed, the user is not logged in. */
+    }
 
     function getParameter(parameter){
        var query = window.location.search.substring(1);
