@@ -241,8 +241,6 @@ function mtfInit()
         gameReplayer.setAttribute('src', 'http://www.tetrisfriends.com/data/games/replayer/OWTetrisReplayWidget.swf');
         gameReplayer.setAttribute('scale', 'noscale');
         contentFlash = document.body.appendChild(gameReplayer);
-        transformContentFlash();
-        scaleContentFlash();
 
         correctSize = false;
         gameSize[gameName] = [616, 355];
@@ -267,5 +265,13 @@ function mtfInit()
         getContentFlashSize();
         contentFlash.as3_loadReplayer(gameProductId[gameName], 'http://www.tetrisfriends.com/data/games/' + gameName + '/' + gameName.toLowerCase() + 'WebsiteReplay.swf');
         contentFlash.as3_startReplay(gameData);
+    }
+
+    replayReady = function()
+    {
+        scaleContentFlash();
+        /* if we don't wait to transform it, the replayer loads improperly */
+        transformContentFlash();
+        document.body.removeChild( document.getElementById('contentFlash') );
     }
 }
