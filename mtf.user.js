@@ -106,6 +106,7 @@ function mtfInit()
     gameFileName['Live'] = 'OWGameTetrisLive.swf';
     gameName = location.href.match(/games\/(.*)\/game.php/)[1];
 
+    correctSize = true;
     gameSize = [];
     gameSize['Ultra'] = [760, 560];
     gameSize['Sprint'] = [760, 560];
@@ -162,8 +163,8 @@ function mtfInit()
         }
 
         /* do not scale if it would be larger than the original size */
-        correctedWidth = updatedWidth > gameSize[gameName][0]? gameSize[gameName][0]: updatedWidth;
-        correctedHeight = updatedHeight > gameSize[gameName][1]? gameSize[gameName][1]: updatedHeight;
+        correctedWidth = correctSize === true && updatedWidth > gameSize[gameName][0]? gameSize[gameName][0]: updatedWidth;
+        correctedHeight = correctSize === true && updatedHeight > gameSize[gameName][1]? gameSize[gameName][1]: updatedHeight;
 
         scaleFactorX = correctedWidth / contentFlashSize.minimalWidth;
         scaleFactorY = correctedHeight / contentFlashSize.minimalHeight;
