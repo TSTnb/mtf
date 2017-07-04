@@ -241,6 +241,7 @@ function mtfInit()
         gameReplayer.setAttribute('src', 'http://www.tetrisfriends.com/data/games/replayer/OWTetrisReplayWidget.swf');
         gameReplayer.setAttribute('scale', 'noscale');
         contentFlash = document.body.appendChild(gameReplayer);
+        contentFlash.style.visibility = "hidden";
 
         correctSize = false;
         gameSize[gameName] = [616, 355];
@@ -273,5 +274,6 @@ function mtfInit()
         /* if we don't wait to transform it, the replayer loads improperly */
         transformContentFlash();
         document.body.removeChild( document.getElementById('contentFlash') );
+        contentFlash.style.visibility = "visible";
     }
 }
