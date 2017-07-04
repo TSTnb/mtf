@@ -114,6 +114,12 @@ function mtfInit()
     gameSize['Marathon'] = [760, 560];
     gameSize['Live'] = [946, 560];
 
+    gameProductId = [];
+    gameProductId['Ultra'] = 23;
+    gameProductId['Sprint'] = 84;
+    gameProductId['Survival'] = 12;
+    gameProductId['Marathon'] = 10;
+
     contentFlash.setAttribute('src', 'http://www.tetrisfriends.com/data/games/' + gameName + '/' + gameFileName[ gameName ]);
     runOnContentFlashLoaded();
     addEventListener('resize', transformContentFlash );
