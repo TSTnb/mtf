@@ -42,6 +42,26 @@ function buildFlashVarsParamString()
     flashVarsRequest.send();
 }
 
+function addParameter(flashObject, paramName, paramValue)
+{
+    var paramElement;
+    var useExisting = false;
+    var flashObjectChildren = flashObject.children;
+    for(var flashIndex = 0; flashIndex < flashObjectChildren.length; flashIndex++)
+        if(flashObjectChildren[flashIndex].name.toLowerCase() === paramName)
+        {
+            useExisting = true;
+            paramElement = flashObjectChildren[flashIndex];
+        }
+
+    if(useExisting === false)
+         paramElement = document.createElement("param")
+
+    paramElement.setAttribute("name", paramName);
+    paramElement.setAttribute("value", paramValue);
+    flashObject.appendChild(paramElement);
+}
+
 function buildContentFlash(flashVarsParamString)
 {
     var contentFlash = document.createElement('embed');
