@@ -128,7 +128,6 @@ function mtfInit()
     gameProductId['Survival'] = 12;
     gameProductId['Marathon'] = 10;
 
-    contentFlash.setAttribute('src', location.protocol + '//' + location.host + '/data/games/' + gameName + '/' + gameFileName[ gameName ]);
     runOnContentFlashLoaded();
     addEventListener('resize', transformContentFlash );
     keepAlive();
