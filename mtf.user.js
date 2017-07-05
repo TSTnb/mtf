@@ -53,7 +53,6 @@ function buildContentFlash(flashVarsParamString)
     contentFlash.setAttribute('flashvars', flashVarsParamString);
     contentFlash.setAttribute('quality', 'low');
     contentFlash.setAttribute('salign', 'tl'); /* Live in particular needs this */
-    contentFlash.setAttribute('scale', 'noscale');
 
     contentFlash.style.visibility = 'hidden';
 
@@ -139,7 +138,6 @@ function mtfInit()
         var percentLoaded = '0';
         try{
             /* this line will fail if it is not loaded */
-            contentFlash.TGetProperty('/', 0);
             percentLoaded = contentFlash.PercentLoaded();
 
         }
@@ -184,16 +182,11 @@ function mtfInit()
         scaleFactorX = correctedWidth / contentFlashSize.minimalWidth;
         scaleFactorY = correctedHeight / contentFlashSize.minimalHeight;
 
-        contentFlash.TSetProperty('/', contentFlashSize.T_HEIGHT_SCALE_INDEX, 100 * scaleFactorX);
-        contentFlash.TSetProperty('/', contentFlashSize.T_WIDTH_SCALE_INDEX, 100 * scaleFactorY);
-
         contentFlash.style.marginLeft = -(correctedWidth / 2) + 'px';
         contentFlash.style.marginTop = -((updatedHeight + correctedHeight) / 2) / 2 + 'px';
 
         contentFlash.style.width = correctedWidth + 'px';
         contentFlash.style.height = correctedHeight + 'px';
-        contentFlash.TSetProperty('/', contentFlashSize.T_PAN_X_INDEX, (contentFlashSize.minimalWidth - correctedWidth) / 2);
-        contentFlash.TSetProperty('/', contentFlashSize.T_PAN_Y_INDEX, (contentFlashSize.minimalHeight - correctedHeight) / 2);
     }
 
     function keepAlive()
@@ -234,9 +227,6 @@ function mtfInit()
 
         contentFlash.style.width = contentFlashSize.minimalWidth + 'px';
         contentFlash.style.height = contentFlashSize.minimalHeight + 'px';
-
-        contentFlash.TSetProperty('/', contentFlashSize.T_HEIGHT_SCALE_INDEX, 100 / contentFlashSize.scaleFactor);
-        contentFlash.TSetProperty('/', contentFlashSize.T_WIDTH_SCALE_INDEX, 100 / contentFlashSize.scaleFactor);
     }
 
     js_tetrisShowResults = function(results)
@@ -248,7 +238,6 @@ function mtfInit()
         gameReplayer.setAttribute('name', 'plugin');
         gameReplayer.setAttribute('type', 'application/x-shockwave-flash');
         gameReplayer.setAttribute('src', location.protocol + '//' + location.host + '/data/games/replayer/OWTetrisReplayWidget.swf');
-        gameReplayer.setAttribute('scale', 'noscale');
         contentFlash = document.body.appendChild(gameReplayer);
         contentFlash.style.visibility = "hidden";
 
@@ -262,7 +251,6 @@ function mtfInit()
         var percentLoaded = '0';
         try{
             /* this line will fail if it is not loaded */
-            contentFlash.TGetProperty('/', 0);
             percentLoaded = contentFlash.PercentLoaded();
         }
         catch(e){
