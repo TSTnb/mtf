@@ -8,8 +8,8 @@
 // @include http://*tetrisfriends.com/games/Marathon/game.php*
 // @include http://*tetrisfriends.com/games/Live/game.php*
 // @grant none
-// @run-at document-start
-// @version 4.5.3
+// @run-at document-end
+// @version 4.5.4
 // @author morningpee
 // ==/UserScript==
 
@@ -126,7 +126,7 @@ function mtfInit()
     gameProductId['Survival'] = 12;
     gameProductId['Marathon'] = 10;
 
-    contentFlash.setAttribute('src', 'http://www.tetrisfriends.com/data/games/' + gameName + '/' + gameFileName[ gameName ]);
+    contentFlash.setAttribute('src', '/data/games/' + gameName + '/' + gameFileName[ gameName ]);
     runOnContentFlashLoaded();
     addEventListener('resize', transformContentFlash );
     keepAlive();
@@ -244,7 +244,7 @@ function mtfInit()
         gameReplayer.setAttribute('allowscriptaccess', 'always');
         gameReplayer.setAttribute('name', 'plugin');
         gameReplayer.setAttribute('type', 'application/x-shockwave-flash');
-        gameReplayer.setAttribute('src', 'http://www.tetrisfriends.com/data/games/replayer/OWTetrisReplayWidget.swf');
+        gameReplayer.setAttribute('src', '/data/games/replayer/OWTetrisReplayWidget.swf');
         gameReplayer.setAttribute('scale', 'noscale');
         contentFlash = document.body.appendChild(gameReplayer);
         contentFlash.style.visibility = "hidden";
@@ -270,7 +270,7 @@ function mtfInit()
         if( percentLoaded != '100' )
            return setTimeout( function(){ runOnReplayerLoaded(gameData ) }, 50 );
         getContentFlashSize();
-        contentFlash.as3_loadReplayer(gameProductId[gameName], 'http://www.tetrisfriends.com/data/games/' + gameName + '/' + gameName.toLowerCase() + 'WebsiteReplay.swf');
+        contentFlash.as3_loadReplayer(gameProductId[gameName], '/data/games/' + gameName + '/' + gameName.toLowerCase() + 'WebsiteReplay.swf');
         contentFlash.as3_startReplay(gameData);
     }
 

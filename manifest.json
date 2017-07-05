@@ -2,7 +2,7 @@
     "content_scripts": [
         { "js"               :  [ "mtf.user.js"                                        ]
         , "matches"          :  [ "*://*.tetrisfriends.com/games/*/game.php*"     ]
-        , "run_at"           :  "document_start"
+        , "run_at"           :  "document_end"
         }
     ],
     "description": "Reduces lag as much as possible by removing everything from the page except for the game itself.",
@@ -21,5 +21,5 @@
     "name": "Minimal Tetris Friends",
     "short_name": "mtf",
     "permissions": [ "*://*.tetrisfriends.com/*" ],
-    "version": "4.5.3"
+    "version": "4.5.4"
 }
