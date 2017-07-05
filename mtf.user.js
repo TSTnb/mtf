@@ -9,7 +9,7 @@
 // @include http://*tetrisfriends.com/games/Live/game.php*
 // @grant none
 // @run-at document-end
-// @version 4.5.5
+// @version 4.5.7
 // @author morningpee
 // ==/UserScript==
 
@@ -42,18 +42,30 @@ function buildFlashVarsParamString()
     flashVarsRequest.send();
 }
 
+function addParameter(flashObject, paramName, paramValue)
+{
+    var paramElement;
+    var useExisting = false;
+    var flashObjectChildren = flashObject.children;
+    for(var flashIndex = 0; flashIndex < flashObjectChildren.length; flashIndex++)
+        if(flashObjectChildren[flashIndex].name.toLowerCase() === paramName)
+        {
+            useExisting = true;
+            paramElement = flashObjectChildren[flashIndex];
+        }
+
+    if(useExisting === false)
+         paramElement = document.createElement("param")
+
+    paramElement.setAttribute("name", paramName);
+    paramElement.setAttribute("value", paramValue);
+    flashObject.appendChild(paramElement);
+}
+
 function buildContentFlash(flashVarsParamString)
 {
-    var contentFlash = document.createElement('embed');
-    contentFlash.setAttribute('id', 'contentFlash');
-    contentFlash.setAttribute('allowscriptaccess', 'always');
-    contentFlash.setAttribute('name', 'plugin');
-    contentFlash.setAttribute('type', 'application/x-shockwave-flash');
-    contentFlash.setAttribute('wmode', 'gpu');
-    contentFlash.setAttribute('flashvars', flashVarsParamString);
-    contentFlash.setAttribute('quality', 'low');
-    contentFlash.setAttribute('salign', 'tl'); /* Live in particular needs this */
-    contentFlash.setAttribute('scale', 'noscale');
+    addParameter(contentFlash, 'wmode', 'gpu');
+    addParameter(contentFlash, 'quality', 'low');
 
     contentFlash.style.visibility = 'hidden';
 
@@ -98,6 +110,7 @@ function haveFlashVars(responseText, flashVars)
 
     flashVarsParamString = Object.keys( flashVars ).map(k => k + '=' + flashVars[k] ).join('&');
 
+    buildContentFlash();
     document.body.appendChild( contentFlash );
 
     /* necessary on firefox to access contentFlash.PercentLoaded() */
@@ -129,7 +142,6 @@ function mtfInit()
     gameProductId['Survival'] = 12;
     gameProductId['Marathon'] = 10;
 
-    contentFlash.setAttribute('src', '/data/games/' + gameName + '/' + gameFileName[ gameName ]);
     runOnContentFlashLoaded();
     addEventListener('resize', transformContentFlash );
     keepAlive();
@@ -139,7 +151,6 @@ function mtfInit()
         var percentLoaded = '0';
         try{
             /* this line will fail if it is not loaded */
-            contentFlash.TGetProperty('/', 0);
             percentLoaded = contentFlash.PercentLoaded();
 
         }
@@ -184,16 +195,11 @@ function mtfInit()
         scaleFactorX = correctedWidth / contentFlashSize.minimalWidth;
         scaleFactorY = correctedHeight / contentFlashSize.minimalHeight;
 
-        contentFlash.TSetProperty('/', contentFlashSize.T_HEIGHT_SCALE_INDEX, 100 * scaleFactorX);
-        contentFlash.TSetProperty('/', contentFlashSize.T_WIDTH_SCALE_INDEX, 100 * scaleFactorY);
-
         contentFlash.style.marginLeft = -(correctedWidth / 2) + 'px';
         contentFlash.style.marginTop = -((updatedHeight + correctedHeight) / 2) / 2 + 'px';
 
         contentFlash.style.width = correctedWidth + 'px';
         contentFlash.style.height = correctedHeight + 'px';
-        contentFlash.TSetProperty('/', contentFlashSize.T_PAN_X_INDEX, (contentFlashSize.minimalWidth - correctedWidth) / 2);
-        contentFlash.TSetProperty('/', contentFlashSize.T_PAN_Y_INDEX, (contentFlashSize.minimalHeight - correctedHeight) / 2);
     }
 
     function keepAlive()
@@ -234,9 +240,6 @@ function mtfInit()
 
         contentFlash.style.width = contentFlashSize.minimalWidth + 'px';
         contentFlash.style.height = contentFlashSize.minimalHeight + 'px';
-
-        contentFlash.TSetProperty('/', contentFlashSize.T_HEIGHT_SCALE_INDEX, 100 / contentFlashSize.scaleFactor);
-        contentFlash.TSetProperty('/', contentFlashSize.T_WIDTH_SCALE_INDEX, 100 / contentFlashSize.scaleFactor);
     }
 
     js_tetrisShowResults = function(results)
@@ -247,8 +250,7 @@ function mtfInit()
         gameReplayer.setAttribute('allowscriptaccess', 'always');
         gameReplayer.setAttribute('name', 'plugin');
         gameReplayer.setAttribute('type', 'application/x-shockwave-flash');
-        gameReplayer.setAttribute('src', '/data/games/replayer/OWTetrisReplayWidget.swf');
-        gameReplayer.setAttribute('scale', 'noscale');
+        gameReplayer.setAttribute('src', location.protocol + '//' + location.host + '/data/games/replayer/OWTetrisReplayWidget.swf');
         contentFlash = document.body.appendChild(gameReplayer);
         contentFlash.style.visibility = "hidden";
 
@@ -262,7 +264,6 @@ function mtfInit()
         var percentLoaded = '0';
         try{
             /* this line will fail if it is not loaded */
-            contentFlash.TGetProperty('/', 0);
             percentLoaded = contentFlash.PercentLoaded();
         }
         catch(e){
@@ -273,7 +274,7 @@ function mtfInit()
         if( percentLoaded != '100' )
            return setTimeout( function(){ runOnReplayerLoaded(gameData ) }, 50 );
         getContentFlashSize();
-        contentFlash.as3_loadReplayer(gameProductId[gameName], '/data/games/' + gameName + '/' + gameName.toLowerCase() + 'WebsiteReplay.swf');
+        contentFlash.as3_loadReplayer(gameProductId[gameName], location.protocol + '//' + location.host + '/data/games/' + gameName + '/' + gameName.toLowerCase() + 'WebsiteReplay.swf');
         contentFlash.as3_startReplay(gameData);
     }
 
