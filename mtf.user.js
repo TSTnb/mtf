@@ -9,7 +9,7 @@
 // @include http://*tetrisfriends.com/games/Live/game.php*
 // @grant none
 // @run-at document-end
-// @version 4.5.7
+// @version 4.5.8
 // @author morningpee
 // ==/UserScript==
 
@@ -286,7 +286,4 @@ function mtfInit()
         document.body.removeChild( document.getElementById('contentFlash') );
         contentFlash.style.visibility = "visible";
     }
-
-    /* declare all functions that TF calls through ExternalInterface */
-    js_gameResultBgDone = js_gameResultBgLoaded = js_gameResultBgTextColor = js_gameOpenShop = js_analyticsTrackGameUrl = js_analyticsTrackGameEvent = js_sendArenaRoomInvite = js_sendArenaRoomInvite = js_tetrisShowMissionPopup = js_tetrisUpdateGuestSettings = function(){};
 }
