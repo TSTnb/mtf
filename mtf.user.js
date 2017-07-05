@@ -64,15 +64,8 @@ function addParameter(flashObject, paramName, paramValue)
 
 function buildContentFlash(flashVarsParamString)
 {
-    var contentFlash = document.createElement('embed');
-    contentFlash.setAttribute('id', 'contentFlash');
-    contentFlash.setAttribute('allowscriptaccess', 'always');
-    contentFlash.setAttribute('name', 'plugin');
-    contentFlash.setAttribute('type', 'application/x-shockwave-flash');
-    contentFlash.setAttribute('wmode', 'gpu');
-    contentFlash.setAttribute('flashvars', flashVarsParamString);
-    contentFlash.setAttribute('quality', 'low');
-    contentFlash.setAttribute('salign', 'tl'); /* Live in particular needs this */
+    addParameter(contentFlash, 'wmode', 'gpu');
+    addParameter(contentFlash, 'quality', 'low');
 
     contentFlash.style.visibility = 'hidden';
 
@@ -117,6 +110,7 @@ function haveFlashVars(responseText, flashVars)
 
     flashVarsParamString = Object.keys( flashVars ).map(k => k + '=' + flashVars[k] ).join('&');
 
+    buildContentFlash();
     document.body.appendChild( contentFlash );
 
     /* necessary on firefox to access contentFlash.PercentLoaded() */
