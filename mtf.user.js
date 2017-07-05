@@ -9,9 +9,11 @@
 // @include http://*tetrisfriends.com/games/Live/game.php*
 // @grant none
 // @run-at document-end
-// @version 4.5.4
+// @version 4.5.5
 // @author morningpee
 // ==/UserScript==
+
+contentFlash = document.getElementById('contentFlash');
 
 window.stop();
 
@@ -24,7 +26,7 @@ document.replaceChild(
         document.documentElement
 );
 
-document.body.appendChild( document.createElement('style') ).textContent = '* { margin: 0; } :root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } embed { position: absolute; top: 50%; left: 50%; }';
+document.body.appendChild( document.createElement('style') ).textContent = '* { margin: 0; } :root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } embed, object { position: absolute; top: 50%; left: 50%; }';
 
 buildFlashVarsParamString();
 
@@ -96,7 +98,8 @@ function haveFlashVars(responseText, flashVars)
 
     flashVarsParamString = Object.keys( flashVars ).map(k => k + '=' + flashVars[k] ).join('&');
 
-    document.body.appendChild( buildContentFlash( flashVarsParamString ) );
+    document.body.appendChild( contentFlash );
+
     /* necessary on firefox to access contentFlash.PercentLoaded() */
     document.body.appendChild( document.createElement('script') ).textContent = '(' + mtfInit + ')()';
 }
