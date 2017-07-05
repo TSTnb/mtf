@@ -8,7 +8,7 @@
 // @include http://*tetrisfriends.com/games/Marathon/game.php*
 // @include http://*tetrisfriends.com/games/Live/game.php*
 // @grant none
-// @run-at document-start
+// @run-at document-end
 // @version 4.5.3
 // @author morningpee
 // ==/UserScript==
