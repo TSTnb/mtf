@@ -21,5 +21,5 @@
     "name": "Minimal Tetris Friends",
     "short_name": "mtf",
     "permissions": [ "*://*.tetrisfriends.com/*" ],
-    "version": "4.5.5"
+    "version": "4.5.6"
 }
