@@ -1,5 +1,5 @@
  ![](http://i.imgur.com/1njY7qe.png)
-###### Version 4.2.7, last updated 2017-06-28
+###### Version 4.2.7, last updated 2017-07-05
 
 ### Description
 This is a script that removes everything from the page except for the game itself and the nice-looking background, sets the Flash quality to "low" instead of "high", and sets the "wmode" parameter to "direct". *This reduces lag significantly.*
@@ -14,7 +14,7 @@ Games currently supported:
 ### How to install
 
 ##### _________________________________________________________________
-##### **[Before you begin, install Adblock! This step reduces lag quite a bit by itself.](https://adblockplus.org/)**
+##### **[Before you begin, install uBlock Origin! This step reduces lag quite a bit by itself.](https://github.com/gorhill/uBlock/#chromium)**
 ___
 
 #### Step 1: Get a Userscript Manager
@@ -47,10 +47,10 @@ So anyway, try it out and post results.
 ---
 |||
 --- | ---:
-**[Download for Firefox](https://addons.mozilla.org/firefox/addon/mtf/)** | last updated 2017-06-28 |
-**[Download for Chrome](https://chrome.google.com/webstore/detail/minimal-tetris-friends/jmcfgfebjmfodjnmgicmkpkbpbfelhki)** | last updated 2017-06-28 |
-**[Download for Opera](https://addons.opera.com/en/extensions/details/minimal-tetris-friends/)** | last updated 2017-06-28 |
+**[Download for Firefox](https://addons.mozilla.org/firefox/addon/mtf/)** | last updated 2017-07-05 |
+**[Download for Chrome](https://chrome.google.com/webstore/detail/minimal-tetris-friends/jmcfgfebjmfodjnmgicmkpkbpbfelhki)** | last updated 2017-07-05 |
+**[Download for Opera](https://addons.opera.com/en/extensions/details/minimal-tetris-friends/)** | last updated 2017-07-05 |
 |||
 |||
-**[Download for Edge or Safari](https://raw.githubusercontent.com/morningpee/mtf/4.2.7/mtf.user.js)** | last updated 2017-06-28 |
-|||size=1]last updated 2017-06-28[/size]
+**[Download for Edge or Safari](https://raw.githubusercontent.com/morningpee/mtf/4.2.7/mtf.user.js)** | last updated 2017-07-05 |
+|||size=1]last updated 2017-07-05[/size]
