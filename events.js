@@ -14,3 +14,10 @@ try{
 }catch(err){
     alert("Error blocking winGrafix");
 }
+
+chrome.storage.sync.get('blockWinGrafix',
+    function(chromeStorage)
+    {
+        blockWinGrafix = chromeStorage.blockWinGrafix;
+    }
+);
