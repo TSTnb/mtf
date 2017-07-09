@@ -5,6 +5,10 @@
         , "run_at"           :  "document_end"
         }
     ],
+    "background": {
+        "scripts": ["events.js"],
+        "persistent": true
+    },
     "description": "Reduces lag as much as possible by removing everything from the page except for the game itself.",
     "icons": {
         "128": "logo128.png",
