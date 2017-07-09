@@ -1,5 +1,12 @@
 var blockWinGrafix = false;
 
+chrome.storage.onChanged.addListener(
+	function(changes, namespace)
+	{
+		blockWinGrafix = changes['blockWinGrafix'].newValue;
+	}
+);
+
 function interceptRequest(request)
 {
 	if( request.url.indexOf("winGrafix/OWResultsAnimation") === -1 )
