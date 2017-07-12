@@ -5,7 +5,7 @@
 // @include http://*tetrisfriends.com/*
 // @grant none
 // @run-at document-end
-// @version 4.6.1
+// @version 4.6.2
 // @author morningpee
 // ==/UserScript==
 
@@ -289,3 +289,15 @@ function mtfInit()
         contentFlash.style.visibility = "visible";
     }
 }
+
+
+document.addEventListener("readystatechange",
+    function(){
+        try{
+            /* intrusive ads not handled by uBlock Origin */
+            var ad = document.getElementById("home_custom_ad_container");
+            ad.parentNode.removeChild(ad);
+            document.getElementById("container").getElementsByTagName("iframe")[0].parentNode.textContent = "";
+        }catch(err){}
+    }
+);
