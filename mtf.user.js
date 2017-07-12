@@ -288,8 +288,16 @@ function mtfInit()
         document.body.removeChild( document.getElementById('contentFlash') );
         contentFlash.style.visibility = "visible";
     }
+
 }
 
+    function loadGame()
+    {
+        var gameLoading = document.getElementsByClassName("game_loading")[0];
+        gameLoading.parentNode.removeChild(gameLoading);
+        document.getElementById("game_container").style.height = "auto";
+        document.getElementById("contentFlash").style.visibility = "visible";
+    }
 
 document.addEventListener("readystatechange",
     function(){
@@ -298,6 +306,7 @@ document.addEventListener("readystatechange",
             var ad = document.getElementById("home_custom_ad_container");
             ad.parentNode.removeChild(ad);
             document.getElementById("container").getElementsByTagName("iframe")[0].parentNode.textContent = "";
+            loadGame();
         }catch(err){}
     }
 );
