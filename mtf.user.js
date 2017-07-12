@@ -2,33 +2,35 @@
 // @name Minimal Tetris Friends
 // @namespace minimaltetrisfriends
 // @description Reduces lag as much as possible
-// @include http://*tetrisfriends.com/games/Ultra/game.php*
-// @include http://*tetrisfriends.com/games/Sprint/game.php*
-// @include http://*tetrisfriends.com/games/Survival/game.php*
-// @include http://*tetrisfriends.com/games/Marathon/game.php*
-// @include http://*tetrisfriends.com/games/Live/game.php*
+// @include http://*tetrisfriends.com/*
 // @grant none
 // @run-at document-end
-// @version 4.6.1
+// @version 4.6.2
 // @author morningpee
 // ==/UserScript==
 
-contentFlash = document.getElementById('contentFlash');
+/* if game mode */
+if( location.pathname.match(/Ultra|Sprint|Survival|Marathon|Live/) !== null)
+    mtfBootstrap();
 
-window.stop();
+function mtfBootstrap()
+{
+    contentFlash = document.getElementById('contentFlash');
 
-/*start fresh with html5 document */
-document.doctype&&
-    document.replaceChild( document.implementation.createDocumentType('html', '', ''), document.doctype );
+    window.stop();
 
-document.replaceChild(
+    /*start fresh with html5 document */
+    document.doctype&&
+        document.replaceChild( document.implementation.createDocumentType('html', '', ''), document.doctype );
+
+    document.replaceChild(
         document.implementation.createHTMLDocument(document.title).documentElement,
         document.documentElement
-);
+    );
 
-document.body.appendChild( document.createElement('style') ).textContent = '* { margin: 0; } :root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } embed, object { position: absolute; top: 50%; left: 50%; }';
-
-buildFlashVarsParamString();
+    document.body.appendChild( document.createElement('style') ).textContent = '* { margin: 0; } :root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } embed, object { position: absolute; top: 50%; left: 50%; }';
+    buildFlashVarsParamString();
+}
 
 function buildFlashVarsParamString()
 {
@@ -287,3 +289,15 @@ function mtfInit()
         contentFlash.style.visibility = "visible";
     }
 }
+
+
+document.addEventListener("readystatechange",
+    function(){
+        try{
+            /* intrusive ads not handled by uBlock Origin */
+            var ad = document.getElementById("home_custom_ad_container");
+            ad.parentNode.removeChild(ad);
+            document.getElementById("container").getElementsByTagName("iframe")[0].parentNode.textContent = "";
+        }catch(err){}
+    }
+);
