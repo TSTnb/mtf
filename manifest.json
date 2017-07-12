@@ -1,7 +1,7 @@
 {
     "content_scripts": [
         { "js"               :  [ "mtf.user.js"                                        ]
-        , "matches"          :  [ "*://*.tetrisfriends.com/games/*/game.php*"     ]
+        , "matches"          :  [ "*://*.tetrisfriends.com/*"     ]
         , "run_at"           :  "document_end"
         }
     ],
