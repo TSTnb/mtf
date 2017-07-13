@@ -10,7 +10,7 @@
 // ==/UserScript==
 
 /* if game mode */
-if( location.pathname.match(/Ultra|Sprint|Survival|Marathon|Live/) !== null)
+if( location.pathname.match(/Ultra|\/Sprint\/|Survival|Marathon|Live/) !== null)
     mtfBootstrap();
 
 function mtfBootstrap()
