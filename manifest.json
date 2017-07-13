@@ -1,8 +1,8 @@
 {
-    "content_scripts": [ {
-            "js"               :  [ "mtf.user.js"               ],
-            "matches"          :  [ "*://*.tetrisfriends.com/*" ],
-            "run_at"           :  "document_end"
+    "content_scripts": [  {
+            "js"       :  [ "mtf.user.js"               ],
+            "matches"  :  [ "*://*.tetrisfriends.com/*" ],
+            "run_at"   :  "document_end"
     } ],
     "background": {
         "scripts": ["events.js"],
@@ -11,8 +11,7 @@
     "options_page": "options.html",
     "browser_action": {
         "default_popup": "options.html",
-        "default_icon":
-            {
+        "default_icon": {
             "128": "logo128.png",
             "48": "logo48.png",
             "16": "logo16.png"
@@ -28,7 +27,7 @@
     "name": "Minimal Tetris Friends",
     "short_name": "mtf",
     "permissions": ["webRequest", "webRequestBlocking", "*://*.tetrisfriends.com/*", "storage"],
-    "version": "4.6.3",
+    "version": "4.6.4",
     "applications": {
         "gecko": {
             "id": "{936c9dbf-25a7-433f-8223-08693060c5da}",

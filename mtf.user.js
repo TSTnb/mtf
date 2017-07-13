@@ -5,12 +5,12 @@
 // @include http://*tetrisfriends.com/*
 // @grant none
 // @run-at document-end
-// @version 4.6.3
+// @version 4.6.4
 // @author morningpee
 // ==/UserScript==
 
 /* if game mode */
-if( location.pathname.match(/Ultra|Sprint|Survival|Marathon|Live/) !== null)
+if( location.pathname.match(/Ultra|\/Sprint\/|Survival|Marathon|Live/) !== null)
     mtfBootstrap();
 
 function mtfBootstrap()
