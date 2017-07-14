@@ -286,7 +286,6 @@ function mtfInit()
 
     js_tetrisShowResults = function(results)
     {
-        a = arguments;
         if( gameReplayerName[gameName] === undefined )
             return;
 
@@ -340,17 +339,16 @@ function mtfInit()
         if( percentLoaded != '100' )
            return setTimeout( function(){ runOnReplayerLoaded(gameData ) }, 50 );
         getContentFlashSize();
+
         var loadReplayerArguments = [gameProductId[gameName] + "", location.protocol + '//' + location.host + '/data/games/' + gameName + '/' + gameReplayerName[gameName]];
-        console.log("about to load the replayer.");
+
         if( gameNumberAIPlayers[gameName] === 0 )
             contentFlash.as3_loadReplayer(loadReplayerArguments[0], loadReplayerArguments[1]);
         else
             contentFlash.as3_loadReplayer(loadReplayerArguments[0], loadReplayerArguments[1], gameNumberAIPlayers[gameName]);
-        console.log("loaded the replayer.");
 
         if( gameNumberAIPlayers[gameName] === 0 )
             return contentFlash.as3_startReplay(gameData);
-        b = [gameData[0], "you", "/data/images/avatars/40X40/82.gif", "20", "8", gameData[1], "them", ["/data/images/avatars/40X40/82.gif"]];
 
         var aiGameData = [];
         var aiNames = [];
@@ -363,8 +361,6 @@ function mtfInit()
             aiAvatars.push("/data/images/avatars/40X40/82.gif");
         }
 
-        b = [gameData[0], "you", "/data/images/avatars/40X40/7.gif", "8", "8", aiGameData, aiNames, aiAvatars];
-        console.log("about to start the replay");
         contentFlash.as3_startReplay(gameData[0], "you", "/data/images/avatars/40X40/7.gif", "8", "8", aiGameData, aiNames, aiAvatars);
     }
 
