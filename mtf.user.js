@@ -361,7 +361,7 @@ function mtfInit()
             aiAvatars.push("/data/images/avatars/40X40/82.gif");
         }
 
-        contentFlash.as3_startReplay(gameData[0], "you", "/data/images/avatars/40X40/7.gif", "8", "8", aiGameData, aiNames, aiAvatars);
+        contentFlash.as3_startReplay(gameData[0], "you", "/data/images/avatars/40X40/7.gif", "20", "20", aiGameData, aiNames, aiAvatars);
     }
 
     replayReady = function()
