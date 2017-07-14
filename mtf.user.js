@@ -123,26 +123,66 @@ function mtfInit()
 {
 
     gameFileName = [];
-    gameFileName['Ultra'] = 'OWGameUltra.swf';
-    gameFileName['Sprint'] = 'OWGameSprint.swf';
+    gameFileName['Ultra']    = 'OWGameUltra.swf';
+    gameFileName['Sprint']   = 'OWGameSprint.swf';
     gameFileName['Survival'] = 'OWGameSurvival.swf';
     gameFileName['Marathon'] = 'OWGameMarathon.swf';
-    gameFileName['Live'] = 'OWGameTetrisLive.swf';
+    gameFileName['Live']     = 'OWGameTetrisLive.swf';
+    gameFileName['Battle2P'] = 'OWGameBattle2pMaps.swf';
+    gameFileName['Battle6P'] = 'OWGameBattle6P.swf';
+    gameFileName['Sprint5P'] = 'OWGameSprint5p.swf';
+    gameFileName['Rally8P']  = 'OWRally8P.swf';
+    gameFileName['Mono']     = 'OWGameColorBlind.swf';
+    gameFileName['NBlox']    = 'OWGameNBlox.swf';
+
     gameName = location.href.match(/games\/(.*)\/game.php/)[1];
 
     correctSize = true;
     gameSize = [];
-    gameSize['Ultra'] = [760, 560];
-    gameSize['Sprint'] = [760, 560];
-    gameSize['Survival'] = [760, 560];
-    gameSize['Marathon'] = [760, 560];
-    gameSize['Live'] = [946, 560];
+    gameSize['Ultra']       = [760, 560];
+    gameSize['Sprint']      = [760, 560];
+    gameSize['Survival']    = [760, 560];
+    gameSize['Marathon']    = [760, 560];
+    gameSize['Live']        = [946, 560];
+    gameSize['Battle2P']    = [760, 560];
+    gameSize['Battle6P']    = [760, 560];
+    gameSize['Sprint5P']    = [760, 560];
+    gameSize['Rally8P']     = [760, 560];
+    gameSize['Mono']        = [760, 560];
+    gameFileName['NBlox']   = [760, 560];
 
     gameProductId = [];
-    gameProductId['Ultra'] = 23;
-    gameProductId['Sprint'] = 84;
-    gameProductId['Survival'] = 12;
-    gameProductId['Marathon'] = 10;
+    gameProductId['Ultra']      = 23;
+    gameProductId['Sprint']     = 84;
+    gameProductId['Survival']   = 12;
+    gameProductId['Marathon']   = 10;
+    gameProductId['Battle2P']   = 100;
+    gameProductId['Battle6P']   = 86;
+    gameProductId['Sprint5P']   = 101;
+    gameProductId['Rally8P']    = 4;
+    gameProductId['Mono']       = 102;
+    gameProductId['NBlox']      = 85;
+
+    gameReplayerName = [];
+    gameReplayerName['Ultra']       = 'ultraWebsiteReplay.swf';
+    gameReplayerName['Sprint']      = 'sprintWebsiteReplay.swf';
+    gameReplayerName['Survival']    = 'survivalWebsiteReplay.swf';
+    gameReplayerName['Marathon']    = 'marathonWebsiteReplay.swf';
+    gameReplayerName['Battle2P']    = 'battleWebsiteReplay.swf';
+    gameReplayerName['Battle6P']    = 'battle6PWebsiteReplay.swf';
+    gameReplayerName['Sprint5P']    = 'sprint_5PWebsiteReplay.swf';
+    gameReplayerName['Mono']        = 'colorblindWebsiteReplay.swf';
+
+    gameNumberAIPlayers = [];
+    gameNumberAIPlayers['Ultra']    = 0;
+    gameNumberAIPlayers['Sprint']   = 0;
+    gameNumberAIPlayers['Survival'] = 0;
+    gameNumberAIPlayers['Marathon'] = 0;
+    gameNumberAIPlayers['Battle2P'] = 1;
+    gameNumberAIPlayers['Battle6P'] = 5;
+    gameNumberAIPlayers['Sprint5P'] = 4;
+    gameNumberAIPlayers['Rally8P']  = 0; //Rally8P does not support replays
+    gameNumberAIPlayers['Mono']     = 0;
 
     runOnContentFlashLoaded();
     addEventListener('resize', transformContentFlash );
