@@ -10,7 +10,7 @@
 // ==/UserScript==
 
 /* if game mode */
-if( location.pathname.match(/Ultra|\/Sprint\/|Survival|Marathon|Live/) !== null)
+if( location.pathname.match(/\/games\/.*\/game\.php.*/) !== null)
     mtfBootstrap();
 
 function mtfBootstrap()
@@ -123,26 +123,66 @@ function mtfInit()
 {
 
     gameFileName = [];
-    gameFileName['Ultra'] = 'OWGameUltra.swf';
-    gameFileName['Sprint'] = 'OWGameSprint.swf';
+    gameFileName['Ultra']    = 'OWGameUltra.swf';
+    gameFileName['Sprint']   = 'OWGameSprint.swf';
     gameFileName['Survival'] = 'OWGameSurvival.swf';
     gameFileName['Marathon'] = 'OWGameMarathon.swf';
-    gameFileName['Live'] = 'OWGameTetrisLive.swf';
+    gameFileName['Live']     = 'OWGameTetrisLive.swf';
+    gameFileName['Battle2P'] = 'OWGameBattle2pMaps.swf';
+    gameFileName['Battle6P'] = 'OWGameBattle6P.swf';
+    gameFileName['Sprint5P'] = 'OWGameSprint5p.swf';
+    gameFileName['Rally8P']  = 'OWRally8P.swf';
+    gameFileName['Mono']     = 'OWGameColorBlind.swf';
+    gameFileName['NBlox']    = 'OWGameNBlox.swf';
+
     gameName = location.href.match(/games\/(.*)\/game.php/)[1];
 
     correctSize = true;
     gameSize = [];
-    gameSize['Ultra'] = [760, 560];
-    gameSize['Sprint'] = [760, 560];
-    gameSize['Survival'] = [760, 560];
-    gameSize['Marathon'] = [760, 560];
-    gameSize['Live'] = [946, 560];
+    gameSize['Ultra']       = [760, 560];
+    gameSize['Sprint']      = [760, 560];
+    gameSize['Survival']    = [760, 560];
+    gameSize['Marathon']    = [760, 560];
+    gameSize['Live']        = [946, 560];
+    gameSize['Battle2P']    = [760, 560];
+    gameSize['Battle6P']    = [760, 560];
+    gameSize['Sprint5P']    = [760, 560];
+    gameSize['Rally8P']     = [760, 560];
+    gameSize['Mono']        = [760, 560];
+    gameFileName['NBlox']   = [760, 560];
 
     gameProductId = [];
-    gameProductId['Ultra'] = 23;
-    gameProductId['Sprint'] = 84;
-    gameProductId['Survival'] = 12;
-    gameProductId['Marathon'] = 10;
+    gameProductId['Ultra']      = 23;
+    gameProductId['Sprint']     = 84;
+    gameProductId['Survival']   = 12;
+    gameProductId['Marathon']   = 10;
+    gameProductId['Battle2P']   = 100;
+    gameProductId['Battle6P']   = 86;
+    gameProductId['Sprint5P']   = 101;
+    gameProductId['Rally8P']    = 4;
+    gameProductId['Mono']       = 102;
+    gameProductId['NBlox']      = 85;
+
+    gameReplayerName = [];
+    gameReplayerName['Ultra']       = 'ultraWebsiteReplay.swf';
+    gameReplayerName['Sprint']      = 'sprintWebsiteReplay.swf';
+    gameReplayerName['Survival']    = 'survivalWebsiteReplay.swf';
+    gameReplayerName['Marathon']    = 'marathonWebsiteReplay.swf';
+    gameReplayerName['Battle2P']    = 'battleWebsiteReplay.swf';
+    gameReplayerName['Battle6P']    = 'battle6PWebsiteReplay.swf';
+    gameReplayerName['Sprint5P']    = 'sprint_5PWebsiteReplay.swf';
+    gameReplayerName['Mono']        = 'colorblindWebsiteReplay.swf';
+
+    gameNumberAIPlayers = [];
+    gameNumberAIPlayers['Ultra']    = 0;
+    gameNumberAIPlayers['Sprint']   = 0;
+    gameNumberAIPlayers['Survival'] = 0;
+    gameNumberAIPlayers['Marathon'] = 0;
+    gameNumberAIPlayers['Battle2P'] = 1;
+    gameNumberAIPlayers['Battle6P'] = 5;
+    gameNumberAIPlayers['Sprint5P'] = 4;
+    gameNumberAIPlayers['Rally8P']  = 0; //Rally8P does not support replays
+    gameNumberAIPlayers['Mono']     = 0;
 
     runOnContentFlashLoaded();
     addEventListener('resize', transformContentFlash );
@@ -246,13 +286,36 @@ function mtfInit()
 
     js_tetrisShowResults = function(results)
     {
-        gameData = results.split(',').pop().match(/^(.*)<awards>/)[1];
+        if( gameReplayerName[gameName] === undefined )
+            return;
+
+        var resultsArray = results.split(",");
+        if( gameNumberAIPlayers[gameName] === 0 )
+            gameData = results.split(',').pop().match(/^(.*)<awards>/)[1];
+        else
+        {
+            gameData = []
+            var currentSubject;
+            for(var i = 0; i < resultsArray.length; i++)
+                {
+                    try{
+                        currentSubject = resultsArray[i].match(/^([^<]+)<?/)[1];
+                        if( currentSubject.length < 20)
+                            continue;
+                        atob(currentSubject);
+                        gameData.push(currentSubject);
+                    }catch(err){}
+                }
+
+        }
+
+
         var gameReplayer = document.createElement('embed');
         gameReplayer.setAttribute('id', 'gameReplayer');
         gameReplayer.setAttribute('allowscriptaccess', 'always');
         gameReplayer.setAttribute('name', 'plugin');
         gameReplayer.setAttribute('type', 'application/x-shockwave-flash');
-        gameReplayer.setAttribute('src', location.protocol + '//' + location.host + '/data/games/replayer/OWTetrisReplayWidget.swf');
+        gameReplayer.setAttribute('src', location.protocol + '//' + location.host + '/data/games/replayer/' + (gameNumberAIPlayers[gameName] === 0? 'OWTetrisReplayWidget.swf': 'OWTetrisMPReplayWidget.swf') );
         contentFlash = document.body.appendChild(gameReplayer);
         contentFlash.style.visibility = "hidden";
 
@@ -276,8 +339,29 @@ function mtfInit()
         if( percentLoaded != '100' )
            return setTimeout( function(){ runOnReplayerLoaded(gameData ) }, 50 );
         getContentFlashSize();
-        contentFlash.as3_loadReplayer(gameProductId[gameName], location.protocol + '//' + location.host + '/data/games/' + gameName + '/' + gameName.toLowerCase() + 'WebsiteReplay.swf');
-        contentFlash.as3_startReplay(gameData);
+
+        var loadReplayerArguments = [gameProductId[gameName] + "", location.protocol + '//' + location.host + '/data/games/' + gameName + '/' + gameReplayerName[gameName]];
+
+        if( gameNumberAIPlayers[gameName] === 0 )
+            contentFlash.as3_loadReplayer(loadReplayerArguments[0], loadReplayerArguments[1]);
+        else
+            contentFlash.as3_loadReplayer(loadReplayerArguments[0], loadReplayerArguments[1], gameNumberAIPlayers[gameName]);
+
+        if( gameNumberAIPlayers[gameName] === 0 )
+            return contentFlash.as3_startReplay(gameData);
+
+        var aiGameData = [];
+        var aiNames = [];
+        var aiAvatars = [];
+
+        for(var i = 0; i < gameNumberAIPlayers[gameName]; i++)
+        {
+            aiGameData.push( gameData[i + 1] );
+            aiNames.push("them");
+            aiAvatars.push("/data/images/avatars/40X40/7.gif");
+        }
+
+        contentFlash.as3_startReplay(gameData[0], "you", "/data/images/avatars/40X40/7.gif", "20", "20", aiGameData, aiNames, aiAvatars);
     }
 
     replayReady = function()
