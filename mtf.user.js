@@ -358,7 +358,7 @@ function mtfInit()
         {
             aiGameData.push( gameData[i + 1] );
             aiNames.push("them");
-            aiAvatars.push("/data/images/avatars/40X40/82.gif");
+            aiAvatars.push("/data/images/avatars/40X40/7.gif");
         }
 
         contentFlash.as3_startReplay(gameData[0], "you", "/data/images/avatars/40X40/7.gif", "20", "20", aiGameData, aiNames, aiAvatars);
