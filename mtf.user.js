@@ -149,7 +149,7 @@ function mtfInit()
     gameSize['Sprint5P']    = [760, 560];
     gameSize['Rally8P']     = [760, 560];
     gameSize['Mono']        = [760, 560];
-    gameFileName['NBlox']   = [760, 560];
+    gameSize['NBlox']       = [760, 560];
 
     gameProductId = [];
     gameProductId['Ultra']      = 23;
