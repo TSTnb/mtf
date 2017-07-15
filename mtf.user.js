@@ -286,6 +286,10 @@ function mtfInit()
 
     js_tetrisShowResults = function(results)
     {
+
+        var aiNames = [];
+        var aiAvatars = [];
+
         if( gameReplayerName[gameName] === undefined )
             return;
 
@@ -306,6 +310,11 @@ function mtfInit()
                             continue;
                         atob(currentSubject);
                         gameData.push(currentSubject);
+                        if( gameData.length > 1)
+                        {
+                            aiNames.push(resultsArray[i - 2]);
+                            aiAvatars.push("/data/images/avatars/40X40/" + resultsArray[i - 1]);
+                        }
                     }catch(err){}
                 }
 
@@ -323,11 +332,11 @@ function mtfInit()
 
         correctSize = false;
         gameSize[gameName] = [616, 355];
-        runOnReplayerLoaded(gameData, currentRank);
+        runOnReplayerLoaded(gameData, currentRank, aiNames, aiAvatars);
     }
 
 
-    runOnReplayerLoaded = function(gameData, currentRank)
+    runOnReplayerLoaded = function(gameData, currentRank, aiNames, aiAvatars)
     {
         var percentLoaded = '0';
         try{
@@ -340,7 +349,7 @@ function mtfInit()
         }
 
         if( percentLoaded != '100' )
-           return setTimeout( function(){ runOnReplayerLoaded(gameData, currentRank) }, 50 );
+           return setTimeout( function(){ runOnReplayerLoaded(gameData, currentRank, aiNames, aiAvatars) }, 50 );
         getContentFlashSize();
 
         var loadReplayerArguments = [gameProductId[gameName] + "", location.protocol + '//' + location.host + '/data/games/' + gameName + '/' + gameReplayerName[gameName]];
@@ -354,14 +363,10 @@ function mtfInit()
             return contentFlash.as3_startReplay(gameData);
 
         var aiGameData = [];
-        var aiNames = [];
-        var aiAvatars = [];
 
         for(var i = 0; i < gameNumberAIPlayers[gameName]; i++)
         {
             aiGameData.push( gameData[i + 1] );
-            aiNames.push("them");
-            aiAvatars.push("/data/images/avatars/40X40/7.gif");
         }
 
         contentFlash.as3_startReplay(gameData[0], "you", "/data/images/avatars/40X40/7.gif", currentRank, currentRank, aiGameData, aiNames, aiAvatars);
