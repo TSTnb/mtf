@@ -290,6 +290,8 @@ function mtfInit()
             return;
 
         var resultsArray = results.split(",");
+        var currentRank = resultsArray[1].split("&")[0];
+
         if( gameNumberAIPlayers[gameName] === 0 )
             gameData = results.split(',').pop().match(/^(.*)<awards>/)[1];
         else
@@ -321,10 +323,11 @@ function mtfInit()
 
         correctSize = false;
         gameSize[gameName] = [616, 355];
-        runOnReplayerLoaded(gameData);
+        runOnReplayerLoaded(gameData, currentRank);
     }
 
-    runOnReplayerLoaded = function(gameData)
+
+    runOnReplayerLoaded = function(gameData, currentRank)
     {
         var percentLoaded = '0';
         try{
@@ -337,7 +340,7 @@ function mtfInit()
         }
 
         if( percentLoaded != '100' )
-           return setTimeout( function(){ runOnReplayerLoaded(gameData ) }, 50 );
+           return setTimeout( function(){ runOnReplayerLoaded(gameData, currentRank) }, 50 );
         getContentFlashSize();
 
         var loadReplayerArguments = [gameProductId[gameName] + "", location.protocol + '//' + location.host + '/data/games/' + gameName + '/' + gameReplayerName[gameName]];
@@ -361,7 +364,7 @@ function mtfInit()
             aiAvatars.push("/data/images/avatars/40X40/7.gif");
         }
 
-        contentFlash.as3_startReplay(gameData[0], "you", "/data/images/avatars/40X40/7.gif", "20", "20", aiGameData, aiNames, aiAvatars);
+        contentFlash.as3_startReplay(gameData[0], "you", "/data/images/avatars/40X40/7.gif", currentRank, currentRank, aiGameData, aiNames, aiAvatars);
     }
 
     replayReady = function()
