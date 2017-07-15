@@ -335,6 +335,16 @@ function mtfInit()
         runOnReplayerLoaded(gameData, currentRank, aiNames, aiAvatars);
     }
 
+    getLastMatch = function(playerRegex, playerSubject)
+    {
+        var returnValue;
+        while( matches = playerRegex.exec(playerSubject) )
+        {
+            returnValue = matches.reverse()[1]
+        }
+        return returnValue;
+    }
+
 
     runOnReplayerLoaded = function(gameData, currentRank, aiNames, aiAvatars)
     {
@@ -362,6 +372,10 @@ function mtfInit()
         if( gameNumberAIPlayers[gameName] === 0 )
             return contentFlash.as3_startReplay(gameData);
 
+        var avatarPrefix = "/data/images/avatars/40X40/"
+        var playerName = getLastMatch(/username\s+=\s+("|')([^"']+)("|')/g, (tetrisShowResults + ""));
+        var playerAvatar = avatarPrefix + getLastMatch(/userAvatar\s+=\s+("|')([^"']+)("|')/g, (tetrisShowResults + ""));
+
         var aiGameData = [];
 
         for(var i = 0; i < gameNumberAIPlayers[gameName]; i++)
@@ -369,7 +383,7 @@ function mtfInit()
             aiGameData.push( gameData[i + 1] );
         }
 
-        contentFlash.as3_startReplay(gameData[0], "you", "/data/images/avatars/40X40/7.gif", currentRank, currentRank, aiGameData, aiNames, aiAvatars);
+        contentFlash.as3_startReplay(gameData[0], playerName, playerAvatar, currentRank, currentRank, aiGameData, aiNames, aiAvatars);
     }
 
     replayReady = function()
