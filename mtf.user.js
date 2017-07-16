@@ -69,8 +69,6 @@ function buildContentFlash(flashVarsParamString)
     addParameter(contentFlash, 'wmode', 'gpu');
     addParameter(contentFlash, 'quality', 'low');
 
-    contentFlash.style.visibility = 'hidden';
-
     return contentFlash;
 }
 
@@ -190,20 +188,8 @@ function mtfInit()
 
     function runOnContentFlashLoaded()
     {
-        var percentLoaded = '0';
-        try{
-            /* this line will fail if it is not loaded */
-            percentLoaded = contentFlash.PercentLoaded();
-
-        }
-        catch(e){
-            percentLoaded = '0';
-        }
-
-        if( percentLoaded != '100' )
-           return setTimeout( runOnContentFlashLoaded, 300 );
+        /*assume loaded, since we just copy it from the page*/
         getContentFlashSize();
-
         scaleContentFlash();
         transformContentFlash();
     }
@@ -328,7 +314,6 @@ function mtfInit()
         gameReplayer.setAttribute('type', 'application/x-shockwave-flash');
         gameReplayer.setAttribute('src', location.protocol + '//' + location.host + '/data/games/replayer/' + (gameNumberAIPlayers[gameName] === 0? 'OWTetrisReplayWidget.swf': 'OWTetrisMPReplayWidget.swf') );
         contentFlash = document.body.appendChild(gameReplayer);
-        contentFlash.style.visibility = "hidden";
 
         correctSize = false;
         gameSize[gameName] = [616, 355];
