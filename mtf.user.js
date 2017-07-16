@@ -28,7 +28,7 @@ function mtfBootstrap()
         document.documentElement
     );
 
-    document.body.appendChild( document.createElement('style') ).textContent = '* { margin: 0; } :root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } embed, object { position: absolute; top: 50%; left: 50%; }';
+    document.body.appendChild( document.createElement('style') ).textContent = '* { margin: 0; } :root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } embed, object, #contentFlash { position: absolute; top: 50%; left: 50%; visibility: initial !important; }';
     buildFlashVarsParamString();
 }
 
@@ -50,7 +50,7 @@ function addParameter(flashObject, paramName, paramValue)
     var useExisting = false;
     var flashObjectChildren = flashObject.children;
     for(var flashIndex = 0; flashIndex < flashObjectChildren.length; flashIndex++)
-        if(flashObjectChildren[flashIndex].name.toLowerCase() === paramName)
+        if(flashObjectChildren[flashIndex].name && flashObjectChildren[flashIndex].name.toLowerCase() === paramName)
         {
             useExisting = true;
             paramElement = flashObjectChildren[flashIndex];
@@ -68,8 +68,6 @@ function buildContentFlash(flashVarsParamString)
 {
     addParameter(contentFlash, 'wmode', 'gpu');
     addParameter(contentFlash, 'quality', 'low');
-
-    contentFlash.style.visibility = 'hidden';
 
     return contentFlash;
 }
@@ -190,20 +188,8 @@ function mtfInit()
 
     function runOnContentFlashLoaded()
     {
-        var percentLoaded = '0';
-        try{
-            /* this line will fail if it is not loaded */
-            percentLoaded = contentFlash.PercentLoaded();
-
-        }
-        catch(e){
-            percentLoaded = '0';
-        }
-
-        if( percentLoaded != '100' )
-           return setTimeout( runOnContentFlashLoaded, 300 );
+        /*assume loaded, since we just copy it from the page*/
         getContentFlashSize();
-
         scaleContentFlash();
         transformContentFlash();
     }
@@ -328,7 +314,6 @@ function mtfInit()
         gameReplayer.setAttribute('type', 'application/x-shockwave-flash');
         gameReplayer.setAttribute('src', location.protocol + '//' + location.host + '/data/games/replayer/' + (gameNumberAIPlayers[gameName] === 0? 'OWTetrisReplayWidget.swf': 'OWTetrisMPReplayWidget.swf') );
         contentFlash = document.body.appendChild(gameReplayer);
-        contentFlash.style.visibility = "hidden";
 
         correctSize = false;
         gameSize[gameName] = [616, 355];
