@@ -50,7 +50,7 @@ function addParameter(flashObject, paramName, paramValue)
     var useExisting = false;
     var flashObjectChildren = flashObject.children;
     for(var flashIndex = 0; flashIndex < flashObjectChildren.length; flashIndex++)
-        if(flashObjectChildren[flashIndex].name.toLowerCase() === paramName)
+        if(flashObjectChildren[flashIndex].name && flashObjectChildren[flashIndex].name.toLowerCase() === paramName)
         {
             useExisting = true;
             paramElement = flashObjectChildren[flashIndex];
