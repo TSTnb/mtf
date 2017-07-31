@@ -417,8 +417,6 @@ function mtfInit(transformEnabled)
     replayReady = function()
     {
         scaleContentFlash();
-        /* if we don't wait to transform it, the replayer loads improperly */
-        transformContentFlash();
         document.body.removeChild( document.getElementById('contentFlash') );
         contentFlash.style.visibility = "visible";
     }
