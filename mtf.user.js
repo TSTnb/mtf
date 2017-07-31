@@ -81,11 +81,10 @@ function addParameter(flashObject, paramName, paramValue)
 function buildContentFlash(flashVarsParamString)
 {
     addParameter(contentFlash, 'quality', 'low');
+    addParameter(contentFlash, 'wmode', 'gpu');
+
     if( transformEnabled === true ) {
-        addParameter(contentFlash, 'wmode', 'opaque');
         addParameter(contentFlash, 'scale', 'noscale');
-    } else {
-        addParameter(contentFlash, 'wmode', 'gpu');
     }
 
     return contentFlash;
