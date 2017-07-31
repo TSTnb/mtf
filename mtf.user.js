@@ -5,13 +5,20 @@
 // @include http://*tetrisfriends.com/*
 // @grant none
 // @run-at document-end
-// @version 4.7.2
+// @version 4.7.3
 // @author morningpee
 // ==/UserScript==
 
 /* if game mode */
-if( location.pathname.match(/\/games\/.*\/game\.php.*/) !== null)
-    mtfBootstrap();
+
+chrome.storage.sync.get('downscaleEnabled',
+    function(chromeStorage)
+    {
+        transformEnabled = chromeStorage.downscaleEnabled;
+        if( location.pathname.match(/\/games\/.*\/game\.php.*/) !== null)
+            mtfBootstrap();
+    }
+)
 
 function mtfBootstrap()
 {
@@ -28,7 +35,7 @@ function mtfBootstrap()
         document.documentElement
     );
 
-    document.body.appendChild( document.createElement('style') ).textContent = '* { margin: 0; } :root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } embed, object, #contentFlash { position: absolute; top: 50%; left: 50%; visibility: initial !important; }';
+    document.body.appendChild( document.createElement('style') ).textContent = '* { margin: 0; } :root{ image-rendering: optimizespeed; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } embed, object, #contentFlash { transform-style: preserve-3d; transform-origin: top left; position: absolute; top: 50%; left: 50%; visibility: initial !important; }';
     buildFlashVarsParamString();
 }
 
@@ -66,8 +73,13 @@ function addParameter(flashObject, paramName, paramValue)
 
 function buildContentFlash(flashVarsParamString)
 {
-    addParameter(contentFlash, 'wmode', 'gpu');
     addParameter(contentFlash, 'quality', 'low');
+    if( transformEnabled === true ) {
+        addParameter(contentFlash, 'wmode', 'opaque');
+        addParameter(contentFlash, 'scale', 'noscale');
+    } else {
+        addParameter(contentFlash, 'wmode', 'gpu');
+    }
 
     return contentFlash;
 }
@@ -114,10 +126,10 @@ function haveFlashVars(responseText, flashVars)
     document.body.appendChild( contentFlash );
 
     /* necessary on firefox to access contentFlash.PercentLoaded() */
-    document.body.appendChild( document.createElement('script') ).textContent = '(' + mtfInit + ')()';
+    document.body.appendChild( document.createElement('script') ).textContent = '(' + mtfInit + ')(' + transformEnabled + ')';
 }
 
-function mtfInit()
+function mtfInit(transformEnabled)
 {
 
     gameFileName = [];
@@ -183,51 +195,33 @@ function mtfInit()
     gameNumberAIPlayers['Mono']     = 0;
 
     runOnContentFlashLoaded();
-    addEventListener('resize', transformContentFlash );
+    addEventListener('resize', scaleContentFlash );
     keepAlive();
 
     function runOnContentFlashLoaded()
     {
         /*assume loaded, since we just copy it from the page*/
+        var percentLoaded = "0";
+        try{
+            percentLoaded = contentFlash.PercentLoaded();
+
+            /* this line will fail if it is not loaded */
+            contentFlash.TGetProperty('/', 0);
+        }
+        catch(e){
+            percentLoaded = "0";
+        }
+
+        if( percentLoaded != "100" )
+           return setTimeout( runOnContentFlashLoaded, 300 );
+
         getContentFlashSize();
-        scaleContentFlash();
-        transformContentFlash();
-    }
 
-
-    function transformContentFlash()
-    {
-        contentFlash.style.visibility = 'initial';
-        var windowAspectRatio = innerHeight / innerWidth;
-
-        var contentFlashAspectRatio = contentFlashSize.originalHeight / contentFlashSize.originalWidth;
-
-        var scaleFactorX;
-        var scaleFactorY;
-
-        if(  contentFlashAspectRatio > windowAspectRatio )
-        {
-            updatedWidth = Math.round( innerHeight / contentFlashAspectRatio );
-            updatedHeight = innerHeight;
+        try {
+            scaleContentFlash();
+        } catch(err) {
+            alert(err);
         }
-        else
-        {
-            updatedWidth = innerWidth;
-            updatedHeight = Math.round( innerWidth * contentFlashAspectRatio );
-        }
-
-        /* do not scale if it would be larger than the original size */
-        correctedWidth = correctSize === true && updatedWidth > gameSize[gameName][0]? gameSize[gameName][0]: updatedWidth;
-        correctedHeight = correctSize === true && updatedHeight > gameSize[gameName][1]? gameSize[gameName][1]: updatedHeight;
-
-        scaleFactorX = correctedWidth / contentFlashSize.minimalWidth;
-        scaleFactorY = correctedHeight / contentFlashSize.minimalHeight;
-
-        contentFlash.style.marginLeft = -(correctedWidth / 2) + 'px';
-        contentFlash.style.marginTop = -((updatedHeight + correctedHeight) / 2) / 2 + 'px';
-
-        contentFlash.style.width = correctedWidth + 'px';
-        contentFlash.style.height = correctedHeight + 'px';
     }
 
     function keepAlive()
@@ -255,19 +249,68 @@ function mtfInit()
         contentFlashSize.originalWidth = gameSize[gameName][0];
         contentFlashSize.originalHeight = gameSize[gameName][1];
 
+        contentFlashSize.correctedWidth = contentFlashSize.originalWidth;
+        contentFlashSize.correctedHeight = contentFlashSize.originalHeight;
+
         contentFlash.style.width = contentFlashSize.originalWidth + 'px';
         contentFlash.style.height = contentFlashSize.originalHeight + 'px';
     }
 
+    function transformContentFlash()
+    {
+        contentFlash.TSetProperty("/", contentFlashSize.T_WIDTH_SCALE_INDEX, 100 / contentFlashSize.correctedScaleFactor);
+        contentFlash.TSetProperty("/", contentFlashSize.T_HEIGHT_SCALE_INDEX, 100 / contentFlashSize.correctedScaleFactor);
+
+        contentFlash.TSetProperty("/", contentFlashSize.T_PAN_X_INDEX, contentFlashSize.originalWidth / contentFlashSize.correctedScaleFactor * (contentFlashSize.correctedScaleFactor - 1) / 2);
+        contentFlash.TSetProperty("/", contentFlashSize.T_PAN_Y_INDEX, contentFlashSize.originalHeight / contentFlashSize.correctedScaleFactor * (contentFlashSize.correctedScaleFactor - 1) / 2);
+
+        contentFlash.style.transform = "scale3d( " + contentFlashSize.scaleFactor + "," + contentFlashSize.scaleFactor + "," + contentFlashSize.scaleFactor + " ) translate3d(-50% , -50% , 0px)";
+    }
+
     function scaleContentFlash()
     {
-        contentFlashSize.scaleFactor = 1;
+        contentFlashSize.scaleFactor = transformEnabled === true? 4: 1;
 
-        contentFlashSize.minimalWidth = contentFlashSize.originalWidth / contentFlashSize.scaleFactor;
-        contentFlashSize.minimalHeight = contentFlashSize.originalHeight / contentFlashSize.scaleFactor;
+        contentFlashSize.minimalWidth = contentFlashSize.correctedWidth / contentFlashSize.scaleFactor;
+        contentFlashSize.minimalHeight = contentFlashSize.correctedHeight / contentFlashSize.scaleFactor;
 
-        contentFlash.style.width = contentFlashSize.minimalWidth + 'px';
-        contentFlash.style.height = contentFlashSize.minimalHeight + 'px';
+        contentFlash.style.visibility = 'initial';
+        var windowAspectRatio = innerHeight / innerWidth;
+
+        var contentFlashAspectRatio = contentFlashSize.originalHeight / contentFlashSize.originalWidth;
+
+        var scaleFactorX;
+        var scaleFactorY;
+
+        if(  contentFlashAspectRatio > windowAspectRatio )
+        {
+            updatedWidth = Math.round( innerHeight / contentFlashAspectRatio );
+            updatedHeight = innerHeight;
+        }
+        else
+        {
+            updatedWidth = innerWidth;
+            updatedHeight = Math.round( innerWidth * contentFlashAspectRatio );
+        }
+
+        /* do not scale if it would be larger than the original size */
+        contentFlashSize.correctedWidth = correctSize === true && updatedWidth > gameSize[gameName][0]? gameSize[gameName][0]: updatedWidth;
+        contentFlashSize.correctedHeight = correctSize === true && updatedHeight > gameSize[gameName][1]? gameSize[gameName][1]: updatedHeight;
+
+        contentFlashSize.correctedScaleFactor = contentFlashSize.scaleFactor * (contentFlashSize.originalWidth / contentFlashSize.correctedWidth);
+
+        scaleFactorX = contentFlashSize.correctedWidth / contentFlashSize.minimalWidth;
+        scaleFactorY = contentFlashSize.correctedHeight / contentFlashSize.minimalHeight;
+
+        contentFlash.style.width = (contentFlashSize.correctedWidth / contentFlashSize.scaleFactor) + 'px';
+        contentFlash.style.height = (contentFlashSize.correctedHeight / contentFlashSize.scaleFactor)+ 'px';
+
+        if(transformEnabled === true) {
+            transformContentFlash();
+        }else {
+            contentFlash.style.marginLeft = -(contentFlashSize.correctedWidth / 2) + 'px';
+            contentFlash.style.marginTop = -((updatedHeight + contentFlashSize.correctedHeight) / 2) / 2 + 'px';
+        }
     }
 
     js_tetrisShowResults = function(results)
