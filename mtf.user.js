@@ -83,10 +83,6 @@ function buildContentFlash(flashVarsParamString)
     addParameter(contentFlash, 'quality', 'low');
     addParameter(contentFlash, 'wmode', 'gpu');
 
-    if( transformEnabled === true ) {
-        addParameter(contentFlash, 'scale', 'noscale');
-    }
-
     return contentFlash;
 }
 
@@ -207,20 +203,6 @@ function mtfInit(transformEnabled)
     function runOnContentFlashLoaded()
     {
         /*assume loaded, since we just copy it from the page*/
-        var percentLoaded = "0";
-        try{
-            percentLoaded = contentFlash.PercentLoaded();
-
-            /* this line will fail if it is not loaded */
-            contentFlash.TGetProperty('/', 0);
-        }
-        catch(e){
-            percentLoaded = "0";
-        }
-
-        if( percentLoaded != "100" )
-           return setTimeout( runOnContentFlashLoaded, 300 );
-
         getContentFlashSize();
 
         try {
@@ -264,12 +246,6 @@ function mtfInit(transformEnabled)
 
     function transformContentFlash()
     {
-        contentFlash.TSetProperty("/", contentFlashSize.T_WIDTH_SCALE_INDEX, 100 / contentFlashSize.correctedScaleFactor);
-        contentFlash.TSetProperty("/", contentFlashSize.T_HEIGHT_SCALE_INDEX, 100 / contentFlashSize.correctedScaleFactor);
-
-        contentFlash.TSetProperty("/", contentFlashSize.T_PAN_X_INDEX, contentFlashSize.originalWidth / contentFlashSize.correctedScaleFactor * (contentFlashSize.correctedScaleFactor - 1) / 2);
-        contentFlash.TSetProperty("/", contentFlashSize.T_PAN_Y_INDEX, contentFlashSize.originalHeight / contentFlashSize.correctedScaleFactor * (contentFlashSize.correctedScaleFactor - 1) / 2);
-
         contentFlash.style.transform = "scale3d( " + contentFlashSize.scaleFactor + "," + contentFlashSize.scaleFactor + "," + contentFlashSize.scaleFactor + " ) translate3d(-50% , -50% , 0px)";
     }
 
