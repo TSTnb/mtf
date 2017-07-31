@@ -251,7 +251,7 @@ function mtfInit(transformEnabled)
 
     function scaleContentFlash()
     {
-        contentFlashSize.scaleFactor = transformEnabled === true? 4: 1;
+        contentFlashSize.scaleFactor = transformEnabled === true? 3: 1;
 
         contentFlashSize.minimalWidth = contentFlashSize.correctedWidth / contentFlashSize.scaleFactor;
         contentFlashSize.minimalHeight = contentFlashSize.correctedHeight / contentFlashSize.scaleFactor;
