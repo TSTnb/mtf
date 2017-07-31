@@ -11,14 +11,21 @@
 
 /* if game mode */
 
-chrome.storage.sync.get('downscaleEnabled',
-    function(chromeStorage)
-    {
-        transformEnabled = chromeStorage.downscaleEnabled;
-        if( location.pathname.match(/\/games\/.*\/game\.php.*/) !== null)
-            mtfBootstrap();
+if( location.pathname.match(/\/games\/.*\/game\.php.*/) !== null)
+{
+    try {
+        chrome.storage.sync.get('downscaleEnabled',
+            function(chromeStorage)
+            {
+                transformEnabled = chromeStorage.downscaleEnabled;
+                mtfBootstrap();
+            }
+        );
+    } catch(err) {
+        /* if running as a userscript */
+        mtfBootstrap();
     }
-)
+}
 
 function mtfBootstrap()
 {
