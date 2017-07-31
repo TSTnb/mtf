@@ -1,18 +1,20 @@
 var blockWinGrafix = false;
 
 chrome.storage.onChanged.addListener(
-	function(changes, namespace)
-	{
-		blockWinGrafix = changes['blockWinGrafix'].newValue;
-	}
+    function(changes, namespace)
+    {
+        if( changes['blockWinGrafix'] ) {
+            blockWinGrafix = changes['blockWinGrafix'].newValue;
+        }
+    }
 );
 
 function interceptRequest(request)
 {
-	if( request.url.indexOf("winGrafix/OWResultsAnimation") === -1 )
-		return;
+    if( request.url.indexOf("winGrafix/OWResultsAnimation") === -1 )
+        return;
 
-	if(blockWinGrafix === true && request && request.url && request.url.indexOf("winGrafix/OWResultsAnimation") !== -1)
+    if(blockWinGrafix === true && request && request.url && request.url.indexOf("winGrafix/OWResultsAnimation") !== -1)
         return {cancel: true};
 }
 
