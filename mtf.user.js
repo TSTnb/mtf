@@ -425,7 +425,6 @@ function mtfInit(downscaleValue)
             percentLoaded = contentFlash.PercentLoaded();
         }
         catch(e){
-            alert(e);
             percentLoaded = '0';
         }
 
