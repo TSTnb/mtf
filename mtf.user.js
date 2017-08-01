@@ -296,12 +296,13 @@ function mtfInit(downscaleValue)
 
     scaleContentFlash = function(scaleFactor)
     {
-        if(scaleFactor !== undefined)
+        scaleFactor = parseInt(scaleFactor)
+        if(typeof scaleFactor === 'number' && isNaN(scaleFactor) === false)
         {
             downscaleValue = scaleFactor;
         }
-        contentFlashSize.scaleFactor = downscaleValue > 1?
-            ( scaleFactor !== undefined? scaleFactor: downscaleValue) : 1;
+
+        contentFlashSize.scaleFactor = downscaleValue;
 
         contentFlashSize.minimalWidth = contentFlashSize.correctedWidth / contentFlashSize.scaleFactor;
         contentFlashSize.minimalHeight = contentFlashSize.correctedHeight / contentFlashSize.scaleFactor;
