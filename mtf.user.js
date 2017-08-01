@@ -15,7 +15,14 @@ chrome.storage.onChanged.addListener(
     {
         if( changes.downscaleValue ) {
             downscaleValue = changes.downscaleValue.newValue;
-            window.onresize(downscaleValue);
+
+            var currentScript = document.getElementsByTagName("script")[0];
+            if(typeof currentScript !== 'undefined')
+            {
+                currentScript.parentNode.removeChild(currentScript);
+            }
+
+            document.body.appendChild( document.createElement('script') ).textContent = 'scaleContentFlash(' + downscaleValue + ')';
         }
     }
 );
@@ -459,7 +466,7 @@ function mtfInit(downscaleValue)
     }
 
     runOnContentFlashLoaded();
-    window.onresize = scaleContentFlash;
+    addEventListener('resize', scaleContentFlash);
     keepAlive();
 }
 
