@@ -1,5 +1,5 @@
  ![](http://i.imgur.com/1njY7qe.png)
-###### Version 4.7.5, last updated 2017-07-31
+###### Version 4.7.6, last updated 2017-07-31
 
 ### Description
 This is a script that removes everything from the page except for the game itself and the nice-looking background, sets the Flash quality to "low" instead of "high", and sets the "wmode" parameter to "direct". *This reduces lag significantly.*
@@ -29,7 +29,7 @@ ___
 * If you have Safari, get [Tampermonkey](https://safari.tampermonkey.net/tampermonkey.safariextz).
 
 #### Step 2: Get the script
-Go to [this page](https://raw.githubusercontent.com/morningpee/mtf/4.7.5/mtf.user.js). A dialog will pop up, click accept, and the script is installed.
+Go to [this page](https://raw.githubusercontent.com/morningpee/mtf/4.7.6/mtf.user.js). A dialog will pop up, click accept, and the script is installed.
 
 ### How to use
 
@@ -52,5 +52,5 @@ So anyway, try it out and post results.
 **[Download for Opera](https://addons.opera.com/en/extensions/details/minimal-tetris-friends/)** | last updated 2017-07-31 |
 |||
 |||
-**[Download for Edge or Safari](https://raw.githubusercontent.com/morningpee/mtf/4.7.5/mtf.user.js)** | last updated 2017-07-31 |
+**[Download for Edge or Safari](https://raw.githubusercontent.com/morningpee/mtf/4.7.6/mtf.user.js)** | last updated 2017-07-31 |
 |||size=1]last updated 2017-07-31[/size]
