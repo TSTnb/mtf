@@ -273,12 +273,6 @@ function mtfInit(downscaleValue)
     transformContentFlash = function()
     {
         contentFlash.style.transformStyle = 'preserve-3d';
-        contentFlash.TSetProperty("/", contentFlashSize.T_WIDTH_SCALE_INDEX, 100 / contentFlashSize.correctedScaleFactor);
-        contentFlash.TSetProperty("/", contentFlashSize.T_HEIGHT_SCALE_INDEX, 100 / contentFlashSize.correctedScaleFactor);
-
-        contentFlash.TSetProperty("/", contentFlashSize.T_PAN_X_INDEX, contentFlashSize.originalWidth / contentFlashSize.correctedScaleFactor * (contentFlashSize.correctedScaleFactor - 1) / 2);
-        contentFlash.TSetProperty("/", contentFlashSize.T_PAN_Y_INDEX, contentFlashSize.originalHeight / contentFlashSize.correctedScaleFactor * (contentFlashSize.correctedScaleFactor - 1) / 2);
-
         contentFlash.style.transform = "scale3d( " + contentFlashSize.scaleFactor + "," + contentFlashSize.scaleFactor + "," + contentFlashSize.scaleFactor + " )";
     }
 
@@ -286,12 +280,6 @@ function mtfInit(downscaleValue)
     {
         contentFlash.style.transformStyle = '';
         contentFlash.style.transform = '';
-
-        contentFlash.TSetProperty("/", contentFlashSize.T_WIDTH_SCALE_INDEX, 100);
-        contentFlash.TSetProperty("/", contentFlashSize.T_HEIGHT_SCALE_INDEX, 100);
-
-        contentFlash.TSetProperty("/", contentFlashSize.T_PAN_X_INDEX, 0);
-        contentFlash.TSetProperty("/", contentFlashSize.T_PAN_Y_INDEX, 0);
     }
 
     scaleContentFlash = function(scaleFactor)
@@ -340,6 +328,16 @@ function mtfInit(downscaleValue)
 
         contentFlash.style.marginLeft = -(contentFlashSize.correctedWidth / 2) + 'px';
         contentFlash.style.marginTop = -((updatedHeight + contentFlashSize.correctedHeight) / 2) / 2 + 'px';
+
+        if(gameName !== 'NBlox')
+        {
+            contentFlash.TSetProperty("/", contentFlashSize.T_WIDTH_SCALE_INDEX, 100 / contentFlashSize.correctedScaleFactor);
+            contentFlash.TSetProperty("/", contentFlashSize.T_HEIGHT_SCALE_INDEX, 100 / contentFlashSize.correctedScaleFactor);
+
+            contentFlash.TSetProperty("/", contentFlashSize.T_PAN_X_INDEX, contentFlashSize.originalWidth / contentFlashSize.correctedScaleFactor * (contentFlashSize.correctedScaleFactor - 1) / 2);
+            contentFlash.TSetProperty("/", contentFlashSize.T_PAN_Y_INDEX, contentFlashSize.originalHeight / contentFlashSize.correctedScaleFactor * (contentFlashSize.correctedScaleFactor - 1) / 2);
+        }
+
 
         if(downscaleValue > 1) {
             transformContentFlash();
