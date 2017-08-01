@@ -90,7 +90,8 @@ function addParameter(flashObject, paramName, paramValue)
 function buildContentFlash(flashVarsParamString)
 {
     addParameter(contentFlash, 'quality', 'low');
-    addParameter(contentFlash, 'scale', 'noscale');
+    if(location.href.match(/games\/(.*)\/game.php/)[1] !== 'NBlox')
+        addParameter(contentFlash, 'scale', 'noscale');
 
     /* windows npapi flash cannot handle css transforms + wmode gpu */
     if(downscaleValue > 1 && navigator.userAgent.match(/windows.*firefox/i) !== null) {
@@ -220,7 +221,8 @@ function mtfInit(downscaleValue)
             percentLoaded = contentFlash.PercentLoaded();
 
             /* this line will fail if it is not loaded */
-            contentFlash.TGetProperty('/', 0);
+            if(gameName !== 'NBlox')
+                contentFlash.TGetProperty('/', 0);
         }
         catch(e){
             percentLoaded = "0";
