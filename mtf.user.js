@@ -10,14 +10,23 @@
 // ==/UserScript==
 
 /* if game mode */
+chrome.storage.onChanged.addListener(
+    function(changes, namespace)
+    {
+        if( changes.downscaleValue ) {
+            downscaleValue = changes.downscaleValue.newValue;
+            window.onresize(downscaleValue);
+        }
+    }
+);
 
 if( location.pathname.match(/\/games\/.*\/game\.php.*/) !== null)
 {
     try {
-        chrome.storage.sync.get('downscaleEnabled',
+        chrome.storage.sync.get('downscaleValue',
             function(chromeStorage)
             {
-                transformEnabled = chromeStorage.downscaleEnabled;
+                downscaleValue = chromeStorage.downscaleValue;
                 mtfBootstrap();
             }
         );
@@ -42,7 +51,7 @@ function mtfBootstrap()
         document.documentElement
     );
 
-    document.body.appendChild( document.createElement('style') ).textContent = '* { margin: 0; } :root{ image-rendering: optimizeSpeed; image-rendering: -moz-crisp-edges; image-rendering: -o-crisp-edges; image-rendering: -webkit-optimize-contrast; image-rendering: pixelated; image-rendering: optimize-contrast; -ms-interpolation-mode: nearest-neighbor; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } embed, object, #contentFlash { transform-style: preserve-3d; transform-origin: top left; position: absolute; top: 50%; left: 50%; visibility: initial !important; }';
+    document.body.appendChild( document.createElement('style') ).textContent = '* { margin: 0; } :root{ image-rendering: optimizeSpeed; image-rendering: -moz-crisp-edges; image-rendering: -o-crisp-edges; image-rendering: -webkit-optimize-contrast; image-rendering: pixelated; image-rendering: optimize-contrast; -ms-interpolation-mode: nearest-neighbor; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } embed, object, #contentFlash { transform-origin: top left; position: absolute; top: 50%; left: 50%; visibility: initial !important; }';
     buildFlashVarsParamString();
 }
 
@@ -81,7 +90,14 @@ function addParameter(flashObject, paramName, paramValue)
 function buildContentFlash(flashVarsParamString)
 {
     addParameter(contentFlash, 'quality', 'low');
-    addParameter(contentFlash, 'wmode', 'gpu');
+    addParameter(contentFlash, 'scale', 'noscale');
+
+    /* windows npapi flash cannot handle css transforms + wmode gpu */
+    if(downscaleValue > 1 && navigator.userAgent.match(/windows.*firefox/i) !== null) {
+        addParameter(contentFlash, 'wmode', 'opaque');
+    } else {
+        addParameter(contentFlash, 'wmode', 'gpu');
+    }
 
     return contentFlash;
 }
@@ -128,10 +144,10 @@ function haveFlashVars(responseText, flashVars)
     document.body.appendChild( contentFlash );
 
     /* necessary on firefox to access contentFlash.PercentLoaded() */
-    document.body.appendChild( document.createElement('script') ).textContent = '(' + mtfInit + ')(' + transformEnabled + ')';
+    document.body.appendChild( document.createElement('script') ).textContent = '(' + mtfInit + ')(' + downscaleValue + ')';
 }
 
-function mtfInit(transformEnabled)
+function mtfInit(downscaleValue)
 {
 
     gameFileName = [];
@@ -196,13 +212,23 @@ function mtfInit(transformEnabled)
     gameNumberAIPlayers['Rally8P']  = 0; //Rally8P does not support replays
     gameNumberAIPlayers['Mono']     = 0;
 
-    runOnContentFlashLoaded();
-    addEventListener('resize', scaleContentFlash );
-    keepAlive();
-
     function runOnContentFlashLoaded()
     {
         /*assume loaded, since we just copy it from the page*/
+        var percentLoaded = "0";
+        try{
+            percentLoaded = contentFlash.PercentLoaded();
+
+            /* this line will fail if it is not loaded */
+            contentFlash.TGetProperty('/', 0);
+        }
+        catch(e){
+            percentLoaded = "0";
+        }
+
+        if( percentLoaded != "100" )
+           return setTimeout( runOnContentFlashLoaded, 300 );
+
         getContentFlashSize();
 
         try {
@@ -244,14 +270,44 @@ function mtfInit(transformEnabled)
         contentFlash.style.height = contentFlashSize.originalHeight + 'px';
     }
 
-    function transformContentFlash()
+    transformContentFlash = function()
     {
+        contentFlash.style.transformStyle = 'preserve-3d';
+        contentFlash.TSetProperty("/", contentFlashSize.T_WIDTH_SCALE_INDEX, 100 / contentFlashSize.correctedScaleFactor);
+        contentFlash.TSetProperty("/", contentFlashSize.T_HEIGHT_SCALE_INDEX, 100 / contentFlashSize.correctedScaleFactor);
+
+        contentFlash.TSetProperty("/", contentFlashSize.T_PAN_X_INDEX, contentFlashSize.originalWidth / contentFlashSize.correctedScaleFactor * (contentFlashSize.correctedScaleFactor - 1) / 2);
+        contentFlash.TSetProperty("/", contentFlashSize.T_PAN_Y_INDEX, contentFlashSize.originalHeight / contentFlashSize.correctedScaleFactor * (contentFlashSize.correctedScaleFactor - 1) / 2);
+
         contentFlash.style.transform = "scale3d( " + contentFlashSize.scaleFactor + "," + contentFlashSize.scaleFactor + "," + contentFlashSize.scaleFactor + " ) translate3d(-50% , -50% , 0px)";
+
+        contentFlash.style.marginLeft = 0;
+        contentFlash.style.marginTop = 0;
     }
 
-    function scaleContentFlash()
+    noTransformContentFlash = function()
     {
-        contentFlashSize.scaleFactor = transformEnabled === true? 3: 1;
+        contentFlash.style.transformStyle = '';
+        contentFlash.style.transform = '';
+
+        contentFlash.TSetProperty("/", contentFlashSize.T_WIDTH_SCALE_INDEX, 100);
+        contentFlash.TSetProperty("/", contentFlashSize.T_HEIGHT_SCALE_INDEX, 100);
+
+        contentFlash.TSetProperty("/", contentFlashSize.T_PAN_X_INDEX, 0);
+        contentFlash.TSetProperty("/", contentFlashSize.T_PAN_Y_INDEX, 0);
+
+        contentFlash.style.marginLeft = -(contentFlashSize.correctedWidth / 2) + 'px';
+        contentFlash.style.marginTop = -((updatedHeight + contentFlashSize.correctedHeight) / 2) / 2 + 'px';
+    }
+
+    scaleContentFlash = function(scaleFactor)
+    {
+        if(scaleFactor !== undefined)
+        {
+            downscaleValue = scaleFactor;
+        }
+        contentFlashSize.scaleFactor = downscaleValue > 1?
+            ( scaleFactor !== undefined? scaleFactor: downscaleValue) : 1;
 
         contentFlashSize.minimalWidth = contentFlashSize.correctedWidth / contentFlashSize.scaleFactor;
         contentFlashSize.minimalHeight = contentFlashSize.correctedHeight / contentFlashSize.scaleFactor;
@@ -287,11 +343,10 @@ function mtfInit(transformEnabled)
         contentFlash.style.width = (contentFlashSize.correctedWidth / contentFlashSize.scaleFactor) + 'px';
         contentFlash.style.height = (contentFlashSize.correctedHeight / contentFlashSize.scaleFactor)+ 'px';
 
-        if(transformEnabled === true) {
+        if(downscaleValue > 1) {
             transformContentFlash();
         }else {
-            contentFlash.style.marginLeft = -(contentFlashSize.correctedWidth / 2) + 'px';
-            contentFlash.style.marginTop = -((updatedHeight + contentFlashSize.correctedHeight) / 2) / 2 + 'px';
+            noTransformContentFlash();
         }
     }
 
@@ -398,11 +453,15 @@ function mtfInit(transformEnabled)
 
     replayReady = function()
     {
+        downscaleValue = 1;
         scaleContentFlash();
         document.body.removeChild( document.getElementById('contentFlash') );
         contentFlash.style.visibility = "visible";
     }
 
+    runOnContentFlashLoaded();
+    window.onresize = scaleContentFlash;
+    keepAlive();
 }
 
     function loadGame()

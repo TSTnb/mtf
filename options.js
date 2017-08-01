@@ -15,13 +15,15 @@ chrome.storage.sync.get('blockWinGrafix',
 function changeScale()
 {
     var changeScale = document.getElementById('changescale')
-    chrome.storage.sync.set( {'downscaleEnabled': changeScale.checked});
+    chrome.storage.sync.set( {'downscaleValue': changeScale.value});
+    document.getElementById('downscaleValue').textContent = changeScale.value;
 }
 document.getElementById('changescale').addEventListener('change', changeScale);
 
-chrome.storage.sync.get('downscaleEnabled',
+chrome.storage.sync.get('downscaleValue',
     function(chromeStorage)
     {
-        document.getElementById('changescale').checked = chromeStorage.downscaleEnabled;
+        document.getElementById('changescale').value = chromeStorage.downscaleValue;
+        document.getElementById('downscaleValue').textContent = chromeStorage.downscaleValue;
     }
 );
