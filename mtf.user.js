@@ -296,7 +296,8 @@ function mtfInit(downscaleValue)
 
     scaleContentFlash = function(scaleFactor)
     {
-        if(typeof scaleFactor === 'string' || typeof scaleFactor === 'number')
+        scaleFactor = parseInt(scaleFactor)
+        if(typeof scaleFactor === 'number' && isNaN(scaleFactor) === false)
         {
             downscaleValue = scaleFactor;
         }
