@@ -1,5 +1,5 @@
 4.7.9, 2017-08-01
-do not autoscale replayer
+fix replayer resizing
 
 4.7.8, 2017-08-01
 fix resizing issue
