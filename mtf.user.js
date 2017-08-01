@@ -279,10 +279,7 @@ function mtfInit(downscaleValue)
         contentFlash.TSetProperty("/", contentFlashSize.T_PAN_X_INDEX, contentFlashSize.originalWidth / contentFlashSize.correctedScaleFactor * (contentFlashSize.correctedScaleFactor - 1) / 2);
         contentFlash.TSetProperty("/", contentFlashSize.T_PAN_Y_INDEX, contentFlashSize.originalHeight / contentFlashSize.correctedScaleFactor * (contentFlashSize.correctedScaleFactor - 1) / 2);
 
-        contentFlash.style.transform = "scale3d( " + contentFlashSize.scaleFactor + "," + contentFlashSize.scaleFactor + "," + contentFlashSize.scaleFactor + " ) translate3d(-50% , -50% , 0px)";
-
-        contentFlash.style.marginLeft = 0;
-        contentFlash.style.marginTop = 0;
+        contentFlash.style.transform = "scale3d( " + contentFlashSize.scaleFactor + "," + contentFlashSize.scaleFactor + "," + contentFlashSize.scaleFactor + " )";
     }
 
     noTransformContentFlash = function()
@@ -295,9 +292,6 @@ function mtfInit(downscaleValue)
 
         contentFlash.TSetProperty("/", contentFlashSize.T_PAN_X_INDEX, 0);
         contentFlash.TSetProperty("/", contentFlashSize.T_PAN_Y_INDEX, 0);
-
-        contentFlash.style.marginLeft = -(contentFlashSize.correctedWidth / 2) + 'px';
-        contentFlash.style.marginTop = -((updatedHeight + contentFlashSize.correctedHeight) / 2) / 2 + 'px';
     }
 
     scaleContentFlash = function(scaleFactor)
@@ -342,6 +336,9 @@ function mtfInit(downscaleValue)
 
         contentFlash.style.width = (contentFlashSize.correctedWidth / contentFlashSize.scaleFactor) + 'px';
         contentFlash.style.height = (contentFlashSize.correctedHeight / contentFlashSize.scaleFactor)+ 'px';
+
+        contentFlash.style.marginLeft = -(contentFlashSize.correctedWidth / 2) + 'px';
+        contentFlash.style.marginTop = -((updatedHeight + contentFlashSize.correctedHeight) / 2) / 2 + 'px';
 
         if(downscaleValue > 1) {
             transformContentFlash();
