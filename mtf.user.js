@@ -90,10 +90,13 @@ function addParameter(flashObject, paramName, paramValue)
 function buildContentFlash(flashVarsParamString)
 {
     addParameter(contentFlash, 'quality', 'low');
-    addParameter(contentFlash, 'wmode', 'gpu');
+    addParameter(contentFlash, 'scale', 'noscale');
 
-    if( transformEnabled === true ) {
-        addParameter(contentFlash, 'scale', 'noscale');
+    /* windows npapi flash cannot handle css transforms + wmode gpu */
+    if(downscaleValue > 1 && navigator.userAgent.match(/windows.*firefox/i) !== null) {
+        addParameter(contentFlash, 'wmode', 'opaque');
+    } else {
+        addParameter(contentFlash, 'wmode', 'gpu');
     }
 
     return contentFlash;
