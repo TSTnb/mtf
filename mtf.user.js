@@ -422,6 +422,7 @@ function mtfInit(transformEnabled)
 
     replayReady = function()
     {
+        transformEnabled = false;
         scaleContentFlash();
         document.body.removeChild( document.getElementById('contentFlash') );
         contentFlash.style.visibility = "visible";
