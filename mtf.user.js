@@ -38,12 +38,21 @@ function updateMTFValues(downscaleValue, correctSize)
 /* if game mode */
 if( location.pathname.match(/\/games\/.*\/game\.php.*/) !== null)
 {
+    downscaleValue = 1;
+    correctSize = true;
+
     try {
         chrome.storage.sync.get(['downscaleValue', 'correctSize'],
             function(chromeStorage)
             {
-                downscaleValue = chromeStorage.downscaleValue;
-                correctSize = chromeStorage.correctSize;
+                if( chromeStorage.downscaleValue ) {
+                    downscaleValue = chromeStorage;
+                }
+
+                if( chromeStorage.correctSize ) {
+                    correctSize = changes.correctSize;
+                }
+
                 mtfBootstrap();
             }
         );
