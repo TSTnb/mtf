@@ -46,11 +46,11 @@ if( location.pathname.match(/\/games\/.*\/game\.php.*/) !== null)
             function(chromeStorage)
             {
                 if( chromeStorage.downscaleValue ) {
-                    downscaleValue = chromeStorage;
+                    downscaleValue = chromeStorage.downscaleValue;
                 }
 
                 if( chromeStorage.correctSize ) {
-                    correctSize = changes.correctSize;
+                    correctSize = chromeStorage.correctSize;
                 }
 
                 mtfBootstrap();
