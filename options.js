@@ -12,6 +12,22 @@ chrome.storage.sync.get('blockWinGrafix',
     }
 )
 
+
+function changeFullScreen()
+{
+    var correctSize = document.getElementById('correctSize')
+    chrome.storage.sync.set( {'correctSize': correctSize.checked === false});
+}
+document.getElementById('correctSize').addEventListener('change', changeFullScreen);
+
+chrome.storage.sync.get('correctSize',
+    function(chromeStorage)
+    {
+        document.getElementById('correctSize').checked = chromeStorage.correctSize === false;
+    }
+);
+
+
 function changeScale()
 {
     var changeScale = document.getElementById('changescale')

@@ -15,25 +15,35 @@ chrome.storage.onChanged.addListener(
     {
         if( changes.downscaleValue ) {
             downscaleValue = changes.downscaleValue.newValue;
-
-            var currentScript = document.getElementsByTagName("script")[0];
-            if(typeof currentScript !== 'undefined')
-            {
-                currentScript.parentNode.removeChild(currentScript);
-            }
-
-            document.body.appendChild( document.createElement('script') ).textContent = 'scaleContentFlash(' + downscaleValue + ')';
         }
+
+        if( changes.correctSize ) {
+            correctSize = changes.correctSize.newValue;
+        }
+
+        updateMTFValues(downscaleValue, correctSize)
     }
 );
+
+function updateMTFValues(downscaleValue, correctSize)
+{
+    var currentScript = document.getElementsByTagName("script")[0];
+    if(typeof currentScript !== 'undefined')
+    {
+        currentScript.parentNode.removeChild(currentScript);
+    }
+
+    document.body.appendChild( document.createElement('script') ).textContent = 'scaleContentFlash(' + downscaleValue + ',' + correctSize + ')';
+}
 
 if( location.pathname.match(/\/games\/.*\/game\.php.*/) !== null)
 {
     try {
-        chrome.storage.sync.get('downscaleValue',
+        chrome.storage.sync.get(['downscaleValue', 'correctSize'],
             function(chromeStorage)
             {
                 downscaleValue = chromeStorage.downscaleValue;
+                correctSize = chromeStorage.correctSize;
                 mtfBootstrap();
             }
         );
@@ -152,12 +162,11 @@ function haveFlashVars(responseText, flashVars)
     document.body.appendChild( contentFlash );
 
     /* necessary on firefox to access contentFlash.PercentLoaded() */
-    document.body.appendChild( document.createElement('script') ).textContent = '(' + mtfInit + ')(' + downscaleValue + ')';
+    document.body.appendChild( document.createElement('script') ).textContent = '(' + mtfInit + ')(' + downscaleValue + ',' + correctSize + ')';
 }
 
-function mtfInit(downscaleValue)
+function mtfInit(downscaleValue, correctSize)
 {
-
     gameFileName = [];
     gameFileName['Ultra']    = 'OWGameUltra.swf';
     gameFileName['Sprint']   = 'OWGameSprint.swf';
@@ -173,7 +182,6 @@ function mtfInit(downscaleValue)
 
     gameName = location.href.match(/games\/(.*)\/game.php/)[1];
 
-    correctSize = true;
     gameSize = [];
     gameSize['Ultra']       = [760, 560];
     gameSize['Sprint']      = [760, 560];
@@ -291,12 +299,17 @@ function mtfInit(downscaleValue)
         contentFlash.style.transform = '';
     }
 
-    scaleContentFlash = function(scaleFactor)
+    scaleContentFlash = function(scaleFactor, newCorrectSize)
     {
         scaleFactor = parseInt(scaleFactor)
         if(typeof scaleFactor === 'number' && isNaN(scaleFactor) === false)
         {
             downscaleValue = scaleFactor;
+        }
+
+        if(newCorrectSize !== undefined)
+        {
+            correctSize = newCorrectSize;
         }
 
         contentFlashSize.scaleFactor = downscaleValue;
