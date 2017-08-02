@@ -5,7 +5,7 @@
 // @include http://*tetrisfriends.com/*
 // @grant none
 // @run-at document-end
-// @version 4.8.2
+// @version 4.8.3
 // @author morningpee
 // ==/UserScript==
 
@@ -46,11 +46,11 @@ if( location.pathname.match(/\/games\/.*\/game\.php.*/) !== null)
             function(chromeStorage)
             {
                 if( chromeStorage.downscaleValue ) {
-                    downscaleValue = chromeStorage;
+                    downscaleValue = chromeStorage.downscaleValue;
                 }
 
                 if( chromeStorage.correctSize ) {
-                    correctSize = changes.correctSize;
+                    correctSize = chromeStorage.correctSize;
                 }
 
                 mtfBootstrap();
