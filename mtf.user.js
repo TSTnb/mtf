@@ -5,11 +5,10 @@
 // @include http://*tetrisfriends.com/*
 // @grant none
 // @run-at document-end
-// @version 4.8.1
+// @version 4.8.2
 // @author morningpee
 // ==/UserScript==
 
-/* if game mode */
 chrome.storage.onChanged.addListener(
     function(changes, namespace)
     {
@@ -36,14 +35,24 @@ function updateMTFValues(downscaleValue, correctSize)
     document.body.appendChild( document.createElement('script') ).textContent = 'scaleContentFlash(' + downscaleValue + ',' + correctSize + ')';
 }
 
+/* if game mode */
 if( location.pathname.match(/\/games\/.*\/game\.php.*/) !== null)
 {
+    downscaleValue = 1;
+    correctSize = true;
+
     try {
         chrome.storage.sync.get(['downscaleValue', 'correctSize'],
             function(chromeStorage)
             {
-                downscaleValue = chromeStorage.downscaleValue;
-                correctSize = chromeStorage.correctSize;
+                if( chromeStorage.downscaleValue ) {
+                    downscaleValue = chromeStorage;
+                }
+
+                if( chromeStorage.correctSize ) {
+                    correctSize = changes.correctSize;
+                }
+
                 mtfBootstrap();
             }
         );
