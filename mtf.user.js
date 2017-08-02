@@ -9,7 +9,6 @@
 // @author morningpee
 // ==/UserScript==
 
-/* if game mode */
 chrome.storage.onChanged.addListener(
     function(changes, namespace)
     {
@@ -36,6 +35,7 @@ function updateMTFValues(downscaleValue, correctSize)
     document.body.appendChild( document.createElement('script') ).textContent = 'scaleContentFlash(' + downscaleValue + ',' + correctSize + ')';
 }
 
+/* if game mode */
 if( location.pathname.match(/\/games\/.*\/game\.php.*/) !== null)
 {
     try {
