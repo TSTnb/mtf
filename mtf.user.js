@@ -176,6 +176,8 @@ function haveFlashVars(responseText, flashVars)
 
 function mtfInit(downscaleValue, correctSize)
 {
+    currentGameState = 'Playing';
+
     gameFileName = [];
     gameFileName['Ultra']    = 'OWGameUltra.swf';
     gameFileName['Sprint']   = 'OWGameSprint.swf';
@@ -321,7 +323,8 @@ function mtfInit(downscaleValue, correctSize)
             correctSize = newCorrectSize;
         }
 
-        contentFlashSize.scaleFactor = downscaleValue;
+        /* if in lobby or between games, scale 1:1 */
+        contentFlashSize.scaleFactor = checkIfInGame();
 
         contentFlashSize.minimalWidth = contentFlashSize.correctedWidth / contentFlashSize.scaleFactor;
         contentFlashSize.minimalHeight = contentFlashSize.correctedHeight / contentFlashSize.scaleFactor;
@@ -370,7 +373,7 @@ function mtfInit(downscaleValue, correctSize)
         }
 
 
-        if(downscaleValue > 1) {
+        if(contentFlashSize.scaleFactor > 1) {
             transformContentFlash();
         }else {
             noTransformContentFlash();
@@ -484,6 +487,42 @@ function mtfInit(downscaleValue, correctSize)
         scaleContentFlash();
         document.body.removeChild( document.getElementById('contentFlash') );
         contentFlash.style.visibility = "visible";
+    }
+
+    js_analyticsTrackGameEvent = function(gameEvent)
+    {
+        if(gameName === 'Live' && gameEvent === 'Start')
+        {
+            currentGameState = gameEvent;
+            scaleContentFlash();
+        }
+
+        if(gameName === 'Live' && gameEvent === 'Finish')
+        {
+            currentGameState = gameEvent;
+            scaleContentFlash();
+        }
+    }
+
+    js_analyticsTrackGameUrl = function(gameUrlGame, gameEvent)
+    {
+        if(gameName === 'Live' && gameEvent.match('lobbyGameList') !== null)
+        {
+            currentGameState = gameEvent;
+            scaleContentFlash();
+        }
+    }
+
+    checkIfInGame = function()
+    {
+        var returnDownscaleValue = downscaleValue;
+
+        if(currentGameState ==='Finish' || currentGameState.match('lobbyGameList') !== null)
+        {
+            returnDownscaleValue = 1;
+        };
+
+        return returnDownscaleValue;
     }
 
     runOnContentFlashLoaded();
