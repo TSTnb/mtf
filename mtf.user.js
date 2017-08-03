@@ -5,26 +5,30 @@
 // @include http://*tetrisfriends.com/*
 // @grant none
 // @run-at document-end
-// @version 4.8.3
+// @version 4.8.4
 // @author morningpee
 // ==/UserScript==
 
 chrome.storage.onChanged.addListener(
     function(changes, namespace)
     {
-        if( changes.downscaleValue ) {
+        if( changes.downscaleValue !== undefined ) {
             downscaleValue = changes.downscaleValue.newValue;
         }
 
-        if( changes.correctSize ) {
+        if( changes.correctSize !== undefined ) {
             correctSize = changes.correctSize.newValue;
         }
 
-        updateMTFValues(downscaleValue, correctSize)
+        if( changes.changeInGame !== undefined ) {
+            changeInGame = changes.changeInGame.newValue;
+        }
+
+        updateMTFValues(downscaleValue, correctSize, changeInGame)
     }
 );
 
-function updateMTFValues(downscaleValue, correctSize)
+function updateMTFValues(downscaleValue, correctSize, changeInGame)
 {
     var currentScript = document.getElementsByTagName("script")[0];
     if(typeof currentScript !== 'undefined')
@@ -32,7 +36,7 @@ function updateMTFValues(downscaleValue, correctSize)
         currentScript.parentNode.removeChild(currentScript);
     }
 
-    document.body.appendChild( document.createElement('script') ).textContent = 'scaleContentFlash(' + downscaleValue + ',' + correctSize + ')';
+    document.body.appendChild( document.createElement('script') ).textContent = 'scaleContentFlash(' + downscaleValue + ',' + correctSize + ',' + changeInGame + ')';
 }
 
 /* if game mode */
@@ -40,17 +44,22 @@ if( location.pathname.match(/\/games\/.*\/game\.php.*/) !== null)
 {
     downscaleValue = 1;
     correctSize = true;
+    changeInGame = true;
 
     try {
-        chrome.storage.sync.get(['downscaleValue', 'correctSize'],
+        chrome.storage.sync.get(['downscaleValue', 'correctSize', 'changeInGame'],
             function(chromeStorage)
             {
-                if( chromeStorage.downscaleValue ) {
+                if( chromeStorage.downscaleValue !== undefined ) {
                     downscaleValue = chromeStorage.downscaleValue;
                 }
 
-                if( chromeStorage.correctSize ) {
+                if( chromeStorage.correctSize !== undefined ) {
                     correctSize = chromeStorage.correctSize;
+                }
+
+                if( chromeStorage.changeInGame !== undefined ) {
+                    changeInGame = chromeStorage.changeInGame;
                 }
 
                 mtfBootstrap();
@@ -171,10 +180,10 @@ function haveFlashVars(responseText, flashVars)
     document.body.appendChild( contentFlash );
 
     /* necessary on firefox to access contentFlash.PercentLoaded() */
-    document.body.appendChild( document.createElement('script') ).textContent = '(' + mtfInit + ')(' + downscaleValue + ',' + correctSize + ')';
+    document.body.appendChild( document.createElement('script') ).textContent = '(' + mtfInit + ')(' + downscaleValue + ',' + correctSize + ',' + changeInGame + ')';
 }
 
-function mtfInit(downscaleValue, correctSize)
+function mtfInit(downscaleValue, correctSize, changeInGame)
 {
     currentGameState = 'Playing';
 
@@ -310,7 +319,7 @@ function mtfInit(downscaleValue, correctSize)
         contentFlash.style.transform = '';
     }
 
-    scaleContentFlash = function(scaleFactor, newCorrectSize)
+    scaleContentFlash = function(scaleFactor, newCorrectSize, newChangeInGame)
     {
         scaleFactor = parseInt(scaleFactor)
         if(typeof scaleFactor === 'number' && isNaN(scaleFactor) === false)
@@ -321,6 +330,11 @@ function mtfInit(downscaleValue, correctSize)
         if(newCorrectSize !== undefined)
         {
             correctSize = newCorrectSize;
+        }
+
+        if(newChangeInGame !== undefined)
+        {
+            changeInGame = newChangeInGame;
         }
 
         /* if in lobby or between games, scale 1:1 */
@@ -517,7 +531,7 @@ function mtfInit(downscaleValue, correctSize)
     {
         var returnDownscaleValue = downscaleValue;
 
-        if(currentGameState ==='Finish' || currentGameState.match('lobbyGameList') !== null)
+        if(changeInGame === true && (currentGameState ==='Finish' || currentGameState.match('lobbyGameList') !== null))
         {
             returnDownscaleValue = 1;
         };
