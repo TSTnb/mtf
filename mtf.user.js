@@ -370,7 +370,7 @@ function mtfInit(downscaleValue, correctSize)
         }
 
 
-        if(downscaleValue > 1) {
+        if(contentFlashSize.scaleFactor > 1) {
             transformContentFlash();
         }else {
             noTransformContentFlash();
