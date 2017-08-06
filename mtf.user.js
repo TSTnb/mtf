@@ -130,8 +130,6 @@ function addParameter(flashObject, paramName, paramValue)
 function buildContentFlash(flashVarsParamString)
 {
     addParameter(contentFlash, 'quality', 'low');
-    if(location.href.match(/games\/(.*)\/game.php/)[1] !== 'NBlox')
-        addParameter(contentFlash, 'scale', 'noscale');
 
     /* windows npapi flash cannot handle css transforms + wmode gpu */
     if(downscaleValue > 1 && navigator.userAgent.match(/windows.*firefox/i) !== null) {
@@ -384,11 +382,26 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
 
         if(gameName !== 'NBlox')
         {
-            contentFlash.TSetProperty("/", contentFlashSize.T_WIDTH_SCALE_INDEX, 100 / contentFlashSize.correctedScaleFactor);
-            contentFlash.TSetProperty("/", contentFlashSize.T_HEIGHT_SCALE_INDEX, 100 / contentFlashSize.correctedScaleFactor);
 
-            contentFlash.TSetProperty("/", contentFlashSize.T_PAN_X_INDEX, contentFlashSize.originalWidth / contentFlashSize.correctedScaleFactor * (contentFlashSize.correctedScaleFactor - 1) / 2);
-            contentFlash.TSetProperty("/", contentFlashSize.T_PAN_Y_INDEX, contentFlashSize.originalHeight / contentFlashSize.correctedScaleFactor * (contentFlashSize.correctedScaleFactor - 1) / 2);
+            if(gameName !== 'Sprint' && gameName !== 'Marathon')
+            {
+                contentFlash.SetVariable('Stage.scaleMode', 'noScale');
+
+                contentFlash.TSetProperty("/", contentFlashSize.T_WIDTH_SCALE_INDEX, 100 / contentFlashSize.correctedScaleFactor);
+                contentFlash.TSetProperty("/", contentFlashSize.T_HEIGHT_SCALE_INDEX, 100 / contentFlashSize.correctedScaleFactor);
+
+                contentFlash.TSetProperty("/", contentFlashSize.T_PAN_X_INDEX, contentFlashSize.originalWidth / contentFlashSize.correctedScaleFactor * (contentFlashSize.correctedScaleFactor - 1) / 2);
+                contentFlash.TSetProperty("/", contentFlashSize.T_PAN_Y_INDEX, contentFlashSize.originalHeight / contentFlashSize.correctedScaleFactor * (contentFlashSize.correctedScaleFactor - 1) / 2);
+            } else
+            {
+                contentFlash.SetVariable('Stage.scaleMode', 'exactFit');
+
+                contentFlash.TSetProperty("/", contentFlashSize.T_WIDTH_SCALE_INDEX, 100);
+                contentFlash.TSetProperty("/", contentFlashSize.T_HEIGHT_SCALE_INDEX, 100);
+
+                contentFlash.TSetProperty("/", contentFlashSize.T_PAN_X_INDEX, 0);
+                contentFlash.TSetProperty("/", contentFlashSize.T_PAN_Y_INDEX, 0);
+            }
         }
 
 
