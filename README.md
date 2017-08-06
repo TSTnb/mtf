@@ -1,5 +1,5 @@
  ![](http://i.imgur.com/1njY7qe.png)
-###### Version 4.8.4, last updated 2017-08-03
+###### Version 4.8.5, last updated 2017-08-06
 
 ### Description
 This is a script that removes everything from the page except for the game itself and the nice-looking background, sets the Flash quality to "low" instead of "high", and sets the "wmode" parameter to "direct". *This reduces lag significantly.*
@@ -29,7 +29,7 @@ ___
 * If you have Safari, get [Tampermonkey](https://safari.tampermonkey.net/tampermonkey.safariextz).
 
 #### Step 2: Get the script
-Go to [this page](https://raw.githubusercontent.com/morningpee/mtf/4.8.4/mtf.user.js). A dialog will pop up, click accept, and the script is installed.
+Go to [this page](https://raw.githubusercontent.com/morningpee/mtf/4.8.5/mtf.user.js). A dialog will pop up, click accept, and the script is installed.
 
 ### How to use
 
@@ -47,10 +47,10 @@ So anyway, try it out and post results.
 ---
 |||
 --- | ---:
-**[Download for Firefox](https://addons.mozilla.org/firefox/addon/mtf/)** | last updated 2017-08-03 |
-**[Download for Chrome](https://chrome.google.com/webstore/detail/minimal-tetris-friends/jmcfgfebjmfodjnmgicmkpkbpbfelhki)** | last updated 2017-08-03 |
-**[Download for Opera](https://addons.opera.com/en/extensions/details/minimal-tetris-friends/)** | last updated 2017-08-03 |
+**[Download for Firefox](https://addons.mozilla.org/firefox/addon/mtf/)** | last updated 2017-08-06 |
+**[Download for Chrome](https://chrome.google.com/webstore/detail/minimal-tetris-friends/jmcfgfebjmfodjnmgicmkpkbpbfelhki)** | last updated 2017-08-06 |
+**[Download for Opera](https://addons.opera.com/en/extensions/details/minimal-tetris-friends/)** | last updated 2017-08-06 |
 |||
 |||
-**[Download for Edge or Safari](https://raw.githubusercontent.com/morningpee/mtf/4.8.4/mtf.user.js)** | last updated 2017-08-03 |
-|||size=1]last updated 2017-08-03[/size]
+**[Download for Edge or Safari](https://raw.githubusercontent.com/morningpee/mtf/4.8.5/mtf.user.js)** | last updated 2017-08-06 |
+|||size=1]last updated 2017-08-06[/size]

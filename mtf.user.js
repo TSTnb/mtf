@@ -5,7 +5,7 @@
 // @include http://*tetrisfriends.com/*
 // @grant none
 // @run-at document-end
-// @version 4.8.4
+// @version 4.8.5
 // @author morningpee
 // ==/UserScript==
 
@@ -42,9 +42,6 @@ function updateMTFValues(downscaleValue, correctSize, changeInGame)
 /* if game mode */
 if( location.pathname.match(/\/games\/.*\/game\.php.*/) !== null)
 {
-    downscaleValue = 1;
-    correctSize = true;
-    changeInGame = true;
 
     try {
         chrome.storage.sync.get(['downscaleValue', 'correctSize', 'changeInGame'],
@@ -52,14 +49,22 @@ if( location.pathname.match(/\/games\/.*\/game\.php.*/) !== null)
             {
                 if( chromeStorage.downscaleValue !== undefined ) {
                     downscaleValue = chromeStorage.downscaleValue;
+                } else
+                {
+                    downscaleValue = 1;
                 }
 
                 if( chromeStorage.correctSize !== undefined ) {
                     correctSize = chromeStorage.correctSize;
+                } else
+                {
+                    correctSize = true;
                 }
 
                 if( chromeStorage.changeInGame !== undefined ) {
                     changeInGame = chromeStorage.changeInGame;
+                } else {
+                    changeInGame = true;
                 }
 
                 mtfBootstrap();
@@ -95,7 +100,7 @@ function buildFlashVarsParamString()
     var flashVars = new Object();
 
     var flashVarsRequest = new XMLHttpRequest();
-    flashVarsRequest.addEventListener('load', function(){ try{ haveFlashVars(this.responseText, flashVars); } catch(err){alert(err);} } );
+    flashVarsRequest.addEventListener('load', function(){ try{ haveFlashVars(this.responseText, flashVars); } catch(err){alert(err + "\n" + err.stack);} } );
 
     var ASYNCHRONOUS_REQUEST = true;
     flashVarsRequest.open('GET', location.href, ASYNCHRONOUS_REQUEST);
@@ -125,8 +130,6 @@ function addParameter(flashObject, paramName, paramValue)
 function buildContentFlash(flashVarsParamString)
 {
     addParameter(contentFlash, 'quality', 'low');
-    if(location.href.match(/games\/(.*)\/game.php/)[1] !== 'NBlox')
-        addParameter(contentFlash, 'scale', 'noscale');
 
     /* windows npapi flash cannot handle css transforms + wmode gpu */
     if(downscaleValue > 1 && navigator.userAgent.match(/windows.*firefox/i) !== null) {
@@ -271,7 +274,7 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
         try {
             scaleContentFlash();
         } catch(err) {
-            alert(err);
+            alert(err + "\n" + err.stack);
         }
     }
 
@@ -379,11 +382,26 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
 
         if(gameName !== 'NBlox')
         {
-            contentFlash.TSetProperty("/", contentFlashSize.T_WIDTH_SCALE_INDEX, 100 / contentFlashSize.correctedScaleFactor);
-            contentFlash.TSetProperty("/", contentFlashSize.T_HEIGHT_SCALE_INDEX, 100 / contentFlashSize.correctedScaleFactor);
 
-            contentFlash.TSetProperty("/", contentFlashSize.T_PAN_X_INDEX, contentFlashSize.originalWidth / contentFlashSize.correctedScaleFactor * (contentFlashSize.correctedScaleFactor - 1) / 2);
-            contentFlash.TSetProperty("/", contentFlashSize.T_PAN_Y_INDEX, contentFlashSize.originalHeight / contentFlashSize.correctedScaleFactor * (contentFlashSize.correctedScaleFactor - 1) / 2);
+            if(gameName !== 'Sprint' && gameName !== 'Marathon')
+            {
+                contentFlash.SetVariable('Stage.scaleMode', 'noScale');
+
+                contentFlash.TSetProperty("/", contentFlashSize.T_WIDTH_SCALE_INDEX, 100 / contentFlashSize.correctedScaleFactor);
+                contentFlash.TSetProperty("/", contentFlashSize.T_HEIGHT_SCALE_INDEX, 100 / contentFlashSize.correctedScaleFactor);
+
+                contentFlash.TSetProperty("/", contentFlashSize.T_PAN_X_INDEX, contentFlashSize.originalWidth / contentFlashSize.correctedScaleFactor * (contentFlashSize.correctedScaleFactor - 1) / 2);
+                contentFlash.TSetProperty("/", contentFlashSize.T_PAN_Y_INDEX, contentFlashSize.originalHeight / contentFlashSize.correctedScaleFactor * (contentFlashSize.correctedScaleFactor - 1) / 2);
+            } else
+            {
+                contentFlash.SetVariable('Stage.scaleMode', 'exactFit');
+
+                contentFlash.TSetProperty("/", contentFlashSize.T_WIDTH_SCALE_INDEX, 100);
+                contentFlash.TSetProperty("/", contentFlashSize.T_HEIGHT_SCALE_INDEX, 100);
+
+                contentFlash.TSetProperty("/", contentFlashSize.T_PAN_X_INDEX, 0);
+                contentFlash.TSetProperty("/", contentFlashSize.T_PAN_Y_INDEX, 0);
+            }
         }
 
 
