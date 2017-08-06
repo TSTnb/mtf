@@ -100,7 +100,7 @@ function buildFlashVarsParamString()
     var flashVars = new Object();
 
     var flashVarsRequest = new XMLHttpRequest();
-    flashVarsRequest.addEventListener('load', function(){ try{ haveFlashVars(this.responseText, flashVars); } catch(err){alert(err);} } );
+    flashVarsRequest.addEventListener('load', function(){ try{ haveFlashVars(this.responseText, flashVars); } catch(err){alert(err + "\n" + err.stack);} } );
 
     var ASYNCHRONOUS_REQUEST = true;
     flashVarsRequest.open('GET', location.href, ASYNCHRONOUS_REQUEST);
@@ -276,7 +276,7 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
         try {
             scaleContentFlash();
         } catch(err) {
-            alert(err);
+            alert(err + "\n" + err.stack);
         }
     }
 
