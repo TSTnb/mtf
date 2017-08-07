@@ -5,7 +5,7 @@
 // @include http://*tetrisfriends.com/*
 // @grant none
 // @run-at document-start
-// @version 4.8.8
+// @version 4.8.9
 // @author morningpee
 // ==/UserScript==
 
