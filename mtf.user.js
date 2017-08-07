@@ -4,29 +4,34 @@
 // @description Reduces lag as much as possible
 // @include http://*tetrisfriends.com/*
 // @grant none
-// @run-at document-end
+// @run-at document-start
 // @version 4.8.5
 // @author morningpee
 // ==/UserScript==
 
-chrome.storage.onChanged.addListener(
-    function(changes, namespace)
-    {
-        if( changes.downscaleValue !== undefined ) {
-            downscaleValue = changes.downscaleValue.newValue;
-        }
+try{
+    chrome.storage.onChanged.addListener(
+        function(changes, namespace)
+        {
+            if( changes.downscaleValue !== undefined ) {
+                downscaleValue = changes.downscaleValue.newValue;
+            }
 
-        if( changes.correctSize !== undefined ) {
-            correctSize = changes.correctSize.newValue;
-        }
+            if( changes.correctSize !== undefined ) {
+                correctSize = changes.correctSize.newValue;
+            }
 
-        if( changes.changeInGame !== undefined ) {
-            changeInGame = changes.changeInGame.newValue;
-        }
+            if( changes.changeInGame !== undefined ) {
+                changeInGame = changes.changeInGame.newValue;
+            }
 
-        updateMTFValues(downscaleValue, correctSize, changeInGame)
-    }
-);
+            updateMTFValues(downscaleValue, correctSize, changeInGame)
+        }
+    );
+} catch(err)
+{
+    /* running as userscript */
+}
 
 function updateMTFValues(downscaleValue, correctSize, changeInGame)
 {
@@ -78,8 +83,6 @@ if( location.pathname.match(/\/games\/.*\/game\.php.*/) !== null)
 
 function mtfBootstrap()
 {
-    contentFlash = document.getElementById('contentFlash');
-
     window.stop();
 
     /*start fresh with html5 document */
@@ -91,100 +94,13 @@ function mtfBootstrap()
         document.documentElement
     );
 
-    document.body.appendChild( document.createElement('style') ).textContent = '* { margin: 0; } :root{ image-rendering: optimizeSpeed; image-rendering: -moz-crisp-edges; image-rendering: -o-crisp-edges; image-rendering: -webkit-optimize-contrast; image-rendering: pixelated; image-rendering: optimize-contrast; -ms-interpolation-mode: nearest-neighbor; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } embed, object, #contentFlash { transform-origin: top left; position: absolute; top: 50%; left: 50%; visibility: initial !important; }';
-    buildFlashVarsParamString();
-}
-
-function buildFlashVarsParamString()
-{
-    var flashVars = new Object();
-
-    var flashVarsRequest = new XMLHttpRequest();
-    flashVarsRequest.addEventListener('load', function(){ try{ haveFlashVars(this.responseText, flashVars); } catch(err){alert(err + "\n" + err.stack);} } );
-
-    var ASYNCHRONOUS_REQUEST = true;
-    flashVarsRequest.open('GET', location.href, ASYNCHRONOUS_REQUEST);
-    flashVarsRequest.send();
-}
-
-function addParameter(flashObject, paramName, paramValue)
-{
-    var paramElement;
-    var useExisting = false;
-    var flashObjectChildren = flashObject.children;
-    for(var flashIndex = 0; flashIndex < flashObjectChildren.length; flashIndex++)
-        if(flashObjectChildren[flashIndex].name && flashObjectChildren[flashIndex].name.toLowerCase() === paramName)
-        {
-            useExisting = true;
-            paramElement = flashObjectChildren[flashIndex];
-        }
-
-    if(useExisting === false)
-         paramElement = document.createElement("param")
-
-    paramElement.setAttribute("name", paramName);
-    paramElement.setAttribute("value", paramValue);
-    flashObject.appendChild(paramElement);
-}
-
-function buildContentFlash(flashVarsParamString)
-{
-    addParameter(contentFlash, 'quality', 'low');
-
-    /* windows npapi flash cannot handle css transforms + wmode gpu */
-    if(downscaleValue > 1 && navigator.userAgent.match(/windows.*firefox/i) !== null) {
-        addParameter(contentFlash, 'wmode', 'opaque');
-    } else {
-        addParameter(contentFlash, 'wmode', 'gpu');
-    }
-
-    return contentFlash;
-}
-
-function haveFlashVars(responseText, flashVars)
-{
-    flashVars.startParam = 'clickToPlay';
-
-    var rawFlashVars = responseText.match(/flashVars.*?=.*?({[\s\S]*?})/)[1];
-
-    flashVars.sessionId = rawFlashVars.match(/sessionId.*?:.*?encodeURIComponent\('(.*?)'\)/)[1];
-    flashVars.sessionToken = rawFlashVars.match(/sessionToken.*?:.*?encodeURIComponent\('(.*?)'\)/)[1];
-    flashVars.timestamp = rawFlashVars.match(/timestamp.*?:.*?(\d+)/)[1];
-
-    try{
-        flashVars.friendUserIds = rawFlashVars.match(/friendUserIds.*?'((\d+,)*\d*)'/)[1];
-        flashVars.blockedToByUserIds = rawFlashVars.match(/blockedToByUserIds.*?'((\d+,)*\d*)'/)[1];
-    }catch(err)
-    {
-        /* If this failed, the user is not logged in. */
-    }
-
-    function getParameter(parameter){
-       var query = window.location.search.substring(1);
-       var vars = query.split('&');
-       for (var i=0;i<vars.length;i++) {
-               var pair = vars[i].split('=');
-               if(pair[0] === parameter){return pair[1];}
-       }
-       return '';
-    };
-
-    var urlParameters = ['autoJoinRoomId', 'autoJoinRoomName', 'das', 'ar'];
-    for(i in urlParameters)
-    {
-        flashVars[ urlParameters[i] ] = getParameter( urlParameters[i] );
-        if( flashVars[ urlParameters[i] ] === '' )
-            delete flashVars[ urlParameters[i] ];
-    }
-
-    flashVarsParamString = Object.keys( flashVars ).map(k => k + '=' + flashVars[k] ).join('&');
-
-    buildContentFlash();
-    document.body.appendChild( contentFlash );
+    document.body.appendChild( document.createElement('style') ).textContent = '* { margin: 0; } :root{ image-rendering: optimizeSpeed; image-rendering: -moz-crisp-edges; image-rendering: -o-crisp-edges; image-rendering: -webkit-optimize-contrast; image-rendering: pixelated; image-rendering: optimize-contrast; -ms-interpolation-mode: nearest-neighbor; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } embed, object, #contentFlash { transform-origin: top left; position: absolute; top: 50%; left: 50%; visibility: visible !important; }';
 
     /* necessary on firefox to access contentFlash.PercentLoaded() */
     document.body.appendChild( document.createElement('script') ).textContent = '(' + mtfInit + ')(' + downscaleValue + ',' + correctSize + ',' + changeInGame + ')';
+
 }
+
 
 function mtfInit(downscaleValue, correctSize, changeInGame)
 {
@@ -251,6 +167,113 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
     gameNumberAIPlayers['Rally8P']  = 0; //Rally8P does not support replays
     gameNumberAIPlayers['Mono']     = 0;
 
+    function buildFlashVarsParamString()
+    {
+        var flashVars = new Object();
+
+        var flashVarsRequest = new XMLHttpRequest();
+        flashVarsRequest.addEventListener('load', function(){ try{ haveFlashVars(this.responseText, flashVars); } catch(err){alert(err + "\n" + err.stack);} } );
+
+        var ASYNCHRONOUS_REQUEST = true;
+        flashVarsRequest.open('GET', location.href, ASYNCHRONOUS_REQUEST);
+        flashVarsRequest.send();
+    }
+
+    function addParameter(flashObject, paramName, paramValue)
+    {
+        var paramElement;
+        var useExisting = false;
+        var flashObjectChildren = flashObject.children;
+        for(var flashIndex = 0; flashIndex < flashObjectChildren.length; flashIndex++)
+            if(flashObjectChildren[flashIndex].name && flashObjectChildren[flashIndex].name.toLowerCase() === paramName)
+            {
+                useExisting = true;
+                paramElement = flashObjectChildren[flashIndex];
+            }
+
+        if(useExisting === false)
+             paramElement = document.createElement("param")
+
+        paramElement.setAttribute("name", paramName);
+        paramElement.setAttribute("value", paramValue);
+        flashObject.appendChild(paramElement);
+    }
+
+    function buildContentFlash(flashVarsParamString)
+    {
+        var contentFlash = document.createElement("object");
+        contentFlash.setAttribute("data", location.protocol + "//" + location.host + "/data/games/" + gameName + "/" + gameFileName[gameName]);
+        contentFlash.setAttribute("type", "application/x-shockwave-flash");
+        contentFlash.setAttribute("id", "contentFlash");
+        contentFlash.setAttribute("allowscriptaccess", "always");
+
+        if(gameName !== 'Sprint' && gameName !== 'Marathon' && gameName !== 'NBlox')
+        {
+            addParameter(contentFlash, 'scale', 'noscale');
+        }
+
+        addParameter(contentFlash, 'quality', 'low');
+
+        /* windows npapi flash cannot handle css transforms + wmode gpu */
+        if(downscaleValue > 1 && navigator.userAgent.match(/windows.*firefox/i) !== null) {
+            addParameter(contentFlash, 'wmode', 'opaque');
+        } else {
+            addParameter(contentFlash, 'wmode', 'gpu');
+        }
+
+        return contentFlash;
+    }
+
+    function haveFlashVars(responseText, flashVars)
+    {
+        flashVars.startParam = 'clickToPlay';
+
+        var rawFlashVars = responseText.match(/flashVars.*?=.*?({[\s\S]*?})/)[1];
+
+        flashVars.loginId = responseText.match(/getLoginId\((.*?)\)/)[1];
+        flashVars.externalId = 'u7tpFP8R0Cg=';
+
+        flashVars.sessionId = rawFlashVars.match(/sessionId.*?:.*?encodeURIComponent\('(.*?)'\)/)[1];
+        flashVars.sessionToken = rawFlashVars.match(/sessionToken.*?:.*?encodeURIComponent\('(.*?)'\)/)[1];
+        flashVars.timestamp = rawFlashVars.match(/timestamp.*?:.*?(\d+)/)[1];
+
+        try{
+            flashVars.friendUserIds = rawFlashVars.match(/friendUserIds.*?'((\d+,)*\d*)'/)[1];
+            flashVars.blockedToByUserIds = rawFlashVars.match(/blockedToByUserIds.*?'((\d+,)*\d*)'/)[1];
+        }catch(err)
+        {
+            /* If this failed, the user is not logged in. */
+        }
+
+    function getParameter(parameter){
+       var query = window.location.search.substring(1);
+       var vars = query.split('&');
+       for (var i=0;i<vars.length;i++) {
+               var pair = vars[i].split('=');
+               if(pair[0] === parameter){return pair[1];}
+       }
+       return '';
+    };
+
+    var urlParameters = ['autoJoinRoomId', 'autoJoinRoomName', 'das', 'ar'];
+    for(i in urlParameters)
+    {
+        flashVars[ urlParameters[i] ] = getParameter( urlParameters[i] );
+        if( flashVars[ urlParameters[i] ] === '' )
+            delete flashVars[ urlParameters[i] ];
+    }
+
+    flashVarsParamString = Object.keys( flashVars ).map(k => k + '=' + flashVars[k] ).join('&');
+
+    contentFlash = buildContentFlash();
+    addParameter(contentFlash, 'flashVars', flashVarsParamString);
+    document.body.appendChild( contentFlash );
+
+    runOnContentFlashLoaded();
+    addEventListener('resize', scaleContentFlash);
+    keepAlive();
+}
+
     function runOnContentFlashLoaded()
     {
         /*assume loaded, since we just copy it from the page*/
@@ -260,16 +283,24 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
 
             /* this line will fail if it is not loaded */
             if(gameName !== 'NBlox')
-                contentFlash.TGetProperty('/', 0);
+                contentFlash.TGetProperty("/", 12)
+
         }
         catch(e){
             percentLoaded = "0";
         }
 
         if( percentLoaded != "100" )
+        {
            return setTimeout( runOnContentFlashLoaded, 300 );
+        }
 
         getContentFlashSize();
+
+        /* second check for whether it is loaded */
+        if( typeof contentFlash.TGetProperty("/", 12) === 'undefined' ) {
+           return setTimeout( runOnContentFlashLoaded, 300 );
+        }
 
         try {
             scaleContentFlash();
@@ -380,13 +411,16 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
         contentFlash.style.marginLeft = -(contentFlashSize.correctedWidth / 2) + 'px';
         contentFlash.style.marginTop = -((updatedHeight + contentFlashSize.correctedHeight) / 2) / 2 + 'px';
 
+        if(contentFlashSize.scaleFactor > 1) {
+            transformContentFlash();
+        }else {
+            noTransformContentFlash();
+        }
+
         if(gameName !== 'NBlox')
         {
-
             if(gameName !== 'Sprint' && gameName !== 'Marathon')
             {
-                contentFlash.SetVariable('Stage.scaleMode', 'noScale');
-
                 contentFlash.TSetProperty("/", contentFlashSize.T_WIDTH_SCALE_INDEX, 100 / contentFlashSize.correctedScaleFactor);
                 contentFlash.TSetProperty("/", contentFlashSize.T_HEIGHT_SCALE_INDEX, 100 / contentFlashSize.correctedScaleFactor);
 
@@ -394,8 +428,6 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
                 contentFlash.TSetProperty("/", contentFlashSize.T_PAN_Y_INDEX, contentFlashSize.originalHeight / contentFlashSize.correctedScaleFactor * (contentFlashSize.correctedScaleFactor - 1) / 2);
             } else
             {
-                contentFlash.SetVariable('Stage.scaleMode', 'exactFit');
-
                 contentFlash.TSetProperty("/", contentFlashSize.T_WIDTH_SCALE_INDEX, 100);
                 contentFlash.TSetProperty("/", contentFlashSize.T_HEIGHT_SCALE_INDEX, 100);
 
@@ -404,12 +436,6 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
             }
         }
 
-
-        if(contentFlashSize.scaleFactor > 1) {
-            transformContentFlash();
-        }else {
-            noTransformContentFlash();
-        }
     }
 
     js_tetrisShowResults = function(results)
@@ -557,9 +583,7 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
         return returnDownscaleValue;
     }
 
-    runOnContentFlashLoaded();
-    addEventListener('resize', scaleContentFlash);
-    keepAlive();
+    buildFlashVarsParamString();
 }
 
     function loadGame()
@@ -567,7 +591,6 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
         var gameLoading = document.getElementsByClassName("game_loading")[0];
         gameLoading.parentNode.removeChild(gameLoading);
         document.getElementById("game_container").style.height = "auto";
-        document.getElementById("contentFlash").style.visibility = "visible";
     }
 
 document.addEventListener("readystatechange",
