@@ -482,7 +482,6 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
         gameReplayer.setAttribute('allowscriptaccess', 'always');
         gameReplayer.setAttribute('name', 'plugin');
         gameReplayer.setAttribute('type', 'application/x-shockwave-flash');
-        gameReplayer.setAttribute('scale', 'noscale');
         gameReplayer.setAttribute('src', location.protocol + '//' + location.host + '/data/games/replayer/' + (gameNumberAIPlayers[gameName] === 0? 'OWTetrisReplayWidget.swf': 'OWTetrisMPReplayWidget.swf') );
         contentFlash = document.body.appendChild(gameReplayer);
 
