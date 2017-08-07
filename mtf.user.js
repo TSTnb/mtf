@@ -202,10 +202,10 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
     function buildContentFlash(flashVarsParamString)
     {
         var contentFlash = document.createElement("object");
-        contentFlash.setAttribute("data", location.protocol + "//" + location.host + "/data/games/" + gameName + "/" + gameFileName[gameName]);
         contentFlash.setAttribute("type", "application/x-shockwave-flash");
-        contentFlash.setAttribute("id", "contentFlash");
         contentFlash.setAttribute("allowscriptaccess", "always");
+        contentFlash.setAttribute("data", location.protocol + "//" + location.host + "/data/games/" + gameName + "/" + gameFileName[gameName]);
+        contentFlash.setAttribute("id", "contentFlash");
 
         if(gameName !== 'Sprint' && gameName !== 'Marathon' && gameName !== 'NBlox')
         {
@@ -231,11 +231,13 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
         var rawFlashVars = responseText.match(/flashVars.*?=.*?({[\s\S]*?})/)[1];
 
         flashVars.loginId = responseText.match(/getLoginId\((.*?)\)/)[1];
-        flashVars.externalId = 'u7tpFP8R0Cg=';
+        flashVars.externalId = encodeURIComponent('u7tpFP8R0Cg=');
 
         flashVars.sessionId = rawFlashVars.match(/sessionId.*?:.*?encodeURIComponent\('(.*?)'\)/)[1];
-        flashVars.sessionToken = rawFlashVars.match(/sessionToken.*?:.*?encodeURIComponent\('(.*?)'\)/)[1];
+        flashVars.sessionToken = encodeURIComponent( rawFlashVars.match(/sessionToken.*?:.*?encodeURIComponent\('(.*?)'\)/)[1] );
         flashVars.timestamp = rawFlashVars.match(/timestamp.*?:.*?(\d+)/)[1];
+        flashVars.apiUrl = encodeURIComponent( rawFlashVars.match(/apiUrl.*?:.*?'(.+?)'/)[1] );
+        flashVars.isAnalyticsEnabled = 'true';
 
         try{
             flashVars.friendUserIds = rawFlashVars.match(/friendUserIds.*?'((\d+,)*\d*)'/)[1];
