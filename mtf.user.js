@@ -5,7 +5,7 @@
 // @include http://*tetrisfriends.com/*
 // @grant none
 // @run-at document-start
-// @version 4.8.9
+// @version 4.8.10
 // @author morningpee
 // ==/UserScript==
 
@@ -234,6 +234,14 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
         flashVars.apiUrl = encodeURIComponent( rawFlashVars.match(/apiUrl.*?:.*?'(.+?)'/)[1] );
         flashVars.isAnalyticsEnabled = 'true';
 
+        flashVars.channelId = rawFlashVars.match(/channelId.*?:.*?(\d+)/)[1];
+        flashVars.prerollId = rawFlashVars.match(/prerollId.*?:.*?(\d+)/)[1];
+        flashVars.isPrerollEnabled = 'true'
+        flashVars.ip = rawFlashVars.match(/ip.*?:.*?'(\d+\.\d+\.\d+\.\d+)'/)[1];
+        flashVars.isForceLogin = 'false';
+        flashVars.numGamesToPlayAd = 0;
+        flashVars.showChallenge = 0;
+
         try{
             flashVars.friendUserIds = rawFlashVars.match(/friendUserIds.*?'((\d+,)*\d*)'/)[1];
             flashVars.blockedToByUserIds = rawFlashVars.match(/blockedToByUserIds.*?'((\d+,)*\d*)'/)[1];
@@ -297,6 +305,13 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
         /* second check for whether it is loaded */
         if( typeof contentFlash.TGetProperty("/", 12) === 'undefined' ) {
            return setTimeout( runOnContentFlashLoaded, 300 );
+        }
+
+        try{
+            contentFlash.as3_prerollDone();
+        } catch(err)
+        {
+            /* okay if this fails */
         }
 
         try {
