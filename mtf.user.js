@@ -5,7 +5,7 @@
 // @include http://*tetrisfriends.com/*
 // @grant none
 // @run-at document-start
-// @version 4.8.10
+// @version 4.8.11
 // @author morningpee
 // ==/UserScript==
 
@@ -431,7 +431,7 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
 
         if(gameName !== 'NBlox')
         {
-            if(gameName !== 'Sprint' && gameName !== 'Marathon')
+            if(gameName !== 'Sprint' && gameName !== 'Marathon' && currentGameState !== 'Replay')
             {
                 contentFlash.TSetProperty("/", contentFlashSize.T_WIDTH_SCALE_INDEX, 100 / contentFlashSize.correctedScaleFactor);
                 contentFlash.TSetProperty("/", contentFlashSize.T_HEIGHT_SCALE_INDEX, 100 / contentFlashSize.correctedScaleFactor);
@@ -496,6 +496,7 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
         contentFlash = document.body.appendChild(gameReplayer);
 
         correctSize = false;
+        currentGameState = 'Replay';
         gameSize[gameName] = [616, 355];
         runOnReplayerLoaded(gameData, currentRank, aiNames, aiAvatars);
     }
