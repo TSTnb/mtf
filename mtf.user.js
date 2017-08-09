@@ -4,8 +4,8 @@
 // @description Reduces lag as much as possible
 // @include http://*tetrisfriends.com/*
 // @grant none
-// @run-at document-start
-// @version 4.8.11
+// @run-at document-end
+// @version 4.8.12
 // @author morningpee
 // ==/UserScript==
 
@@ -199,7 +199,7 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
         var contentFlash = document.createElement("object");
         contentFlash.setAttribute("type", "application/x-shockwave-flash");
         contentFlash.setAttribute("allowscriptaccess", "always");
-        contentFlash.setAttribute("data", location.protocol + "//" + location.host + "/data/games/" + gameName + "/" + gameFileName[gameName]);
+        contentFlash.setAttribute("data", location.protocol + "//" + location.host + "/data5_0_0_3/games/" + gameName + "/" + gameFileName[gameName]);
         contentFlash.setAttribute("id", "contentFlash");
 
         if(gameName !== 'Sprint' && gameName !== 'Marathon' && gameName !== 'NBlox')
@@ -221,34 +221,27 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
 
     function haveFlashVars(responseText, flashVars)
     {
-        flashVars.startParam = 'clickToPlay';
 
         var rawFlashVars = responseText.match(/flashVars.*?=.*?({[\s\S]*?})/)[1];
 
-        flashVars.loginId = responseText.match(/getLoginId\((.*?)\)/)[1];
-        flashVars.externalId = encodeURIComponent('u7tpFP8R0Cg=');
 
-        flashVars.sessionId = rawFlashVars.match(/sessionId.*?:.*?encodeURIComponent\('(.*?)'\)/)[1];
+        flashVars.theGamePath = '';
+        flashVars.sessionId = encodeURIComponent( rawFlashVars.match(/sessionId.*?:.*?encodeURIComponent\('(.*?)'\)/)[1] );
         flashVars.sessionToken = encodeURIComponent( rawFlashVars.match(/sessionToken.*?:.*?encodeURIComponent\('(.*?)'\)/)[1] );
         flashVars.timestamp = rawFlashVars.match(/timestamp.*?:.*?(\d+)/)[1];
-        flashVars.apiUrl = encodeURIComponent( rawFlashVars.match(/apiUrl.*?:.*?'(.+?)'/)[1] );
+        flashVars.startParam = 'clickToPlay';
+        flashVars.isForceLogin = 'false';
+        flashVars.isDemo = '';
+        flashVars.ip = rawFlashVars.match(/ip.*?:.*?'(\d+\.\d+\.\d+\.\d+)'/)[1];
+        flashVars.externalId = 'u7tpFP8R0Cg=';
+        flashVars.loginId = responseText.match(/getLoginId\(0*(.*?)\)/)[1];
+        flashVars.channelId = rawFlashVars.match(/channelId.*?:.*?(\d+)/)[1];
+        flashVars.numGamesToPlayAd = 0;
+        flashVars.isPrerollEnabled = 'true'
         flashVars.isAnalyticsEnabled = 'true';
 
-        flashVars.channelId = rawFlashVars.match(/channelId.*?:.*?(\d+)/)[1];
-        flashVars.prerollId = rawFlashVars.match(/prerollId.*?:.*?(\d+)/)[1];
-        flashVars.isPrerollEnabled = 'true'
-        flashVars.ip = rawFlashVars.match(/ip.*?:.*?'(\d+\.\d+\.\d+\.\d+)'/)[1];
-        flashVars.isForceLogin = 'false';
-        flashVars.numGamesToPlayAd = 0;
-        flashVars.showChallenge = 0;
-
-        try{
-            flashVars.friendUserIds = rawFlashVars.match(/friendUserIds.*?'((\d+,)*\d*)'/)[1];
-            flashVars.blockedToByUserIds = rawFlashVars.match(/blockedToByUserIds.*?'((\d+,)*\d*)'/)[1];
-        }catch(err)
-        {
-            /* If this failed, the user is not logged in. */
-        }
+        flashVars.autoJoinRoomId= -1;
+        flashVars.autoJoinRoomName = '';
 
     function getParameter(parameter){
        var query = window.location.search.substring(1);
@@ -260,18 +253,32 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
        return '';
     };
 
-    var urlParameters = ['autoJoinRoomId', 'autoJoinRoomName', 'das', 'ar'];
+    var urlParameters = ['das', 'ar'];
+    var tempParameter = '';
     for(i in urlParameters)
     {
-        flashVars[ urlParameters[i] ] = getParameter( urlParameters[i] );
-        if( flashVars[ urlParameters[i] ] === '' )
-            delete flashVars[ urlParameters[i] ];
+        var tempParameter = getParameter( urlParameters[i] );
+        if( tempParameter !== '' )
+            flashVars[ urlParameters[i] ] = tempParameter;
+
+    }
+
+    flashVars.apiUrl = encodeURIComponent( rawFlashVars.match(/apiUrl.*?:.*?'(.+?)'/)[1] );
+    flashVars.showChallenge = 0;
+    flashVars.prerollId = rawFlashVars.match(/prerollId.*?:.*?(\d+)/)[1];
+
+    try{
+        flashVars.friendUserIds = rawFlashVars.match(/friendUserIds.*?'((\d+,)*\d*)'/)[1];
+        flashVars.blockedToByUserIds = rawFlashVars.match(/blockedToByUserIds.*?'((\d+,)*\d*)'/)[1];
+    }catch(err)
+    {
+        /* If this failed, the user is not logged in. */
     }
 
     flashVarsParamString = Object.keys( flashVars ).map(k => k + '=' + flashVars[k] ).join('&');
 
     contentFlash = buildContentFlash();
-    addParameter(contentFlash, 'flashVars', flashVarsParamString);
+    addParameter(contentFlash, 'flashvars', flashVarsParamString);
     document.body.appendChild( contentFlash );
 
     runOnContentFlashLoaded();
@@ -479,7 +486,7 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
                         if( gameData.length > 1)
                         {
                             aiNames.push(resultsArray[i - 2]);
-                            aiAvatars.push("/data/images/avatars/40X40/" + resultsArray[i - 1]);
+                            aiAvatars.push("/data5_0_0_3/images/avatars/40X40/" + resultsArray[i - 1]);
                         }
                     }catch(err){}
                 }
@@ -492,7 +499,7 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
         gameReplayer.setAttribute('allowscriptaccess', 'always');
         gameReplayer.setAttribute('name', 'plugin');
         gameReplayer.setAttribute('type', 'application/x-shockwave-flash');
-        gameReplayer.setAttribute('src', location.protocol + '//' + location.host + '/data/games/replayer/' + (gameNumberAIPlayers[gameName] === 0? 'OWTetrisReplayWidget.swf': 'OWTetrisMPReplayWidget.swf') );
+        gameReplayer.setAttribute('src', location.protocol + '//' + location.host + '/data5_0_0_3/games/replayer/' + (gameNumberAIPlayers[gameName] === 0? 'OWTetrisReplayWidget.swf': 'OWTetrisMPReplayWidget.swf') );
         contentFlash = document.body.appendChild(gameReplayer);
 
         correctSize = false;
@@ -527,7 +534,7 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
            return setTimeout( function(){ runOnReplayerLoaded(gameData, currentRank, aiNames, aiAvatars) }, 50 );
         getContentFlashSize();
 
-        var loadReplayerArguments = [gameProductId[gameName] + "", location.protocol + '//' + location.host + '/data/games/' + gameName + '/' + gameReplayerName[gameName]];
+        var loadReplayerArguments = [gameProductId[gameName] + "", location.protocol + '//' + location.host + '/data5_0_0_3/games/' + gameName + '/' + gameReplayerName[gameName]];
 
         if( gameNumberAIPlayers[gameName] === 0 )
             contentFlash.as3_loadReplayer(loadReplayerArguments[0], loadReplayerArguments[1]);
@@ -537,7 +544,7 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
         if( gameNumberAIPlayers[gameName] === 0 )
             return contentFlash.as3_startReplay(gameData);
 
-        var avatarPrefix = "/data/images/avatars/40X40/"
+        var avatarPrefix = "/data5_0_0_3/images/avatars/40X40/"
         var playerName = getLastMatch(/username\s+=\s+("|')([^"']+)("|')/g, (tetrisShowResults + ""));
         var playerAvatar = avatarPrefix + getLastMatch(/userAvatar\s+=\s+("|')([^"']+)("|')/g, (tetrisShowResults + ""));
 
