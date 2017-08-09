@@ -2,7 +2,7 @@
     "content_scripts": [  {
             "js"       :  [ "mtf.user.js"               ],
             "matches"  :  [ "*://*.tetrisfriends.com/*" ],
-            "run_at"   :  "document_start"
+            "run_at"   :  "document_end"
     } ],
     "background": {
         "scripts": ["events.js"],
