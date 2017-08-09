@@ -271,7 +271,7 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
     flashVarsParamString = Object.keys( flashVars ).map(k => k + '=' + flashVars[k] ).join('&');
 
     contentFlash = buildContentFlash();
-    addParameter(contentFlash, 'flashVars', flashVarsParamString);
+    addParameter(contentFlash, 'flashvars', flashVarsParamString);
     document.body.appendChild( contentFlash );
 
     runOnContentFlashLoaded();
