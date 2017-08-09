@@ -221,34 +221,27 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
 
     function haveFlashVars(responseText, flashVars)
     {
-        flashVars.startParam = 'clickToPlay';
 
         var rawFlashVars = responseText.match(/flashVars.*?=.*?({[\s\S]*?})/)[1];
 
-        flashVars.loginId = responseText.match(/getLoginId\((.*?)\)/)[1];
-        flashVars.externalId = encodeURIComponent('u7tpFP8R0Cg=');
 
-        flashVars.sessionId = rawFlashVars.match(/sessionId.*?:.*?encodeURIComponent\('(.*?)'\)/)[1];
+        flashVars.theGamePath = '';
+        flashVars.sessionId = encodeURIComponent( rawFlashVars.match(/sessionId.*?:.*?encodeURIComponent\('(.*?)'\)/)[1] );
         flashVars.sessionToken = encodeURIComponent( rawFlashVars.match(/sessionToken.*?:.*?encodeURIComponent\('(.*?)'\)/)[1] );
         flashVars.timestamp = rawFlashVars.match(/timestamp.*?:.*?(\d+)/)[1];
-        flashVars.apiUrl = encodeURIComponent( rawFlashVars.match(/apiUrl.*?:.*?'(.+?)'/)[1] );
+        flashVars.startParam = 'clickToPlay';
+        flashVars.isForceLogin = 'false';
+        flashVars.isDemo = '';
+        flashVars.ip = rawFlashVars.match(/ip.*?:.*?'(\d+\.\d+\.\d+\.\d+)'/)[1];
+        flashVars.externalId = 'u7tpFP8R0Cg=';
+        flashVars.loginId = responseText.match(/getLoginId\(0*(.*?)\)/)[1];
+        flashVars.channelId = rawFlashVars.match(/channelId.*?:.*?(\d+)/)[1];
+        flashVars.numGamesToPlayAd = 0;
+        flashVars.isPrerollEnabled = 'true'
         flashVars.isAnalyticsEnabled = 'true';
 
-        flashVars.channelId = rawFlashVars.match(/channelId.*?:.*?(\d+)/)[1];
-        flashVars.prerollId = rawFlashVars.match(/prerollId.*?:.*?(\d+)/)[1];
-        flashVars.isPrerollEnabled = 'true'
-        flashVars.ip = rawFlashVars.match(/ip.*?:.*?'(\d+\.\d+\.\d+\.\d+)'/)[1];
-        flashVars.isForceLogin = 'false';
-        flashVars.numGamesToPlayAd = 0;
-        flashVars.showChallenge = 0;
-
-        try{
-            flashVars.friendUserIds = rawFlashVars.match(/friendUserIds.*?'((\d+,)*\d*)'/)[1];
-            flashVars.blockedToByUserIds = rawFlashVars.match(/blockedToByUserIds.*?'((\d+,)*\d*)'/)[1];
-        }catch(err)
-        {
-            /* If this failed, the user is not logged in. */
-        }
+        flashVars.autoJoinRoomId= -1;
+        flashVars.autoJoinRoomName = '';
 
     function getParameter(parameter){
        var query = window.location.search.substring(1);
@@ -260,12 +253,26 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
        return '';
     };
 
-    var urlParameters = ['autoJoinRoomId', 'autoJoinRoomName', 'das', 'ar'];
+    var urlParameters = ['das', 'ar'];
+    var tempParameter = '';
     for(i in urlParameters)
     {
-        flashVars[ urlParameters[i] ] = getParameter( urlParameters[i] );
-        if( flashVars[ urlParameters[i] ] === '' )
-            delete flashVars[ urlParameters[i] ];
+        var tempParameter = getParameter( urlParameters[i] );
+        if( tempParameter !== '' )
+            flashVars[ urlParameters[i] ] = tempParameter;
+
+    }
+
+    flashVars.apiUrl = encodeURIComponent( rawFlashVars.match(/apiUrl.*?:.*?'(.+?)'/)[1] );
+    flashVars.showChallenge = 0;
+    flashVars.prerollId = rawFlashVars.match(/prerollId.*?:.*?(\d+)/)[1];
+
+    try{
+        flashVars.friendUserIds = rawFlashVars.match(/friendUserIds.*?'((\d+,)*\d*)'/)[1];
+        flashVars.blockedToByUserIds = rawFlashVars.match(/blockedToByUserIds.*?'((\d+,)*\d*)'/)[1];
+    }catch(err)
+    {
+        /* If this failed, the user is not logged in. */
     }
 
     flashVarsParamString = Object.keys( flashVars ).map(k => k + '=' + flashVars[k] ).join('&');
