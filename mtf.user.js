@@ -4,7 +4,7 @@
 // @description Reduces lag as much as possible
 // @include http://*tetrisfriends.com/*
 // @grant none
-// @run-at document-end
+// @run-at document-start
 // @version 4.8.12
 // @author morningpee
 // ==/UserScript==
