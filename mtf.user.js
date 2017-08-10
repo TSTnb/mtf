@@ -199,7 +199,15 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
         var contentFlash = document.createElement("object");
         contentFlash.setAttribute("type", "application/x-shockwave-flash");
         contentFlash.setAttribute("allowscriptaccess", "always");
-        contentFlash.setAttribute("data", location.protocol + "//" + location.host + "/data/games/" + gameName + "/" + gameFileName[gameName]);
+
+        var gamePath = location.protocol + "//" + location.host + "/data/games/" + gameName + "/" + gameFileName[gameName];
+        if(gameName === 'Live')
+        {
+            gamePath += '?livebust=0173';
+        }
+        gamePath += '?version=0';
+
+        contentFlash.setAttribute("data", gamePath);
         contentFlash.setAttribute("id", "contentFlash");
 
         if(gameName !== 'Sprint' && gameName !== 'Marathon' && gameName !== 'NBlox')
