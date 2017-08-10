@@ -1,13 +1,16 @@
-4.8.12, 2017-08-06
+4.8.13, 2017-08-06
+run at document start
+
+4.8.12, 2017-08-09
 completely mirror flashVar order and content
 
-4.8.11, 2017-08-06
+4.8.11, 2017-08-08
 fix replayer scaling
 
-4.8.10, 2017-08-06
+4.8.10, 2017-08-07
 add flashvars that should not matter
 
-4.8.9, 2017-08-06
+4.8.9, 2017-08-07
 group config for userscript compatibility
 
 4.8.8, 2017-08-06
@@ -122,4 +125,4 @@ Game resizes with the window, window uses minimal content document, other ad-blo
 Updated to use the "direct" wmode for faster rendering.
 
 1.0.2, 2014-10-06
-This extension used to be the "Minimal Tetris Friends" Userscript, but that website has been down for months. Bask in the glory of your favorite userscript as an easy-to-install extension instead.
+This extension used to be the "Minimal Tetris Friends" Userscript, but that website has been down for months. Bask in the glory of y

@@ -27,7 +27,7 @@
     "name": "Minimal Tetris Friends",
     "short_name": "mtf",
     "permissions": ["webRequest", "webRequestBlocking", "*://*.tetrisfriends.com/*", "storage"],
-    "version": "4.8.12",
+    "version": "4.8.13",
     "applications": {
         "gecko": {
             "id": "{936c9dbf-25a7-433f-8223-08693060c5da}",
