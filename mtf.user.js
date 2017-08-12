@@ -210,7 +210,7 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
         contentFlash.setAttribute("data", gamePath);
         contentFlash.setAttribute("id", "contentFlash");
 
-        if(gameName !== 'Sprint' && gameName !== 'Marathon' && gameName !== 'NBlox')
+        if(gameName !== 'NBlox')
         {
             addParameter(contentFlash, 'scale', 'noscale');
         }
@@ -446,7 +446,7 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
 
         if(gameName !== 'NBlox')
         {
-            if(gameName !== 'Sprint' && gameName !== 'Marathon' && currentGameState !== 'Replay')
+            if(currentGameState !== 'Replay')
             {
                 contentFlash.TSetProperty("/", contentFlashSize.T_WIDTH_SCALE_INDEX, 100 / contentFlashSize.correctedScaleFactor);
                 contentFlash.TSetProperty("/", contentFlashSize.T_HEIGHT_SCALE_INDEX, 100 / contentFlashSize.correctedScaleFactor);
