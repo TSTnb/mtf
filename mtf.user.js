@@ -520,53 +520,56 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
     {
         js_tetrisShowResults = function(results)
         {
+            try {
+                if( gameReplayerName[gameName] === undefined )
+                    return;
 
-            var aiNames = [];
-            var aiAvatars = [];
+                if( gameNumberAIPlayers[gameName] === 0 )
+                    gameData = results.match(/^(.*)<awards>/)[1].split(',').pop();
+                else
+                {
+                    var aiNames = [];
+                    var aiAvatars = [];
 
-            if( gameReplayerName[gameName] === undefined )
-                return;
+                    var resultsArray = results.split(",");
+                    var currentRank = resultsArray[1].split("&")[0];
 
-            var resultsArray = results.split(",");
-            var currentRank = resultsArray[1].split("&")[0];
+                    gameData = []
+                    var currentSubject;
+                    for(var i = 0; i < resultsArray.length; i++)
+                        {
+                            try{
+                                currentSubject = resultsArray[i].match(/^([^<]+)<?/)[1];
+                                if( currentSubject.length < 20)
+                                    continue;
+                                atob(currentSubject);
+                                gameData.push(currentSubject);
+                                if( gameData.length > 1)
+                                {
+                                    aiNames.push(resultsArray[i - 2]);
+                                    aiAvatars.push("/data/images/avatars/40X40/" + resultsArray[i - 1]);
+                                }
+                            }catch(err){}
+                        }
 
-            if( gameNumberAIPlayers[gameName] === 0 )
-                gameData = results.split(',').pop().match(/^(.*)<awards>/)[1];
-            else
-            {
-                gameData = []
-                var currentSubject;
-                for(var i = 0; i < resultsArray.length; i++)
-                    {
-                        try{
-                            currentSubject = resultsArray[i].match(/^([^<]+)<?/)[1];
-                            if( currentSubject.length < 20)
-                                continue;
-                            atob(currentSubject);
-                            gameData.push(currentSubject);
-                            if( gameData.length > 1)
-                            {
-                                aiNames.push(resultsArray[i - 2]);
-                                aiAvatars.push("/data/images/avatars/40X40/" + resultsArray[i - 1]);
-                            }
-                        }catch(err){}
-                    }
+                }
 
+
+                var gameReplayer = document.createElement('embed');
+                gameReplayer.setAttribute('id', 'gameReplayer');
+                gameReplayer.setAttribute('allowscriptaccess', 'always');
+                gameReplayer.setAttribute('name', 'plugin');
+                gameReplayer.setAttribute('type', 'application/x-shockwave-flash');
+                gameReplayer.setAttribute('src', location.protocol + '//' + location.host + '/data/games/replayer/' + (gameNumberAIPlayers[gameName] === 0? 'OWTetrisReplayWidget.swf': 'OWTetrisMPReplayWidget.swf') );
+                contentFlash = document.body.appendChild(gameReplayer);
+
+                correctSize = false;
+                currentGameState = 'Replay';
+                gameSize[gameName] = [616, 355];
+                runOnReplayerLoaded(gameData, currentRank, aiNames, aiAvatars);
+            } catch(err) {
+                alert(err + "\n" + err.stack);
             }
-
-
-            var gameReplayer = document.createElement('embed');
-            gameReplayer.setAttribute('id', 'gameReplayer');
-            gameReplayer.setAttribute('allowscriptaccess', 'always');
-            gameReplayer.setAttribute('name', 'plugin');
-            gameReplayer.setAttribute('type', 'application/x-shockwave-flash');
-            gameReplayer.setAttribute('src', location.protocol + '//' + location.host + '/data/games/replayer/' + (gameNumberAIPlayers[gameName] === 0? 'OWTetrisReplayWidget.swf': 'OWTetrisMPReplayWidget.swf') );
-            contentFlash = document.body.appendChild(gameReplayer);
-
-            correctSize = false;
-            currentGameState = 'Replay';
-            gameSize[gameName] = [616, 355];
-            runOnReplayerLoaded(gameData, currentRank, aiNames, aiAvatars);
         }
 
         replayReady = function()
