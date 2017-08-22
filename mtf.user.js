@@ -89,31 +89,6 @@ function mtfBootstrap()
         document.documentElement
     );
 
-    var metaElement = document.createElement("meta");
-    metaElement.setAttribute("http-equiv", "cache-conrol");
-    metaElement.setAttribute("content", "max-age=0");
-    document.head.appendChild(metaElement);
-
-    metaElement = document.createElement("meta");
-    metaElement.setAttribute("http-equiv", "cache-conrol");
-    metaElement.setAttribute("content", "no-cache");
-    document.head.appendChild(metaElement);
-
-    metaElement = document.createElement("meta");
-    metaElement.setAttribute("http-equiv", "expires");
-    metaElement.setAttribute("content", "0");
-    document.head.appendChild(metaElement);
-
-    metaElement = document.createElement("meta");
-    metaElement.setAttribute("http-equiv", "expires");
-    metaElement.setAttribute("content", "Tue, 01 Jan 1980 1:00:00 GMT");
-    document.head.appendChild(metaElement);
-
-    metaElement = document.createElement("meta");
-    metaElement.setAttribute("http-equiv", "pragma");
-    metaElement.setAttribute("content", "no-cache");
-    document.head.appendChild(metaElement);
-
     document.head.appendChild( document.createElement('style') ).textContent = '* { margin: 0; } :root{ image-rendering: optimizeSpeed; image-rendering: -moz-crisp-edges; image-rendering: -o-crisp-edges; image-rendering: -webkit-optimize-contrast; image-rendering: pixelated; image-rendering: optimize-contrast; -ms-interpolation-mode: nearest-neighbor; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } embed, object, #contentFlash { transform-origin: top left; position: absolute; top: 50%; left: 50%; visibility: visible !important; }';
 
     /* necessary on firefox to access contentFlash.PercentLoaded() */
