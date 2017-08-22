@@ -525,7 +525,7 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
                     return;
 
                 if( gameNumberAIPlayers[gameName] === 0 )
-                    gameData = results.split(',').pop().match(/^(.*)<awards>/)[1];
+                    gameData = results.match(/^(.*)<awards>/)[1].split(',').pop();
                 else
                 {
                     var aiNames = [];
