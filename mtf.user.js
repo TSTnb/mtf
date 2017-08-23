@@ -261,7 +261,7 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
        return '';
     };
 
-    var urlParameters = ['das', 'ar'];
+    var urlParameters = ['das', 'ar', 'autoJoinRoomName', 'autoJoinRoomId'];
     var tempParameter = '';
     for(i in urlParameters)
     {
