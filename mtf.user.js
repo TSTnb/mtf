@@ -563,9 +563,8 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
                 gameReplayer.setAttribute('src', location.protocol + '//' + location.host + '/data/games/replayer/' + (gameNumberAIPlayers[gameName] === 0? 'OWTetrisReplayWidget.swf': 'OWTetrisMPReplayWidget.swf') );
                 contentFlash = document.body.appendChild(gameReplayer);
 
-                correctSize = false;
                 currentGameState = 'Replay';
-                gameSize[gameName] = [616, 355];
+                gameSize[gameName] = [760, 760 / 616 * 355];
                 runOnReplayerLoaded(gameData, currentRank, aiNames, aiAvatars);
             } catch(err) {
                 alert(err + "\n" + err.stack);
