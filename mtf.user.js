@@ -5,7 +5,7 @@
 // @include http://*tetrisfriends.com/*
 // @grant none
 // @run-at document-start
-// @version 4.9.2
+// @version 4.9.3
 // @author morningpee
 // ==/UserScript==
 
@@ -89,7 +89,7 @@ function mtfBootstrap()
         document.documentElement
     );
 
-    document.head.appendChild( document.createElement('style') ).textContent = '* { margin: 0; } :root{ image-rendering: optimizeSpeed; image-rendering: -moz-crisp-edges; image-rendering: -o-crisp-edges; image-rendering: -webkit-optimize-contrast; image-rendering: pixelated; image-rendering: optimize-contrast; -ms-interpolation-mode: nearest-neighbor; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } embed, object, #contentFlash { transform-origin: top left; position: absolute; top: 50%; left: 50%; visibility: visible !important; }';
+    document.head.appendChild( document.createElement('style') ).textContent = '* { margin: 0; } :root{ image-rendering: optimizeSpeed; image-rendering: -moz-crisp-edges; image-rendering: -o-crisp-edges; image-rendering: -webkit-optimize-contrast; image-rendering: pixelated; image-rendering: optimize-contrast; -ms-interpolation-mode: nearest-neighbor; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } embed, object, #contentFlash { transform-origin: top left; position: absolute; top: 50%; left: 50%; margin-left: calc(-760px / 2); margin-top: calc((-100% - 560px) / 4); visibility: visible !important; }';
 
     /* necessary on firefox to access contentFlash.PercentLoaded() */
     document.head.appendChild( document.createElement('script') ).textContent = '(' + mtfInit + ')(' + downscaleValue + ',' + correctSize + ',' + changeInGame + ')';
@@ -563,9 +563,8 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
                 gameReplayer.setAttribute('src', location.protocol + '//' + location.host + '/data/games/replayer/' + (gameNumberAIPlayers[gameName] === 0? 'OWTetrisReplayWidget.swf': 'OWTetrisMPReplayWidget.swf') );
                 contentFlash = document.body.appendChild(gameReplayer);
 
-                correctSize = false;
                 currentGameState = 'Replay';
-                gameSize[gameName] = [616, 355];
+                gameSize[gameName] = [760, 760 / 616 * 355];
                 runOnReplayerLoaded(gameData, currentRank, aiNames, aiAvatars);
             } catch(err) {
                 alert(err + "\n" + err.stack);
