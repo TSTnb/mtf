@@ -9,7 +9,7 @@ document.getElementById('changeblock').addEventListener('change', changeBlock);
 chrome.storage.sync.get('blockWinGrafix',
     function(chromeStorage)
     {
-        document.getElementById('changeblock').checked = chromeStorage.blockWinGrafix;
+        document.getElementById('changeblock').checked = chromeStorage.blockWinGrafix === undefined? false: chromeStorage.blockWinGrafix;
     }
 )
 
@@ -25,7 +25,7 @@ document.getElementById('correctSize').addEventListener('change', changeFullScre
 chrome.storage.sync.get('correctSize',
     function(chromeStorage)
     {
-        document.getElementById('correctSize').checked = chromeStorage.correctSize === false;
+        document.getElementById('correctSize').checked = chromeStorage.correctSize === undefined? false: chromeStorage.correctSize === false;
     }
 );
 
@@ -42,8 +42,8 @@ document.getElementById('changescale').addEventListener('change', changeScale);
 chrome.storage.sync.get('downscaleValue',
     function(chromeStorage)
     {
-        document.getElementById('changescale').value = chromeStorage.downscaleValue;
-        document.getElementById('downscaleValue').textContent = chromeStorage.downscaleValue;
+        document.getElementById('changescale').value = chromeStorage.downscaleValue === undefined? 1: chromeStorage.downscaleValue;
+        document.getElementById('downscaleValue').textContent = chromeStorage.downscaleValue === undefined? 1: chromeStorage.downscaleValue;
     }
 );
 
@@ -58,6 +58,6 @@ document.getElementById('changeInGame').addEventListener('change', changeInGame)
 chrome.storage.sync.get('changeInGame',
     function(chromeStorage)
     {
-        document.getElementById('changeInGame').checked = chromeStorage.changeInGame;
+        document.getElementById('changeInGame').checked = chromeStorage.changeInGame === undefined? true: chromeStorage.changeInGame;
     }
 );
