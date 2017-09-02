@@ -1,4 +1,12 @@
-body
-{
+body {
     white-space: nowrap;
+}
+
+#changescale {
+    width: calc( 100% - 20px);
+}
+
+#downscaleValue {
+    float: right;
+    margin-top: 4px;
 }
