@@ -5,7 +5,7 @@
 // @include http://*tetrisfriends.com/*
 // @grant none
 // @run-at document-start
-// @version 4.9.4
+// @version 4.9.5
 // @author morningpee
 // ==/UserScript==
 
@@ -628,12 +628,15 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
 
 document.addEventListener("readystatechange",
     function(){
-        try{
             /* intrusive ads not handled by uBlock Origin */
-            var ad = document.getElementById("home_custom_ad_container");
-            ad.parentNode.removeChild(ad);
+            var ads = ['home_custom_ad_container', 'rail_left', 'rail_right'];
+            for(adIndex in ads) {
+                try {
+                    ad = document.getElementById(ads[adIndex]);
+                    ad.parentNode.removeChild(ad);
+                } catch(err) {}
+            }
             document.getElementById("container").getElementsByTagName("iframe")[0].parentNode.textContent = "";
             loadGame();
-        }catch(err){}
     }
 );
