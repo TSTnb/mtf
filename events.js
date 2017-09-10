@@ -11,17 +11,20 @@ chrome.storage.onChanged.addListener(
 
 function interceptRequest(request)
 {
-    if( request.url.indexOf("winGrafix/OWResultsAnimation") === -1 )
+    if( request.url.indexOf('toa_ads.js.php') !== -1 || request.url.indexOf('showads.js') !== -1)
+        return {cancel: true};
+
+    if( request.url.indexOf('winGrafix/OWResultsAnimation') === -1 )
         return;
 
-    if(blockWinGrafix === true && request && request.url && request.url.indexOf("winGrafix/OWResultsAnimation") !== -1)
+    if(blockWinGrafix === true && request && request.url && request.url.indexOf('winGrafix/OWResultsAnimation') !== -1)
         return {cancel: true};
 }
 
 try{
-    chrome.webRequest.onBeforeRequest.addListener(interceptRequest, {urls: ["*://*.tetrisfriends.com/*"]}, ['blocking']);
+    chrome.webRequest.onBeforeRequest.addListener(interceptRequest, {urls: ['*://*.tetrisfriends.com/*', '*://tetrisow-a.akamaihd.net/*']}, ['blocking']);
 }catch(err){
-    alert("Error blocking winGrafix");
+    alert('Error blocking winGrafix');
 }
 
 chrome.storage.sync.get('blockWinGrafix',
