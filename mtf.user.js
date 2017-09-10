@@ -47,6 +47,7 @@ function updateMTFValues(downscaleValue, correctSize, changeInGame)
 /* if game mode */
 if( location.pathname.match(/\/games\/.*\/game\.php.*/) !== null)
 {
+    window.stop();
     downscaleValue = 1;
     correctSize = true;
     changeInGame = true;
@@ -78,8 +79,6 @@ if( location.pathname.match(/\/games\/.*\/game\.php.*/) !== null)
 
 function mtfBootstrap()
 {
-    window.stop();
-
     /*start fresh with html5 document */
     document.doctype&&
         document.replaceChild( document.implementation.createDocumentType('html', '', ''), document.doctype );
