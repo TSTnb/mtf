@@ -26,7 +26,7 @@
     "manifest_version": 2,
     "name": "Minimal Tetris Friends",
     "short_name": "mtf",
-    "permissions": ["webRequest", "webRequestBlocking", "*://*.tetrisfriends.com/*", "storage"],
+    "permissions": ["webRequest", "webRequestBlocking", "*://*.tetrisfriends.com/*", "*://tetrisow-a.akamaihd.net/*", "storage"],
     "version": "4.9.5",
     "applications": {
         "gecko": {
