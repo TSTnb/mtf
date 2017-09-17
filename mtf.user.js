@@ -5,7 +5,7 @@
 // @include http://*tetrisfriends.com/*
 // @grant none
 // @run-at document-start
-// @version 4.9.5
+// @version 4.9.6
 // @author morningpee
 // ==/UserScript==
 
@@ -25,7 +25,11 @@ try{
                 changeInGame = changes.changeInGame.newValue;
             }
 
-            updateMTFValues(downscaleValue, correctSize, changeInGame)
+            if( changes.restartKey !== undefined ) {
+                restartKey = changes.restartKey.newValue;
+            }
+
+            updateMTFValues(downscaleValue, correctSize, changeInGame, restartKey)
         }
     );
 } catch(err)
@@ -33,7 +37,7 @@ try{
     /* running as userscript */
 }
 
-function updateMTFValues(downscaleValue, correctSize, changeInGame)
+function updateMTFValues(downscaleValue, correctSize, changeInGame, restartKey)
 {
     var currentScript = document.getElementsByTagName("script")[0];
     if(typeof currentScript !== 'undefined')
@@ -41,7 +45,7 @@ function updateMTFValues(downscaleValue, correctSize, changeInGame)
         currentScript.parentNode.removeChild(currentScript);
     }
 
-    document.body.appendChild( document.createElement('script') ).textContent = 'scaleContentFlash(' + downscaleValue + ',' + correctSize + ',' + changeInGame + ')';
+    document.body.appendChild( document.createElement('script') ).textContent = 'scaleContentFlash(' + downscaleValue + ',' + correctSize + ',' + changeInGame + ',' + JSON.stringify(restartKey) + ')';
 }
 
 /* if game mode */
@@ -51,9 +55,10 @@ if( location.pathname.match(/\/games\/.*\/game\.php.*/) !== null)
     downscaleValue = 1;
     correctSize = true;
     changeInGame = true;
+    restartKey = '[';
 
     try {
-        chrome.storage.sync.get(['downscaleValue', 'correctSize', 'changeInGame'],
+        chrome.storage.sync.get(['downscaleValue', 'correctSize', 'changeInGame', 'restartKey'],
             function(chromeStorage)
             {
                 if( chromeStorage.downscaleValue !== undefined ) {
@@ -66,6 +71,10 @@ if( location.pathname.match(/\/games\/.*\/game\.php.*/) !== null)
 
                 if( chromeStorage.changeInGame !== undefined ) {
                     changeInGame = chromeStorage.changeInGame;
+                }
+
+                if( chromeStorage.restartKey !== undefined ) {
+                    restartKey = chromeStorage.restartKey;
                 }
 
                 mtfBootstrap();
@@ -91,12 +100,12 @@ function mtfBootstrap()
     document.head.appendChild( document.createElement('style') ).textContent = '* { margin: 0; } :root{ image-rendering: optimizeSpeed; image-rendering: -moz-crisp-edges; image-rendering: -o-crisp-edges; image-rendering: -webkit-optimize-contrast; image-rendering: pixelated; image-rendering: optimize-contrast; -ms-interpolation-mode: nearest-neighbor; } @viewport { zoom: 1; min-zoom: 1; max-zoom: 1; user-zoom: fixed; } * { margin: 0; padding: 0; outline: none; box-sizing: border-box; } body { background: url(http://tetrisow-a.akamaihd.net/data5_0_0_1/images/bg.jpg) repeat-x; margin: 0; display: block; overflow: hidden; } embed, object, #contentFlash { transform-origin: top left; position: absolute; top: 50%; left: 50%; margin-left: calc(-760px / 2); margin-top: calc((-100% - 560px) / 4); visibility: visible !important; }';
 
     /* necessary on firefox to access contentFlash.PercentLoaded() */
-    document.head.appendChild( document.createElement('script') ).textContent = '(' + mtfInit + ')(' + downscaleValue + ',' + correctSize + ',' + changeInGame + ')';
+    document.head.appendChild( document.createElement('script') ).textContent = '(' + mtfInit + ')(' + downscaleValue + ',' + correctSize + ',' + changeInGame + ',' + JSON.stringify(restartKey) + ')';
 
 }
 
 
-function mtfInit(downscaleValue, correctSize, changeInGame)
+function mtfInit(downscaleValue, correctSize, changeInGame, restartKey)
 {
     currentGameState = 'Playing';
 
@@ -316,6 +325,7 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
 
         getContentFlashSize();
         overrideJSEvents();
+        addListeners();
 
         /* second check for whether it is loaded */
         if( typeof contentFlash.TGetProperty("/", 12) === 'undefined' ) {
@@ -380,7 +390,7 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
         contentFlash.style.transform = '';
     }
 
-    scaleContentFlash = function(scaleFactor, newCorrectSize, newChangeInGame)
+    scaleContentFlash = function(scaleFactor, newCorrectSize, newChangeInGame, newRestartKey)
     {
         scaleFactor = parseInt(scaleFactor)
         if(typeof scaleFactor === 'number' && isNaN(scaleFactor) === false)
@@ -396,6 +406,11 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
         if(newChangeInGame !== undefined)
         {
             changeInGame = newChangeInGame;
+        }
+
+        if(newRestartKey !== undefined)
+        {
+            restartKey = newRestartKey;
         }
 
         /* if in lobby or between games, scale 1:1 */
@@ -613,6 +628,11 @@ function mtfInit(downscaleValue, correctSize, changeInGame)
         };
 
         return returnDownscaleValue;
+    }
+
+    addListeners = function()
+    {
+        contentFlash.addEventListener('keyup', function(e){if(e.key === restartKey) contentFlash.as3_tetrisGameRestart();} );
     }
 
     buildFlashVarsParamString();
