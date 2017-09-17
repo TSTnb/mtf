@@ -61,17 +61,17 @@ chrome.storage.sync.get('changeInGame',
     }
 );
 
-function downscaleValue(e)
+function restartKey(e)
 {
     chrome.storage.sync.set( {'restartKey': e.key});
     document.getElementById('restartKey').value = e.key;
 }
 
-document.getElementById('restartKey').addEventListener('keyup', downscaleValue);
+document.getElementById('restartKey').addEventListener('keyup', restartKey);
 
 chrome.storage.sync.get('restartKey',
     function(chromeStorage)
     {
-        document.getElementById('restartKey').textContent = chromeStorage.downscaleValue === undefined? '[': chromeStorage.downscaleValue;
+        document.getElementById('restartKey').value = chromeStorage.restartKey === undefined? '[': chromeStorage.restartKey;
     }
 );
