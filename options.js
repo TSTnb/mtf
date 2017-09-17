@@ -29,7 +29,6 @@ chrome.storage.sync.get('correctSize',
     }
 );
 
-
 function changeScale()
 {
     var changeScale = document.getElementById('changescale')
@@ -59,5 +58,20 @@ chrome.storage.sync.get('changeInGame',
     function(chromeStorage)
     {
         document.getElementById('changeInGame').checked = chromeStorage.changeInGame === undefined? true: chromeStorage.changeInGame;
+    }
+);
+
+function downscaleValue(e)
+{
+    chrome.storage.sync.set( {'restartKey': e.key});
+    document.getElementById('restartKey').value = e.key;
+}
+
+document.getElementById('restartKey').addEventListener('keyup', downscaleValue);
+
+chrome.storage.sync.get('restartKey',
+    function(chromeStorage)
+    {
+        document.getElementById('restartKey').textContent = chromeStorage.downscaleValue === undefined? '[': chromeStorage.downscaleValue;
     }
 );
