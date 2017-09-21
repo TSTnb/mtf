@@ -633,7 +633,10 @@ function mtfInit(downscaleValue, correctSize, changeInGame, restartKey)
 
     addListeners = function()
     {
-        contentFlash.addEventListener('keyup', function(e){if(e.key === restartKey) contentFlash.as3_tetrisGameRestart();} );
+        document.addEventListener('keyup', function(e){if(e.key === restartKey){
+            contentFlash.focus();
+            contentFlash.as3_tetrisGameRestart();
+        }});
     }
 
     buildFlashVarsParamString();
