@@ -237,7 +237,7 @@ function mtfInit(downscaleValue, correctSize, changeInGame, restartKey)
 
     function haveFlashVars(responseText, flashVars)
     {
-
+        pageHTML = responseText;
         var rawFlashVars = responseText.match(/flashVars.*?=.*?({[\s\S]*?})/)[1];
 
 
@@ -501,8 +501,9 @@ function mtfInit(downscaleValue, correctSize, changeInGame, restartKey)
             percentLoaded = '0';
         }
 
-        if( percentLoaded != '100' )
+        if( percentLoaded != '100' ) {
            return setTimeout( function(){ runOnReplayerLoaded(gameData, currentRank, aiNames, aiAvatars) }, 50 );
+        }
         getContentFlashSize();
 
         var loadReplayerArguments = [gameProductId[gameName] + "", location.protocol + '//' + location.host + '/data/games/' + gameName + '/' + gameReplayerName[gameName]];
@@ -515,9 +516,9 @@ function mtfInit(downscaleValue, correctSize, changeInGame, restartKey)
         if( gameNumberAIPlayers[gameName] === 0 )
             return contentFlash.as3_startReplay(gameData);
 
-        var avatarPrefix = "/data/images/avatars/40X40/"
-        var playerName = getLastMatch(/username\s+=\s+("|')([^"']+)("|')/g, (tetrisShowResults + ""));
-        var playerAvatar = avatarPrefix + getLastMatch(/userAvatar\s+=\s+("|')([^"']+)("|')/g, (tetrisShowResults + ""));
+        var avatarPrefix = "/data/images/avatars/40X40/";
+        var playerName = getLastMatch(/username\s+=\s+("|')([^"']+)("|')/g, (pageHTML + ""));
+        var playerAvatar = avatarPrefix + getLastMatch(/userAvatar\s+=\s+("|')([^"']+)("|')/g, (pageHTML + ""));
 
         var aiGameData = [];
 
@@ -632,7 +633,10 @@ function mtfInit(downscaleValue, correctSize, changeInGame, restartKey)
 
     addListeners = function()
     {
-        contentFlash.addEventListener('keyup', function(e){if(e.key === restartKey) contentFlash.as3_tetrisGameRestart();} );
+        document.addEventListener('keyup', function(e){if(e.key === restartKey){
+            contentFlash.focus();
+            contentFlash.as3_tetrisGameRestart();
+        }});
     }
 
     buildFlashVarsParamString();
