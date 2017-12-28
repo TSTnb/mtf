@@ -11,9 +11,6 @@ chrome.storage.onChanged.addListener(
 
 function interceptRequest(request)
 {
-    if( request.url.indexOf('toa_ads.js.php') !== -1 || request.url.indexOf('showads.js') !== -1)
-        return {cancel: true};
-
     if( request.url.indexOf('winGrafix/OWResultsAnimation') === -1 )
         return;
 
