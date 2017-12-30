@@ -5,7 +5,7 @@
 // @include http://*tetrisfriends.com/*
 // @grant none
 // @run-at document-start
-// @version 4.9.9
+// @version 4.9.10
 // @author morningpee
 // ==/UserScript==
 
@@ -649,17 +649,41 @@ function mtfInit(downscaleValue, correctSize, changeInGame, restartKey)
         document.getElementById("game_container").style.height = "auto";
     }
 
-document.addEventListener("readystatechange",
+document.addEventListener('readystatechange',
     function(){
-            /* intrusive ads not handled by uBlock Origin */
-            var ads = ['home_custom_ad_container', 'rail_left', 'rail_right'];
-            for(adIndex in ads) {
+        /* intrusive ads not handled by uBlock Origin */
+        var ads = ['tetris_house_ad_container', 'home_custom_ad_container', 'home_ad_container', 'rail_left', 'rail_right'];
+        for(adIndex in ads) {
+            try {
+                ad = document.getElementById(ads[adIndex]);
+                ad.parentNode.removeChild(ad);
+            } catch(err) {}
+        }
+
+        try {
+            document.getElementById('container').getElementsByTagName('iframe')[0].parentNode.textContent = '';
+        } catch(err) {}
+
+        /* hide ad at the top */
+        var adHider = document.createElement('style');
+        adHider.textContent = '#fb-root + div > iframe{ display: none !important; }';
+        document.body.appendChild(adHider);
+
+        /* remove the ad at the top */
+        setTimeout(function()
+            {
                 try {
-                    ad = document.getElementById(ads[adIndex]);
-                    ad.parentNode.removeChild(ad);
+                    document.getElementById('fb-root')
+                        .nextSibling
+                        .nextSibling
+                        .getElementsByTagName('iframe')[0]
+                        .contentDocument
+                        .location = 'about:blank';
                 } catch(err) {}
-            }
-            document.getElementById("container").getElementsByTagName("iframe")[0].parentNode.textContent = "";
-            loadGame();
+            },
+            10000
+        );
+
+        loadGame();
     }
 );
