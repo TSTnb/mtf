@@ -5,7 +5,7 @@
 // @include http://*tetrisfriends.com/*
 // @grant none
 // @run-at document-start
-// @version 4.9.10
+// @version 4.9.11
 // @author morningpee
 // ==/UserScript==
 
@@ -269,7 +269,7 @@ function mtfInit(downscaleValue, correctSize, changeInGame, restartKey)
        return '';
     };
 
-    var urlParameters = ['das', 'ar', 'autoJoinRoomName', 'autoJoinRoomId'];
+    var urlParameters = ['das', 'ar', 'ihs', 'irs', 'autoJoinRoomName', 'autoJoinRoomId'];
     var tempParameter = '';
     for(i in urlParameters)
     {
