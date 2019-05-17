@@ -6,7 +6,7 @@
 // @grant none
 // @run-at document-start
 // @version 4.9.11
-// @author morningpee
+// @author TSTman
 // ==/UserScript==
 
 try {
