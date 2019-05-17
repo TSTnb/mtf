@@ -41,7 +41,7 @@
     "*://tetrisow-a.akamaihd.net/*",
     "storage"
   ],
-  "version": "4.9.11",
+  "version": "4.10.0",
   "applications": {
     "gecko": {
       "id": "{936c9dbf-25a7-433f-8223-08693060c5da}",
