@@ -204,7 +204,7 @@ function mtfInit(downscaleValue, correctSize, changeInGame, restartKey) {
 
         var gamePath = location.protocol + "//" + location.host + "/data/games/" + gameName + "/" + gameFileName[gameName];
         if (gameName === 'Live') {
-            gamePath += '?livebust=0173';
+            gamePath += '?livebust=0178';
         }
         gamePath += '?version=0';
 
