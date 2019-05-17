@@ -2,7 +2,7 @@
 // @name Minimal Tetris Friends
 // @namespace minimaltetrisfriends
 // @description Reduces lag as much as possible
-// @include http://*tetrisfriends.com/*
+// @include http*://*tetrisfriends.com/*
 // @grant none
 // @run-at document-start
 // @version 4.9.11
