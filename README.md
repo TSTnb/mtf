@@ -29,7 +29,7 @@ ___
 * If you have Safari, get [Tampermonkey](https://safari.tampermonkey.net/tampermonkey.safariextz).
 
 #### Step 2: Get the script
-Go to [this page](https://raw.githubusercontent.com/morningpee/mtf/4.9.11/mtf.user.js). A dialog will pop up, click accept, and the script is installed.
+Go to [this page](https://raw.githubusercontent.com/TSTman/mtf/4.9.11/mtf.user.js). A dialog will pop up, click accept, and the script is installed.
 
 ### How to use
 
@@ -52,5 +52,5 @@ So anyway, try it out and post results.
 **[Download for Opera](https://addons.opera.com/en/extensions/details/minimal-tetris-friends/)** | last updated 2018-01-27 |
 |||
 |||
-**[Download for Edge or Safari](https://raw.githubusercontent.com/morningpee/mtf/4.9.11/mtf.user.js)** | last updated 2018-01-27 |
+**[Download for Edge or Safari](https://raw.githubusercontent.com/TSTman/mtf/4.9.11/mtf.user.js)** | last updated 2018-01-27 |
 |||size=1]last updated 2018-01-27[/size]
