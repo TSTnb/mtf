@@ -5,7 +5,7 @@
 // @include http*://*tetrisfriends.com/*
 // @grant none
 // @run-at document-start
-// @version 4.10.0
+// @version 5.0.1
 // @author TSTman
 // ==/UserScript==
 
