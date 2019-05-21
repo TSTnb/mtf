@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name Minimal Tetris Friends
+// @name Minimal Tetromino Friends
 // @namespace minimaltetrisfriends
 // @description Reduces lag as much as possible
 // @include http*://*tetrisfriends.com/*

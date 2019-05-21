@@ -32,7 +32,7 @@
     "16": "logo16.png"
   },
   "manifest_version": 2,
-  "name": "Minimal Tetris Friends",
+  "name": "Minimal Tetromino Friends",
   "short_name": "mtf",
   "permissions": [
     "webRequest",
