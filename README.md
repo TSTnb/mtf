@@ -1,5 +1,5 @@
  ![](http://i.imgur.com/1njY7qe.png)
-###### Version 4.10.0, last updated 2019-05-17
+###### Version 4.10.0, last updated 2019-05-20
 
 ### Description
 This is a script that removes everything from the page except for the game itself and the nice-looking background, sets the Flash quality to "low" instead of "high", and sets the "wmode" parameter to "direct". *This reduces lag significantly.*
@@ -47,10 +47,10 @@ So anyway, try it out and post results.
 ---
 |||
 --- | ---:
-**[Download for Firefox](https://addons.mozilla.org/firefox/addon/mtf/)** | last updated 2019-05-17 |
-**[Download for Chrome](https://chrome.google.com/webstore/detail/minimal-tetromino-friends/jmcfgfebjmfodjnmgicmkpkbpbfelhki)** | last updated 2019-05-17 |
-**[Download for Opera](https://addons.opera.com/en/extensions/details/minimal-tetromino-friends/)** | last updated 2019-05-17 |
+**[Download for Firefox](https://addons.mozilla.org/firefox/addon/mtf/)** | last updated 2019-05-20 |
+**[Download for Chrome](https://chrome.google.com/webstore/detail/minimal-tetromino-friends/jmcfgfebjmfodjnmgicmkpkbpbfelhki)** | last updated 2019-05-20 |
+**[Download for Opera](https://addons.opera.com/en/extensions/details/minimal-tetromino-friends/)** | last updated 2019-05-20 |
 |||
 |||
-**[Download for Edge or Safari](https://raw.githubusercontent.com/TSTman/mtf/4.10.0/mtf.user.js)** | last updated 2019-05-17 |
-|||size=1]last updated 2019-05-17[/size]
+**[Download for Edge or Safari](https://raw.githubusercontent.com/TSTman/mtf/4.10.0/mtf.user.js)** | last updated 2019-05-20 |
+|||size=1]last updated 2019-05-20[/size]
