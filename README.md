@@ -1,5 +1,5 @@
  ![](http://i.imgur.com/1njY7qe.png)
-###### Version 4.10.0, last updated 2019-05-17
+###### Version 4.10.0, last updated 2019-05-20
 
 ### Description
 This is a script that removes everything from the page except for the game itself and the nice-looking background, sets the Flash quality to "low" instead of "high", and sets the "wmode" parameter to "direct". *This reduces lag significantly.*
@@ -18,11 +18,11 @@ Games currently supported:
 ___
 
 #### Step 1: Get a Userscript Manager
-* If you have Firefox, download the [Minimal Tetris Friends browser add-on](https://addons.mozilla.org/firefox/addon/mtf/).
+* If you have Firefox, download the [Minimal Tetromino Friends browser add-on](https://addons.mozilla.org/firefox/addon/mtf/).
 
-* If you have Chrome, download the [Minimal Tetris Friends browser extension](https://chrome.google.com/webstore/detail/minimal-tetris-friends/jmcfgfebjmfodjnmgicmkpkbpbfelhki).
+* If you have Chrome, download the [Minimal Tetromino Friends browser extension](https://chrome.google.com/webstore/detail/minimal-tetromino-friends/jmcfgfebjmfodjnmgicmkpkbpbfelhki).
 
-* If you have Opera, download the [Minimal Tetris Friends browser add-on](https://addons.opera.com/extensions/details/minimal-tetris-friends/).
+* If you have Opera, download the [Minimal Tetromino Friends browser add-on](https://addons.opera.com/extensions/details/minimal-tetromino-friends/).
 
 * If you have Edge, get [Tampermonkey](https://www.microsoft.com/store/apps/9NBLGGH5162S).
 
@@ -33,13 +33,13 @@ Go to [this page](https://raw.githubusercontent.com/TSTman/mtf/4.10.0/mtf.user.j
 
 ### How to use
 
-Visit the [Tetris Friends Arena](http://www.tetrisfriends.com/games/Live/game.php), and the script will do the rest. The DAS URL hack *does* work with this.
+Visit the [Tetromino Friends Arena](http://www.tetrisfriends.com/games/Live/game.php), and the script will do the rest. The DAS URL hack *does* work with this.
 
 ### What it should look like
 Without the script installed, it will look something like this:
 ![](http://i.imgur.com/08BJLH4.png)
 
-If the Minimal Tetris Arena script works, the page will look like this:
+If the Minimal Tetromino Arena script works, the page will look like this:
 ![](http://i.imgur.com/RL8nTBB.png)
 So anyway, try it out and post results.
 
@@ -47,10 +47,10 @@ So anyway, try it out and post results.
 ---
 |||
 --- | ---:
-**[Download for Firefox](https://addons.mozilla.org/firefox/addon/mtf/)** | last updated 2019-05-17 |
-**[Download for Chrome](https://chrome.google.com/webstore/detail/minimal-tetris-friends/jmcfgfebjmfodjnmgicmkpkbpbfelhki)** | last updated 2019-05-17 |
-**[Download for Opera](https://addons.opera.com/en/extensions/details/minimal-tetris-friends/)** | last updated 2019-05-17 |
+**[Download for Firefox](https://addons.mozilla.org/firefox/addon/mtf/)** | last updated 2019-05-20 |
+**[Download for Chrome](https://chrome.google.com/webstore/detail/minimal-tetromino-friends/jmcfgfebjmfodjnmgicmkpkbpbfelhki)** | last updated 2019-05-20 |
+**[Download for Opera](https://addons.opera.com/en/extensions/details/minimal-tetromino-friends/)** | last updated 2019-05-20 |
 |||
 |||
-**[Download for Edge or Safari](https://raw.githubusercontent.com/TSTman/mtf/4.10.0/mtf.user.js)** | last updated 2019-05-17 |
-|||size=1]last updated 2019-05-17[/size]
+**[Download for Edge or Safari](https://raw.githubusercontent.com/TSTman/mtf/4.10.0/mtf.user.js)** | last updated 2019-05-20 |
+|||size=1]last updated 2019-05-20[/size]
